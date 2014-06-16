@@ -41,3 +41,329 @@ FROM (SELECT rownum rw
 WHERE o.rw >= 3590
 
 http://stackoverflow.com/questions/470542/how-do-i-limit-the-number-of-rows-returned-by-an-oracle-query-after-ordering
+
+
+
+08.01.2014 13:43:55] Alex Sysoi: Отдал мышку Мятликову?
+[08.01.2014 13:45:33] Sergey Zayats: да
+[08.01.2014 17:53:12] Alex Sysoi: счет на клавиатуру для Инны Беляевой и USB удлинители для ВЭС готов?
+[08.01.2014 17:57:19] Alex Sysoi: План работ на неделю и статус по задачам подготовь. Завтра в 9-30 обсуждаем, что сделано.
+[09.01.2014 10:51:03] Alex Sysoi: Привет, я тебя уже 15 минут жду. Не читал сообщение вчерашнее?
+[11.01.2014 10:02:03] Sergey Zayats: Добавил
+[27.01.2014 11:12:31] Sergey Zayats: \\Admin\Install\Software\Venta\Venta_v6.3
+[03.02.2014 18:36:49] Sergey Zayats: https://myveb08.bn.by
+[03.02.2014 18:38:30] Sergey Zayats: логин: cci.by
+pass:    g4h#Mns_gbjh
+[03.02.2014 18:38:42] Sergey Zayats: вход https://myweb08.bn.by/
+[03.02.2014 18:39:16] Sergey Zayats: https://myweb08.bn.by:8443/login_up.php3
+[03.02.2014 18:54:37] Alex Sysoi: httpdocs / sites / all / modules
+[03.02.2014 18:54:50] Alex Sysoi: тут лежат кастом модули
+[03.02.2014 18:58:49] Sergey Zayats: похоже на то
+[10.02.2014 18:53:39] Sergey Zayats: \\Admin\Users\Проекты\mysql-connector-odbc-5.2.6-winx64.msi - забирай
+[10.02.2014 18:54:10] Alex Sysoi: спс
+[11.02.2014 14:22:25] Sergey Zayats: ftp://212.98.164.233
+Login cci.by
+pass knKI$w_J3na
+[11.02.2014 16:09:41] Alex Sysoi: / httpdocs / sites / all / modules / jlab /
+[13.02.2014 15:52:07] Sergey Zayats: Готово
+проверяй, что хотел
+[13.02.2014 15:56:00] Alex Sysoi: отлично, работает
+[26.02.2014 18:16:28] Sergey Zayats: \\Admin\Install\_http_log - здесь лог ошибок и лог доступа за сегодня
+[26.02.2014 18:17:26] Alex Sysoi: ok, спс
+[27.02.2014 11:41:53] Sergey Zayats: http://windows.microsoft.com/en-us/windows-live/download-windows-essentials
+[27.02.2014 12:43:18] Sergey Zayats: \\Admin\Users\Проекты\AMD_Server.JPG - характеристики сервера
+думаю, хватит его
+[27.02.2014 13:19:22] Sergey Zayats: 8-ми адресная подсеть - 120 000 в месяц без НДС
+IP-адрес входит в стоимость аренды
+[27.02.2014 13:25:36] Alex Sysoi: спс
+[17.03.2014 12:54:05] Sergey Zayats: https://support.skype.com/ru/faq/FA829/kak-ispol-zovat-neskol-ko-ucetnyh-zapisej-v-skype-dla-windows-desktop
+[18.03.2014 11:32:46] Sergey Zayats: "В рамках потенциальных угроз необходимо принять решение о том, должны ли мы следовать нормам закона “О рекламе” при выполнении наших массовых рассылок посредством факсимильной связи и электронной почты."
+я бы поменял на :
+"В рамках потенциальных угроз  мы должны следовать нормам закона “О рекламе” при выполнении наших массовых рассылок посредством факсимильной связи и электронной почты."
+Иначе получается, что мы еще думаем выполнять закон или не выполнять )) И можем решить, что выполнять то его и не стоит )
+[18.03.2014 12:19:15] Alex Sysoi: ok
+[18.03.2014 14:18:12] Sergey Zayats: \\Ccidc1\Registr Belarus Redakt\2012_12\Db
+[11.04.2014 13:53:51] Alex Sysoi: какой  эккаунт для ftp://cci.by ?
+[11.04.2014 13:55:46] Sergey Zayats: ftp: 212.98.164.233
+l: cci.by
+p: knKI$w_J3na
+[11.04.2014 13:57:52] Alex Sysoi: спс, заработало...
+
+
+
+----------------------------------------------------------
+DROP TABLE C_COUNTRY CASCADE CONSTRAINTS;
+
+CREATE TABLE C_COUNTRY
+(
+  COUNTRY_ID    VARCHAR2(3 BYTE),
+  COUNTRY_NAME  VARCHAR2(255 BYTE)
+)
+TABLESPACE CERT
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+-----------------------------------------------------------
+ALTER TABLE C_OTD
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE C_OTD CASCADE CONSTRAINTS;
+
+CREATE TABLE C_OTD
+(
+  OTD_ID             NUMBER,
+  OTD_NAME           VARCHAR2(255 BYTE),
+  OTD_NAME_SYN       VARCHAR2(100 BYTE),
+  OTD_ADDRESS_INDEX  VARCHAR2(15 BYTE),
+  OTD_ADDRESS_CITY   VARCHAR2(25 BYTE),
+  OTD_ADDRESS_LINE   VARCHAR2(50 BYTE),
+  OTD_ADDRESS_HOME   VARCHAR2(10 BYTE),
+  OTD_ADDRESS_EXP    DATE
+)
+TABLESPACE CERT
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE C_OTD ADD (
+  PRIMARY KEY
+ (OTD_ID)
+    USING INDEX 
+    TABLESPACE CERT
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+               ));
+----------------------------------------------------
+ALTER TABLE XML_CERT
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE XML_CERT CASCADE CONSTRAINTS;
+
+CREATE TABLE XML_CERT
+(
+  CERT_ID     NUMBER,
+  FORMS       VARCHAR2(1000 BYTE),
+  UNN         VARCHAR2(1000 BYTE),
+  KONTRP      VARCHAR2(1000 BYTE),
+  KONTRS      VARCHAR2(1000 BYTE),
+  ADRESS      VARCHAR2(1000 BYTE),
+  POLUCHAT    VARCHAR2(1000 BYTE),
+  ADRESSPOL   VARCHAR2(1000 BYTE),
+  DATACERT    VARCHAR2(1000 BYTE),
+  NOMERCERT   VARCHAR2(1000 BYTE),
+  EXPERT      VARCHAR2(1000 BYTE),
+  NBLANKA     VARCHAR2(1000 BYTE),
+  RUKOVOD     VARCHAR2(1000 BYTE),
+  TRANSPORT   VARCHAR2(1000 BYTE),
+  MARSHRUT    VARCHAR2(1000 BYTE),
+  OTMETKA     VARCHAR2(1000 BYTE),
+  STRANAV     VARCHAR2(1000 BYTE),
+  STRANAPR    VARCHAR2(1000 BYTE),
+  STATUS      VARCHAR2(1000 BYTE),
+  KOLDOPLIST  VARCHAR2(1000 BYTE),
+  FLEXP       VARCHAR2(1000 BYTE),
+  UNNEXP      VARCHAR2(1000 BYTE),
+  EXPP        VARCHAR2(1000 BYTE),
+  EXPS        VARCHAR2(1000 BYTE),
+  EXPADRESS   VARCHAR2(1000 BYTE),
+  FLIMP       VARCHAR2(1000 BYTE),
+  IMPORTER    VARCHAR2(1000 BYTE),
+  ADRESSIMP   VARCHAR2(1000 BYTE),
+  FLSEZ       VARCHAR2(1000 BYTE),
+  SEZ         VARCHAR2(1000 BYTE),
+  FLSEZREZ    VARCHAR2(1000 BYTE),
+  STRANAP     VARCHAR2(1000 BYTE),
+  OTD_ID      NUMBER
+)
+TABLESPACE CERT
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+CREATE INDEX NOMERCERT_INX ON XML_CERT
+(NOMERCERT)
+LOGGING
+TABLESPACE CERT
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+NOPARALLEL;
+
+
+ALTER TABLE XML_CERT ADD (
+  PRIMARY KEY
+ (CERT_ID)
+    USING INDEX 
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+               ));
+
+ALTER TABLE XML_CERT ADD (
+  FOREIGN KEY (OTD_ID) 
+ REFERENCES C_OTD (OTD_ID));
+ 
+ -----------------------------------------------------
+ 
+ DROP TABLE XML_PRODUCTS CASCADE CONSTRAINTS;
+
+CREATE TABLE XML_PRODUCTS
+(
+  PRODUCT_ID  NUMBER,
+  CERT_ID     NUMBER,
+  NUMERATOR   VARCHAR2(1000 BYTE),
+  TOVAR       VARCHAR2(1000 BYTE),
+  VIDUP       VARCHAR2(1000 BYTE),
+  KRITER      VARCHAR2(1000 BYTE),
+  VES         VARCHAR2(1000 BYTE),
+  SCHET       VARCHAR2(1000 BYTE)
+)
+TABLESPACE CERT
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+-------------------------------------------------------
+
+DROP TABLE XML_FILES_IN CASCADE CONSTRAINTS;
+
+CREATE TABLE XML_FILES_IN
+(
+  FILE_IN_ID    NUMBER,
+  FILE_IN_NAME  VARCHAR2(255 BYTE),
+  CERT_ID       NUMBER,
+  DATE_LOAD     DATE
+)
+TABLESPACE CERT
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+---------------------------------------------------
+DROP TABLE XML_FILES_OUT CASCADE CONSTRAINTS;
+
+CREATE TABLE XML_FILES_OUT
+(
+  FILE_IN_ID    NUMBER,
+  FILE_IN_NAME  VARCHAR2(255 BYTE),
+  CERT_ID       NUMBER,
+  DATE_LOAD     DATE
+)
+TABLESPACE CERT
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+--------------------------------------------
+
+
+
+
