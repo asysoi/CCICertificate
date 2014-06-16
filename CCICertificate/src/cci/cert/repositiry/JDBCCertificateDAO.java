@@ -143,7 +143,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	public int save(Certificate cert) {
 		String sql_cert = "insert into xml_cert values "
-				+ "(beltpp_cert_test.cert_id_seq.nextval, "
+				+ "(beltpp_cert.cert_id_seq.nextval, "
 				+ ":forms, :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
@@ -160,7 +160,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			cert_id = keyHolder.getKey().intValue();
 
 			String sql_product = "insert into XML_PRODUCTS values ("
-					+ " beltpp_cert_test.product_id_seq.nextval, " + cert_id
+					+ " beltpp_cert.product_id_seq.nextval, " + cert_id
 					+ ", "
 					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
 
@@ -198,7 +198,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					Long.valueOf(cert.getCert_id()));
 
 			String sql_product = "insert into XML_PRODUCTS values ("
-					+ " beltpp_cert_test.product_id_seq.nextval, "
+					+ " beltpp_cert.product_id_seq.nextval, "
 					+ cert.getCert_id() + ", "
 					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
 
