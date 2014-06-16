@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 import cci.cert.model.Certificate;
 import cci.cert.model.Product;
 
-@Repository 
+@Repository  
 public class JDBCCertificateDAO implements CertificateDAO {
 
 	private NamedParameterJdbcTemplate template;

@@ -3,7 +3,7 @@ package cci.cert.repositiry;
 import java.util.List;
 
 import cci.cert.model.Certificate;
-
+ 
 public interface CertificateDAO {
 
 	public Certificate findByID(Long id);
