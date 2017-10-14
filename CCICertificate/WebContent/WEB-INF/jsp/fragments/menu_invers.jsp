@@ -75,7 +75,7 @@
 						<li><a href="fscerts.do">Сертификаты свободной продажи</a></li>
 						<li class="divider"></li>						
 						<li><a href="#">Акты экспертиз</a></li>
-						<li><a href="certcheck.do">Верификация</a></li>
+						<li><a href="check.do">Проверка выдачи сертификата</a></li>
 					</ul>
 				</li>
 			    </security:authorize>				

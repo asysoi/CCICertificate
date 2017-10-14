@@ -19,8 +19,8 @@
 		<div class="navbar-collapse collapse">
 		
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="certcheck.do">
-    			Проверка сертификата 
+				<li><a href="check.do">
+    			Проверка выдачи сертификата
 				</a></li>
 			</ul>
 		</div>
