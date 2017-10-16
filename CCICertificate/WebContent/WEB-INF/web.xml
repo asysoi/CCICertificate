@@ -35,7 +35,11 @@
 	<param-name>contextConfigLocation</param-name>
 	<param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
   </context-param>
-    
+  
+  <context-param>
+	<param-name>webAppRootKey</param-name>
+	<param-value>portal.cci.by</param-value>
+  </context-param>   
   
   <listener>
     <listener-class>
