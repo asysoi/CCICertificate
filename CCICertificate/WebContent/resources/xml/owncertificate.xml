@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <ownCertificate>
+  <number>0 - 8957.1/3869-1</number>
+  <blanknumber>0037566</blanknumber>
+  <beltpp>
+    <name>Унитарное предприятие по оказанию услуг "Минское отделение торгово-промышленной палаты"</name>
+    <address>220113, г.Минск, ул.Я.Коласа, д.65, т. 280-04-73</address>
+    <unp>1234567890123</unp>
+  </beltpp>
+  <customername>ООО "Электрощит-Сервис"</customername>
+  <customeraddress>220070, г.Минск, ул.Солтыса, д.187, корпус 7</customeraddress>
+  <customerunp>12345667</customerunp>
+  <factoryaddress>220070, г.Минск, ул.Солтыса, д.187, корпус 7, Республика Беларусь</factoryaddress>
+  <branches>1. Первый филиал, 220070, г.Минск, ул.Солтыса, д.157, корпус 12. Второй филиал, 220070, г.Минск, ул.Солтыса, д.157, корпус 1</branches>
+  <additionallists>0</additionallists>
+  <datecert>01.01.2014</datecert>
+  <dateexpire>01.01.2015</dateexpire>
+  <expert>Петров В.А.</expert>
+  <signer>М.В.Гуринович</signer>
+  <signerjob>Начальник ОЭиС №1</signerjob>
+  <datesign>01.01.2014</datesign>
+  <dateload>20.12.2016 10:42:06</dateload>
+  <product>
+    <number>1</number>
+    <name>Подстанция</name>
+    <code>8537 20 910 0</code>
+  </product>
+  <product>
+    <number>2</number>
+    <name>Камеры</name>
+    <code>8537 20 910 0</code>
+  </product>
+  <product>
+    <number>3</number>
+    <name>Распределеители</name>
+    <code>8537 20 910 0</code>
+  </product>
+</ownCertificate>

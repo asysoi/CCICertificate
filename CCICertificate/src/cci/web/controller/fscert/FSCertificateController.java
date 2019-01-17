@@ -1106,7 +1106,7 @@ public class FSCertificateController {
 				try {
 					  FSCertificate cert = (FSCertificate)model.get("fscert");
 					  int iid = Integer.valueOf(id).intValue(); 
-					  List<FSProduct> nproducts = new ArrayList();
+					  List<FSProduct> nproducts = new ArrayList<FSProduct>();
 					  boolean beforeid = true;
 					  
   				      for(int index = 0; index < cert.getProducts().size(); index++) {
@@ -1334,7 +1334,7 @@ public class FSCertificateController {
 				try {
 					  FSCertificate cert = (FSCertificate)model.get("fscert");
 					  int iid = Integer.valueOf(id).intValue(); 
-					  List<FSBlank> nblanks = new ArrayList();
+					  List<FSBlank> nblanks = new ArrayList<FSBlank>();
 					  boolean beforeid = true;
 					  
   				      for(int index = 0; index < cert.getBlanks().size(); index++) {
