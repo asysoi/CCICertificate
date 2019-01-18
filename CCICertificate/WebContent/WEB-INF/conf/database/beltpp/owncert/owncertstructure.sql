@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `owncertificate` (
   `expert` varchar(50) NOT NULL,
   `signer` varchar(50) NOT NULL,
   `signerjob` varchar(120) NOT NULL,
+  'otd_id' tyniint not null
   PRIMARY KEY (`id`),
   UNIQUE KEY `ind_ownc_number` (`number`,`blanknumber`),
   KEY `FK_owncertificate_beltpp` (`id_beltpp`),
