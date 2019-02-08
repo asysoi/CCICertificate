@@ -275,7 +275,7 @@
 				<td>${cert.customername}</td>
 				<td>${cert.blanknumber}</td>
                 <td>${cert.datecert}</td>
-                <td>${cert.additionallists}</td> 
+                <td>${cert.additionalblanks}</td> 
 			</tr>
 		</c:forEach>
 	</table>

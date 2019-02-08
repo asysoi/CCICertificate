@@ -169,7 +169,7 @@ public class OwnCertificateController {
 		vmanager.setHnames(new String[] {"Номер Сертификата",  "Отделение", 
 				"Предприятие", "Номер бланка", "Дата", "Доп. лист"});
 		vmanager.setOrdnames(new String[] { "number", "beltppname", "customername",
-				"blanknumber", "datecert", "additionallists"});
+				"blanknumber", "datecert", "additionalblanks"});
 		vmanager.setWidths(new int[] { 15, 20, 40, 10, 10, 5 });
 		model.addAttribute("ownmanager", vmanager);
 

@@ -1,40 +1,29 @@
 package cci.model.owncert;
 
+
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-@XmlType(name = "product", propOrder = { "number", "name", "code"})
-public class Product {
-	
+
+@XmlType(propOrder = { "name", "address"})
+public class Branch {
 	@JsonIgnore
 	private int id;
-	private String number;
 	private String name;
-	private String code;
+	private String address;
 
-	public void init(int id, String number, String name, String code) {
+	public void init(int id, String name, String address) {
 		this.id = id;
-		this.number = number;
 		this.name = name;
-		this.code = code;
+		this.address = address;
 	}
 
 	@XmlTransient
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getNumber() {
-		return number;
-	}
-
-	public void setNumber(String number) {
-		this.number = number;
 	}
 
 	public String getName() {
@@ -45,28 +34,26 @@ public class Product {
 		this.name = name;
 	}
 
-	public String getCode() {
-		return code;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", number=" + number + ", name=" + name
-				+ ", code=" + code + "]";
+		return name + ", address=" + address + ";";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
 		return result;
 	}
 
@@ -78,11 +65,11 @@ public class Product {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Product other = (Product) obj;
-		if (code == null) {
-			if (other.code != null)
+		Branch other = (Branch) obj;
+		if (address == null) {
+			if (other.address != null)
 				return false;
-		} else if (!code.equals(other.code))
+		} else if (!address.equals(other.address))
 			return false;
 		if (id != other.id)
 			return false;
@@ -91,14 +78,8 @@ public class Product {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (number == null) {
-			if (other.number != null)
-				return false;
-		} else if (!number.equals(other.number))
-			return false;
 		return true;
 	}
-
 	
-
+	
 }

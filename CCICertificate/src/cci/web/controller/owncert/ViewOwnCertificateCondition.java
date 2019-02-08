@@ -10,9 +10,9 @@ public class ViewOwnCertificateCondition {
 	private String customername="like";
 	private String customeraddress="like";
 	private String customerunp="like";
-	private String factoryaddress="like";
+	private String factories="like";
 	private String branches="like";
-	private String additionallists="like";
+	private String additionalblanks="like";
 	private String datestart="=";
 	private String dateexpire="=";
 	private String expert="like";
@@ -24,8 +24,8 @@ public class ViewOwnCertificateCondition {
 	private String productcode="like";
 	private String datecertfrom=">=";
 	private String datecertto="<=";
-	private String additionallistsfrom=">=";
-	private String additionalliststo=">=";
+	private String additionalblanksfrom=">=";
+	private String additionalblanksto=">=";
 	private String otd_id="=";
 	
 	public String getId() {
@@ -76,11 +76,11 @@ public class ViewOwnCertificateCondition {
 	public void setCustomerunp(String customerunp) {
 		this.customerunp = customerunp;
 	}
-	public String getFactoryaddress() {
-		return factoryaddress;
+	public String getFactories() {
+		return factories;
 	}
-	public void setFactoryaddress(String factoryaddress) {
-		this.factoryaddress = factoryaddress;
+	public void setFactories(String factories) {
+		this.factories = factories;
 	}
 	public String getBranches() {
 		return branches;
@@ -88,11 +88,11 @@ public class ViewOwnCertificateCondition {
 	public void setBranches(String branches) {
 		this.branches = branches;
 	}
-	public String getAdditionallists() {
-		return additionallists;
+	public String getAdditionalblanks() {
+		return additionalblanks;
 	}
-	public void setAdditionallists(String additionallists) {
-		this.additionallists = additionallists;
+	public void setAdditionalblanks(String additionalblanks) {
+		this.additionalblanks = additionalblanks;
 	}
 	public String getDatestart() {
 		return datestart;
@@ -160,17 +160,17 @@ public class ViewOwnCertificateCondition {
 	public void setDatecertto(String datecertto) {
 		this.datecertto = datecertto;
 	}
-	public String getAdditionallistsfrom() {
-		return additionallistsfrom;
+	public String getAdditionalblanksfrom() {
+		return additionalblanksfrom;
 	}
-	public void setAdditionallistsfrom(String additionallistsfrom) {
-		this.additionallistsfrom = additionallistsfrom;
+	public void setAdditionallistsfrom(String additionalblanksfrom) {
+		this.additionalblanksfrom = additionalblanksfrom;
 	}
 	public String getAdditionalliststo() {
-		return additionalliststo;
+		return additionalblanksto;
 	}
-	public void setAdditionalliststo(String additionalliststo) {
-		this.additionalliststo = additionalliststo;
+	public void setAdditionalblanksto(String additionalblanksto) {
+		this.additionalblanksto = additionalblanksto;
 	}
 	public String getOtd_id() {
 		return otd_id;

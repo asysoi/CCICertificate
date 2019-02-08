@@ -18,7 +18,7 @@ public class ExportOwnCertConfig implements ExportConfig {
 		"Отделение","Адрес отделения"};
 
 	private String[] fieldnames = new String[] { "number",	"blanknumber",	"customername",
-			"customeraddress","customerunp","factoryaddress","branches","additionallists","datestart",
+			"customeraddress","customerunp","factories","branches","additionalblanks","datestart",
 			"dateexpire","expert","signer","signerjob","datecert","dateload","beltppname",
 			"beltppaddress"};
 	

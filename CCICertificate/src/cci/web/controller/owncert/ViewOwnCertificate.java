@@ -7,8 +7,8 @@ public class ViewOwnCertificate extends OwnCertificate {
 	private String productcode;
 	private String datecertfrom;
 	private String datecertto;
-	private String additionallistsfrom;
-	private String additionalliststo;
+	private String additionalblanksfrom;
+	private String additionalblanksto;
 	private String otd_id;
 	
 	public String getProductname() {
@@ -35,17 +35,17 @@ public class ViewOwnCertificate extends OwnCertificate {
 	public void setDatecertto(String datecertto) {
 		this.datecertto = datecertto;
 	}
-	public String getAdditionallistsfrom() {
-		return additionallistsfrom;
+	public String getAdditionalblanksfrom() {
+		return additionalblanksfrom;
 	}
-	public void setAdditionallistsfrom(String additionallistsfrom) {
-		this.additionallistsfrom = additionallistsfrom;
+	public void setAdditionallistsfrom(String additionalblanksfrom) {
+		this.additionalblanksfrom = additionalblanksfrom;
 	}
 	public String getAdditionalliststo() {
-		return additionalliststo;
+		return additionalblanksto;
 	}
-	public void setAdditionalliststo(String additionalliststo) {
-		this.additionalliststo = additionalliststo;
+	public void setAdditionalliststo(String additionalblanksto) {
+		this.additionalblanksto = additionalblanksto;
 	}
 	public String getOtd_id() {
 		return otd_id;
@@ -56,8 +56,8 @@ public class ViewOwnCertificate extends OwnCertificate {
 	@Override
 	public String toString() {
 		return "ViewOwnCertificate [" + super.toString() + " productname=" + productname + ", productcode=" + productcode + ", datecertfrom="
-				+ datecertfrom + ", datecertto=" + datecertto + ", additionallistsfrom=" + additionallistsfrom
-				+ ", additionalliststo=" + additionalliststo + ", otd_id=" + otd_id + "]";
+				+ datecertfrom + ", datecertto=" + datecertto + ", additionalblanksfrom=" + additionalblanksfrom
+				+ ", additionalblanksto=" + additionalblanksto + ", otd_id=" + otd_id + "]";
 	}
 	
     

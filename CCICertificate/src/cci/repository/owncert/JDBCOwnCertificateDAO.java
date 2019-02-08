@@ -16,6 +16,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import cci.model.cert.Certificate;
+import cci.model.owncert.Branch;
+import cci.model.owncert.Factory;
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.OwnCertificateHeader;
@@ -46,7 +48,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ------------------------------------------------------------------------------
 	public int getViewPageCount(SQLBuilder builder) {
         SQLQueryUnit qunit = builder.getSQLUnitWhereClause();     
-		String sql = "SELECT count(*) FROM CERTVIEW "
+		String sql = "SELECT count(*) FROM owncertificate "
 				+ qunit.getClause();
 	
 		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
@@ -90,7 +92,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 				+ " ORDER by " +  orderby + " " + order + ", id " + order;
         	*/
         	sql = "select " + flist
-    				+ " from certview "
+    				+ " from owncertificate "
     				+  filter.getClause()
     				+ " ORDER by " +  orderby + " " + order + ", id " + order  
     				+ " LIMIT :lowposition, :pagesize ";    
@@ -101,7 +103,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
     		
         } else {
         	sql = "select " + flist 
-    				+ " from certview "
+    				+ " from owncertificate "
     				+  filter.getClause()
     				+ " ORDER by " +  orderby + " " + order + ", id " + order;  
         }
@@ -134,7 +136,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
     	Map<String, Object> params = filter.getParams();
 
-		String sql = " SELECT " + flist + " FROM CERTVIEW " 
+		String sql = " SELECT " + flist + " FROM owncertificate " 
 				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
 
 		LOG.info("Get certificates: " + sql);
@@ -154,7 +156,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ---------------------------------------------------------------
 	public OwnCertificates getOwnCertificates(OwnFilter filter, boolean isLike) {
 
-		String sql = "select * from certview "
+		String sql = "select * from owncertificate "
 				+ (isLike ? filter.getWhereLikeClause() : filter
 						.getWhereEqualClause()) + " ORDER BY id";
          OwnCertificates certs = new  OwnCertificates();
@@ -169,7 +171,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ---------------------------------------------------------------
 	public OwnCertificateHeaders getOwnCertificateHeaders(OwnFilter filter, boolean isLike) {
 
-		String sql = "select number, blanknumber from certview "
+		String sql = "select number, blanknumber from owncertificate "
 				+ (isLike ? filter.getWhereLikeClause() : filter
 						.getWhereEqualClause()) + " ORDER BY id";
          OwnCertificateHeaders certs = new  OwnCertificateHeaders();
@@ -186,7 +188,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	public OwnCertificate findOwnCertificateByID(int id) throws Exception {
 		OwnCertificate cert = null;
 
-		String sql = "select * from certview WHERE id = ?";
+		String sql = "select * from owncertificate WHERE id = ?";
 		cert = template.getJdbcOperations()
 				.queryForObject(
 						sql,
@@ -210,14 +212,18 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		cert.setId_beltpp(getBeltppID(cert));
 
 		String sql_cert = "insert into owncertificate(id_beltpp, number, blanknumber, type, customername, customeraddress, "
-				+ " customerunp, factoryaddress, branches, datecert, dateexpire, expert, signer, signerjob, datestart, additionallists) "
+				+ " customerunp, datecert, dateexpire, expert, signer, signerjob, datestart, additionalblanks, factories, branches, products, "
+				+ " beltppname, beltppaddress, beltppphone, beltppunp) "
 				+ " values ("
-				+ " :id_beltpp, :number, :blanknumber, :type, :customername, :customeraddress, :customerunp, :factoryaddress, :branches,"
+				+ " :id_beltpp, :number, :blanknumber, :type, :customername, :customeraddress, :customerunp, "
 				+ " STR_TO_DATE(:datecert,'%d.%m.%Y'), "
 				+ " STR_TO_DATE(:dateexpire,'%d.%m.%Y'), "
 				+ " :expert, :signer, :signerjob, "
-				+ " STR_TO_DATE(:datestart,'%d.%m.%Y')" + ", :additionallists)";
-
+				+ " STR_TO_DATE(:datestart,'%d.%m.%Y')" + ", :additionalblanks, :factorylist, :branchlist, :productlist, "
+				+ " :beltppname, :beltppaddress, :beltppphone, :beltppunp)";
+		
+		//factories, branches, 
+		
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 		int id = 0;
@@ -242,6 +248,34 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 				LOG.info("Добавлены продукты: " + updateCounts.toString());
 			}
 
+			String sql_branches = 
+					"insert into ownbranch(id_certificate, name, address) "
+					+ "values ( :id, :name, :address)";
+                
+			if (cert.getBranches() != null && cert.getBranches().size() > 0) {
+				for (Branch br : cert.getBranches()) {
+					br.setId(id);
+				}
+				SqlParameterSource[] batch = SqlParameterSourceUtils
+						.createBatch(cert.getBranches().toArray());
+				int[] updateCounts = template.batchUpdate(sql_branches, batch);
+				LOG.info("Добавлены обособленные подразделения: " + updateCounts.toString());
+			}
+
+			String sql_factories = 
+					"insert into ownfactory(id_certificate, address) "
+					+ "values (:id, :address)";
+                
+			if (cert.getFactories() != null && cert.getFactories().size() > 0) {
+				for (Factory ft : cert.getFactories()) {
+					ft.setId(id);
+				}
+				SqlParameterSource[] batch = SqlParameterSourceUtils
+						.createBatch(cert.getFactories().toArray());
+				int[] updateCounts = template.batchUpdate(sql_factories, batch);
+				LOG.info("Добавлены адреса производств: " + updateCounts.toString());
+			}
+			
 			cert.setId(id);
 		}
 
@@ -312,9 +346,9 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 
 				String sql_cert = "update owncertificate SET "
 						+ " id_beltpp=:id_beltpp, type=:type, customername=:customername, customeraddress=:customeraddress, customerunp=:customerunp,"
-						+ " factoryaddress=:factoryaddress, branches=:branches, datecert=STR_TO_DATE(:datecert,'%d.%m.%Y'), "
+						+ " factories=:factories, branches=:branches, datecert=STR_TO_DATE(:datecert,'%d.%m.%Y'), "
 						+ " dateexpire = STR_TO_DATE(:dateexpire,'%d.%m.%Y'), "
-						+ " expert = :expert, signer = :signer, signerjob = :signerjob, additionallists=:additionallists, "
+						+ " expert = :expert, signer = :signer, signerjob = :signerjob, additionalblanks=:additionalblanks, "
 						+ " datestart = STR_TO_DATE(:datestart,'%d.%m.%Y') "
 						+ " WHERE id = :id ";
 
@@ -361,11 +395,11 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// Find certificate by number
+	// Find certificate by number. Updated 07.02.2019
 	// ---------------------------------------------------------------
 	public OwnCertificate findOwnCertificateByNumber(String number) {
 
-		String sql = "select * from certview WHERE number = ?";
+		String sql = "select * from owncertificate WHERE number = ?";
 		OwnCertificate cert = template.getJdbcOperations()
 				.queryForObject(
 						sql,
@@ -377,6 +411,19 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		cert.setProducts(template.getJdbcOperations().query(sql,
 				new Object[] { cert.getId() },
 				new BeanPropertyRowMapper<Product>(Product.class)));
+		
+		sql = "select * from ownbranch WHERE id_certificate = ? ORDER BY id";
+		
+		cert.setBranches(template.getJdbcOperations().query(sql,
+				new Object[] { cert.getId() },
+				new BeanPropertyRowMapper<Branch>(Branch.class)));
+
+		sql = "select * from ownfactory WHERE id_certificate = ? ORDER BY id";
+		
+		cert.setFactories(template.getJdbcOperations().query(sql,
+				new Object[] { cert.getId() },
+				new BeanPropertyRowMapper<Factory>(Factory.class)));
+		
 		return cert;	
 	}
 }

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@XmlType(propOrder = { "name", "address", "unp"})
+@XmlType(propOrder = { "name", "address", "unp", "phone"})
 public class Company {
    
 	@JsonIgnore
@@ -13,13 +13,14 @@ public class Company {
 	private String name;
 	private String address;
 	private String unp;
+	private String phone;
 	
-   
-	public void init(int id, String name, String address, String unp) {
+   	public void init(int id, String name, String address, String unp, String phone) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.unp = unp;
+		this.phone = phone;
 	}
 	
 	@XmlTransient
@@ -53,6 +54,14 @@ public class Company {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	@Override

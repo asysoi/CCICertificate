@@ -1,19 +1,12 @@
 package cci.web.controller.owncert;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,15 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cci.model.owncert.Company;
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateHeaders;
 import cci.model.owncert.OwnCertificates;
-import cci.service.owncert.OwnCertificateService;
 import cci.web.controller.cert.exception.AddCertificateException;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
 
@@ -87,6 +74,7 @@ public class OwnCertificateRestFulController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public OwnCertificate addCertificate(@RequestBody OwnCertificate certificate) {
 		try {
+			System.out.println(certificate.toString());
 			service.addOwnSertificate(certificate);
 		} catch (Exception ex) {
 			throw(new AddCertificateException(ex.toString()));
@@ -102,7 +90,9 @@ public class OwnCertificateRestFulController {
 			headers = "Accept=application/json,application/xml")
 	@ResponseStatus(HttpStatus.OK)
 	public OwnCertificate getOwnCertificateByNumber(
-			@RequestParam(value = "number", required = true) String number)  {
+			@RequestParam(value = "number", required = true) String number,
+			@RequestParam(value = "blanknumber", required = true) String blanknumber,
+			@RequestParam(value = "date", required = true) String datecert)  {
 		try {
 		    return service.getOwnCertificateByNumber(number);
 		} catch (Exception ex) {
@@ -123,14 +113,18 @@ public class OwnCertificateRestFulController {
 	/* -----------------------------
 	 * Delete certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "rowncert.do/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json,application/xml")
+	@RequestMapping(value = "rowncert.do", method = RequestMethod.DELETE, headers = "Accept=application/json,application/xml")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public ResponseEntity<String> deleteCountry(@PathVariable("id") int id) throws Exception {
-		System.out.println("id="+id);
-		service.deleteOwnCertificate(id);
+	public ResponseEntity<String> deleteCountry(
+			@RequestParam(value = "number", required = true) String number,
+			@RequestParam(value = "blanknumber", required = true) String blanknumber,
+			@RequestParam(value = "date", required = true) String datecert
+			) throws Exception {
+		//System.out.println("id="+id);
+		//service.deleteOwnCertificate(id);
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("MyResponseHeader", "MyValue");
-		return new ResponseEntity<String>("Certificate " + id + " deleted.", responseHeaders, HttpStatus.OK);
+		return new ResponseEntity<String>("Certificate deleted.", responseHeaders, HttpStatus.OK);
 	}
 	
 	/* -----------------------------
