@@ -46,6 +46,13 @@ public class OwnCertificateMapper<T> implements RowMapper<OwnCertificate> {
 			cert.setSignerjob(resultSet.getString("signerjob"));
 			cert.setDatecert(formatter.format(resultSet.getDate("datecert")));
 			cert.setDateload(time.format(resultSet.getTimestamp("dateload")));
+			cert.setDatestop(resultSet.getDate("datestop") == null ? null : time.format(resultSet.getDate("datestop")));
+			cert.setDatechange(time.format(resultSet.getDate("datechange")) == null ? null : time.format(resultSet.getDate("datechange")));
+			cert.setNumbernext(resultSet.getString("numbernext"));
+			cert.setNumberprev(resultSet.getString("numberprev"));
+			cert.setFilename(resultSet.getString("filename"));
+			cert.setStatus(resultSet.getString("status"));
+			cert.setProductdescription(resultSet.getString("productdescription"));
 			
 			beltpp = new Company();
 			beltpp.setName(resultSet.getString("beltppname")); 

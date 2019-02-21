@@ -213,16 +213,22 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 
 		String sql_cert = "insert into owncertificate(id_beltpp, number, blanknumber, type, customername, customeraddress, "
 				+ " customerunp, datecert, dateexpire, expert, signer, signerjob, datestart, additionalblanks, factories, branches, products, "
-				+ " beltppname, beltppaddress, beltppphone, beltppunp) "
+				+ " beltppname, beltppaddress, beltppphone, beltppunp, " 
+				+ " datestop, datechange, numberprev, numbernext, filename, status, productdescription) "
 				+ " values ("
 				+ " :id_beltpp, :number, :blanknumber, :type, :customername, :customeraddress, :customerunp, "
 				+ " STR_TO_DATE(:datecert,'%d.%m.%Y'), "
 				+ " STR_TO_DATE(:dateexpire,'%d.%m.%Y'), "
 				+ " :expert, :signer, :signerjob, "
 				+ " STR_TO_DATE(:datestart,'%d.%m.%Y')" + ", :additionalblanks, :factorylist, :branchlist, :productlist, "
-				+ " :beltppname, :beltppaddress, :beltppphone, :beltppunp)";
+				+ " :beltppname, :beltppaddress, :beltppphone, :beltppunp, "
+				+ " STR_TO_DATE(:datestop,'%d.%m.%Y'), "
+				+ " STR_TO_DATE(:datechange,'%d.%m.%Y'), "
+				+ " :numberprev, :numbernext, :filename, :status, :productdescription"
+				+ ")";
 		
-		//factories, branches, 
+	    // Денорм данные
+		//factories -> ownCerificate.getFactoryList(), branches -> getBranchlist(), products -> getProductlist()    
 		
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
