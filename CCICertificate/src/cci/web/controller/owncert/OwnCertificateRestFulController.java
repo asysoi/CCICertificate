@@ -2,6 +2,16 @@ package cci.web.controller.owncert;
 
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateHeaders;
@@ -82,6 +93,36 @@ public class OwnCertificateRestFulController {
 		return certificate;
 	}
 	
+	/* -------------------------------------------------
+	 * Add new certificate & file upload
+	 * ------------------------------------------------- */
+	@RequestMapping(value = "rowncertfile.do", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public String addCertificateAndFileUpload(HttpServletRequest request,
+			            @RequestParam("number") String number,
+			            @RequestParam("blanknumber") String blanknumber,
+			            @RequestParam("date") String date,
+						@RequestParam("file") MultipartFile multipartFile) {
+		
+		try {
+			 //System.out.println(certificate.toString());
+			 //service.addOwnSertificate(certificate);
+		     System.out.println("Number = " + number);
+		     System.out.println("BlankNumber = " + blanknumber);
+		     System.out.println("Date = " + date);
+			 //Get the uploaded files and store them
+             String fileName = multipartFile.getOriginalFilename();
+             String relativeWebPath = "/resources/in";
+             String absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+             File certFile = new File(absoluteDiskPath, fileName);  		
+             multipartFile.transferTo(certFile);
+	        
+		} catch (Exception ex) {
+			throw(new AddCertificateException(ex.toString()));
+		}
+		return "File added";
+    }
+		
 		
 	/* ---------------------------------------------------
 	 * Get certificate by NUmber

@@ -37,6 +37,11 @@
           </property>
     </bean>
 
+    <!-- Resolver for multipart file upload Spring wrapper for apache fileupload  -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+          <property name="maxUploadSize" value="10000000"/>
+    </bean> 
+
 	<!-- TRANSACTION support transactional handling --> 
 	<!-- Enable Annotation based Declarative Transaction Management -->
 	<tx:annotation-driven proxy-target-class="true"
