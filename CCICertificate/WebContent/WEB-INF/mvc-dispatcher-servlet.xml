@@ -44,13 +44,19 @@
 
 	<!-- TRANSACTION support transactional handling --> 
 	<!-- Enable Annotation based Declarative Transaction Management -->
-	<tx:annotation-driven proxy-target-class="true"
-		transaction-manager="transactionManager" />
+	<tx:annotation-driven/>
 
 	<!-- Creating TransactionManager Bean, since JDBC we are creating of type 	DataSourceTransactionManager -->
+	<!-- Use qualified name in Transactional annotation to select right transactionaManager -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
+		<qualifier value="ct1"/>
+	</bean>
+	<bean id="transactionManagerOwn"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceOwn" />
+		<qualifier value="own"/>
 	</bean>
 	<!-- TRANSACTION  -->
 
@@ -114,7 +120,7 @@
  
     <bean id="dataSourceOwn" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://192.168.0.72:3306/owncert?useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="url" value="jdbc:mysql://192.168.0.72:3306/owncert?useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true"/>
         <property name="username" value="cert"/>
         <property name="password" value="123456"/>
     </bean>

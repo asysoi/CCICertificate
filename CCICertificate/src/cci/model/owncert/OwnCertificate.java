@@ -47,6 +47,27 @@ public class OwnCertificate {
 	private List<Factory> factories;
 	private List<Branch> branches;
 	private List<Product> products;
+	private int otd_id;
+	private String xml;
+	
+		
+	@XmlTransient
+	public String getXml() {
+		return xml;
+	}
+
+	public void setXml(String xml) {
+		this.xml = xml;
+	}
+
+	@XmlTransient
+	public int getOtd_id() {
+		return otd_id;
+	}
+	
+	public void setOtd_id(int otd_id) {
+		this.otd_id = otd_id;
+	}
 
 	@XmlTransient
 	public String getBeltppname() {
@@ -482,5 +503,4 @@ public class OwnCertificate {
 		return true;
 	}
 
-    
 }

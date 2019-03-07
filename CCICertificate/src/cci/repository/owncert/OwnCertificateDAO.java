@@ -21,8 +21,12 @@ public interface OwnCertificateDAO {
 
 	OwnCertificate updateOwnCertificate(OwnCertificate certificate);
 	
-	OwnCertificate findOwnCertificateByNumber(String number) throws Exception;
-
+	OwnCertificate findOwnCertificateByNumber(String number, String blanknumber, String datecert, String otd_id) throws Exception;
+	
+	boolean deleteOwnCertificate(String number, String blanknumber, String datecert, String otd_id);
+	
+	// OwnCertificate checkOwnCertificateExist(String number, String blanknumber, String datecert) throws Exception;
+	
 	// ---------------- Web orientated methods ----------------------
 	int getViewPageCount(SQLBuilder builder);
 
@@ -31,6 +35,7 @@ public interface OwnCertificateDAO {
 
 	List<OwnCertificateExport> getCertificates(String[] fields, String orderby, String order, SQLBuilder builder);
 
+	boolean updateOwnCertificateFileName(String number, String blanknumber, String datecert, String filename);
 
 
 }

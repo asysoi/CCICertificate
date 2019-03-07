@@ -33,19 +33,19 @@ public class XMLService {
 	}
 	
 
-	public void uploadCertificateToFile(Certificate cert, String file_path)
+	public void uploadCertificateToFile(Object cert, String file_path)
 			throws Exception {
-		JAXBContext context = JAXBContext.newInstance(Certificate.class);
+		JAXBContext context = JAXBContext.newInstance(cert.getClass());
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		m.marshal(cert, new File(file_path));
 	}
 	
-	public String uploadCertificateToString(Certificate cert)
+	public String parceObjectToXMLString(Object cert)
 			throws Exception {
 		Writer outstr = new StringWriter();
 		
-		JAXBContext context = JAXBContext.newInstance(Certificate.class);
+		JAXBContext context = JAXBContext.newInstance(cert.getClass());
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         m.marshal(cert, outstr);

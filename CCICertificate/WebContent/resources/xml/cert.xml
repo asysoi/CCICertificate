@@ -1,42 +1,584 @@
-<cert>
-	<otd_id>4</otd_id>
-	<otd_name>Гомельское отделение Белорусской торгово-промышленной палаты
-	</otd_name>
-	<forms>А</forms>
-	<kontrp>OJSC "BSW - MANAGEMENT COMPANY OF "BMC" HOLDING". 247210
-		ZHLOBIN PROMYSHLENNAYA STR.37 REPUBLIC BELARUS.</kontrp>
-	<poluchat>MAZUR-TOM
-		UL.MODRZEWIOWA 82
-		11-010, BARCZEWO WOJTOWO
-		POLAND.
-	</poluchat>
-	<datacert>14.01.2017</datacert>
-	<nomercert>BYPL7309010398</nomercert>
-	<expert>ZHLOBIN</expert>
-	<nblanka>0458190</nblanka>
-	<rukovod>ZHLOBIN</rukovod>
-	<transport>TRUCK:</transport>
-	<stranav>THE REPUBLIC OF BELARUS</stranav>
-	<codestranav>BY</codestranav>
-	<stranapr>POLAND</stranapr>
-	<codestranapr>PL</codestranapr>
-	<stranap>THE REPUBLIC OF BELARUS</stranap>
-	<status>действительный</status>
-	<koldoplist>0</koldoplist>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ownCertificate>
+	<number>5/21</number>
+	<blanknumber>0061893</blanknumber>
+	<beltpp>
+		<name>Унитарное предприятие "Брестское отделение БелТПП"</name>
+		<address>224030, г.Брест, ул.Гоголя,13</address>
+		<phone>(0163) 41-32-56</phone>
+	</beltpp>
+	<customername>Открытое акционерное общество "Барановичское
+		производственное хлопчатобумажное объединение"</customername>
+	<customeraddress>225410, Брестская обл., г.Барановичи ул.Фабричная, 7;
+		Республика Беларусь</customeraddress>
+	<customerunp>200166488</customerunp>
+	<additionalblanks>91 639;91 640;91 641;91 642;91 643;91 644;91 645;
+	</additionalblanks>
+	<datestart>27.02.2019</datestart>
+	<dateexpire>27.02.2020</dateexpire>
+	<expert>Стасюкевич И.В.</expert>
+	<signer>Стасюкевич И.В.</signer>
+	<signerjob>Эксперт 1 категории</signerjob>
+	<datecert>27.02.2019</datecert>
+	<dateload>07.03.2019 09:30:30</dateload>
+	<status>valid</status>
+	<factories>
+		<factory>
+			<address>Производство тканей - 225410, Брестская обл., г.Барановичи,
+				ул.Фабричная, 7. Производство швейных изделий - 225410, Брестская
+				обл., г.Барановичи, ул.Фабричная, 7А.</address>
+		</factory>
+	</factories>
+	<branches />
 	<products>
-		<row>
-			<numerator>1</numerator>
-			<vidup> 14
-				№4/14,16, 18; 7/21; 9/1,2,5; 10/1-5,7,11.
-			</vidup>
-			<tovar>14 COILS.
-				STEEL WIRE FOR NAILS 3,40mm.
-			</tovar>
-			<kriter>"W"72.17</kriter>
-			<ves>19842 kg/
-				19814 kg
-			</ves>
-			<schet>75571211 от 14.01.2017</schet>
-		</row>
+		<product>
+			<number>1</number>
+			<name>1.Изделия для новорожденных и детей ясельной группы (ГОСТ
+				32119-2013):Рубашечка для детей ясельной группы, нагрудный фартук,
+				распашонка для новорожденного, кофточка для детей ясельной группы,
+				набор для крещения мальчика, набор для крещения девочки, рубашечка,
+				пеленка, конверт для новорожденного, простынка для купания</name>
+			<code>6209200000</code>
+		</product>
+		<product>
+			<number>2</number>
+			<name>Простынка</name>
+			<code>6302210000</code>
+		</product>
+		<product>
+			<number>3</number>
+			<name>Косынка</name>
+			<code>6505009000</code>
+		</product>
+		<product>
+			<number>4</number>
+			<name>Чепчик для новорожденного</name>
+			<code>6505009000</code>
+		</product>
+		<product>
+			<number>5</number>
+			<name>2.Изделия швейные бельевые (ГОСТ 25296-2003): Трусы мужские
+			</name>
+			<code>6207110000</code>
+		</product>
+		<product>
+			<number>6</number>
+			<name>Пижама мужская</name>
+			<code>6207210000</code>
+		</product>
+		<product>
+			<number>7</number>
+			<name>Пижама женская, ночная сорочка женская</name>
+			<code>6208210000</code>
+		</product>
+		<product>
+			<number>8</number>
+			<name>Комплект домашний (2 слой): блуза на бретелях, шорты, брюки
+			</name>
+			<code>620422 8000</code>
+		</product>
+		<product>
+			<number>9</number>
+			<name>3.Одежда верхняя платьево-блузочного ассортимента (ГОСТ
+				25294-2003):Халат махровый хлопчатобумажный</name>
+			<code>6207910000, 6208910000</code>
+		</product>
+		<product>
+			<number>10</number>
+			<name>Халат махровый (состав: хлопок, полиэфир)</name>
+			<code>6207910000, 6208990000</code>
+		</product>
+		<product>
+			<number>11</number>
+			<name>5.Платки носовые (ГОСТ 11381-83): Платки носовые для взрослых
+			</name>
+			<code>6213200000</code>
+		</product>
+		<product>
+			<number>12</number>
+			<name>Платки носовые детские</name>
+			<code>6213200000</code>
+		</product>
+		<product>
+			<number>13</number>
+			<name>6.Платки головные хлопчатобумажные, смешанные и из вискозной
+				пряжи (ГОСТ 11372-84): Платки головные хлопчатобумажные</name>
+			<code>6214900000</code>
+		</product>
+		<product>
+			<number>14</number>
+			<name>7.Изделия штучные (СТБ 638-2001): Скатерть из хлопчатобумажных
+				тканей</name>
+			<code>6302510009</code>
+		</product>
+		<product>
+			<number>15</number>
+			<name>Скатерть из хлопкольняных тканей</name>
+			<code>6302599000</code>
+		</product>
+		<product>
+			<number>16</number>
+			<name>Скатерть из смешанных тканей</name>
+			<code>6302510001</code>
+		</product>
+		<product>
+			<number>17</number>
+			<name>Салфетка из хлопчатобумажных тканей</name>
+			<code>6302510009</code>
+		</product>
+		<product>
+			<number>18</number>
+			<name>Салфетка из хлопкольняных тканей</name>
+			<code>6302510001</code>
+		</product>
+		<product>
+			<number>19</number>
+			<name>Салфетка из смешанных тканей</name>
+			<code>6302539000</code>
+		</product>
+		<product>
+			<number>20</number>
+			<name>Полотенце из хлопчатобумажных тканей</name>
+			<code>6302910000</code>
+		</product>
+		<product>
+			<number>21</number>
+			<name>Полотенце из хлопкольняных тканей</name>
+			<code>6302910000</code>
+		</product>
+		<product>
+			<number>22</number>
+			<name>Рукавица кухонная (из хлопчатобумажных, хлопкольняных и
+				смешанных тканей)</name>
+			<code>6216000000</code>
+		</product>
+		<product>
+			<number>23</number>
+			<name>Прихватка, утеплитель для чайника (из хлопчатобумажных,
+				хлопкольняных и смешанных тканей)</name>
+			<code>6307909800</code>
+		</product>
+		<product>
+			<number>24</number>
+			<name>Фартук кухонный</name>
+			<code>6211421000</code>
+		</product>
+		<product>
+			<number>25</number>
+			<name>Набор хозяйственный: фартук и нарукавники</name>
+			<code>6211421000, 6217100000</code>
+		</product>
+		<product>
+			<number>26</number>
+			<name>Набор кухонный в комплектах и отдельными предметами из
+				хлопчатобумажных тканей</name>
+			<code>6302910000</code>
+		</product>
+		<product>
+			<number>27</number>
+			<name>Набор кухонный в комплектах и отдельными предметами из
+				хлопкольняных тканей</name>
+			<code>6302999000</code>
+		</product>
+		<product>
+			<number>28</number>
+			<name>Набор кухонный в комплектах и отдельными предметами из
+				смешанных тканей</name>
+			<code>6302939000</code>
+		</product>
+		<product>
+			<number>29</number>
+			<name>Подставка под горячее, набор столовый из скатертей и салфеток в
+				комплектах и отдельными предметами, набор чайный в комплектах и
+				отдельными предметами, набор кофейный в комплектах и отдельными
+				предметами, дорожки из хлопчатобумажных тканей</name>
+			<code>6302510009</code>
+		</product>
+		<product>
+			<number>30</number>
+			<name>Подставка под горячее, набор столовый из скатертей и салфеток в
+				комплектах и отдельными предметами, набор чайный в комплектах и
+				отдельными предметами, набор кофейный в комплектах и отдельными
+				предметами, дорожки из хлопкольняных тканей</name>
+			<code>6302510009</code>
+		</product>
+		<product>
+			<number>31</number>
+			<name>Подставка под горячее, набор столовый из скатертей и салфеток в
+				комплектах и отдельными предметами, набор чайный в комплектах и
+				отдельными предметами, набор кофейный в комплектах и отдельными
+				предметами, дорожки из из смешанных тканей</name>
+			<code>6302539000</code>
+		</product>
+		<product>
+			<number>32</number>
+			<name>Набор полотенец, набор банный из полотенец из хлопчатобумажных
+				тканей</name>
+			<code>6302910000</code>
+		</product>
+		<product>
+			<number>33</number>
+			<name>Набор полотенец, набор банный из полотенец из хлопкольняных
+				тканей</name>
+			<code>6302999000</code>
+		</product>
+		<product>
+			<number>34</number>
+			<name>Набор полотенец, набор банный из полотенец из смешанных тканей
+			</name>
+			<code>6302939000</code>
+		</product>
+		<product>
+			<number>35</number>
+			<name>Наборы банные в комплектах и отдельными предметами: шарф для
+				сауны, коврик, полотенце для сауны, рукавица, простыня, шляпочка для
+				сауны</name>
+			<code>6307909800, 6214900000, 6307909800, 6302910000, 6307909800,
+				6307909800, 6506999090</code>
+		</product>
+		<product>
+			<number>36</number>
+			<name>Салфетка для рук из хлопчатобумажных тканей</name>
+			<code>6302910000</code>
+		</product>
+		<product>
+			<number>37</number>
+			<name>Салфетка для рук из хлопкольняных тканей</name>
+			<code>6302999000</code>
+		</product>
+		<product>
+			<number>38</number>
+			<name>Салфетка для рук из смешанных тканей</name>
+			<code>6302939000</code>
+		</product>
+		<product>
+			<number>39</number>
+			<name>Набор декоративный для детской кроватки</name>
+			<code>6304999000</code>
+		</product>
+		<product>
+			<number>40</number>
+			<name>Прогулочный комплект</name>
+			<code>6302210000</code>
+		</product>
+		<product>
+			<number>41</number>
+			<name>Полог</name>
+			<code>6304191000</code>
+		</product>
+		<product>
+			<number>42</number>
+			<name>Покрывало</name>
+			<code>6304191000</code>
+		</product>
+		<product>
+			<number>43</number>
+			<name>Плед детский</name>
+			<code>9404909000</code>
+		</product>
+		<product>
+			<number>44</number>
+			<name>Плед</name>
+			<code>9404909000</code>
+		</product>
+		<product>
+			<number>45</number>
+			<name>Чехол декоративный для подушки</name>
+			<code>6304920000</code>
+		</product>
+		<product>
+			<number>46</number>
+			<name>Чехол на табурет, чехол на стул, чехол на кастрюлю, сумка
+				хозяйственная (из хлопчатобумажных, хлопкольняных и смешанных
+				тканей)</name>
+			<code>6307909800</code>
+		</product>
+		<product>
+			<number>47</number>
+			<name>Чехол для хранения изделий, чехол для изготовления подушки
+			</name>
+			<code>6307909800</code>
+		</product>
+		<product>
+			<number>48</number>
+			<name>Шторы из хлопчатобумажных тканей</name>
+			<code>6303910000</code>
+		</product>
+		<product>
+			<number>49</number>
+			<name>Шторы из хлопкольняных тканей</name>
+			<code>6303999000</code>
+		</product>
+		<product>
+			<number>50</number>
+			<name>Шторы из смешанных тканей</name>
+			<code>6303929000</code>
+		</product>
+		<product>
+			<number>51</number>
+			<name>Сувениры из текстильных материалов</name>
+			<code>6305200000, 6307909800, 9505900000</code>
+		</product>
+		<product>
+			<number>52</number>
+			<name>8.Белье постельное (ГОСТ 31307-2005):Белье постельное для
+				взрослых в комплектах и отдельными предметами из хлопчатобумажных и
+				хлопкольняных тканей: пододеяльники, простыни, наволочки верхние
+			</name>
+			<code>6302210000, 6302310009, 6302310001</code>
+		</product>
+		<product>
+			<number>53</number>
+			<name>Белье постельное для детей и подростков в комплектах и
+				отдельными предметами из хлопчатобумажных тканей: пододеяльники,
+				простыни, наволочки верхние</name>
+			<code>6302210000, 6302310009</code>
+		</product>
+		<product>
+			<number>54</number>
+			<name>Белье постельное для взрослых в комплектах и отдельными
+				предметами верхние из чистольняных, льняных и полульняных тканей:
+				пододеяльники, простыни, наволочки верхние</name>
+			<code>6302291000, 6302392001</code>
+		</product>
+		<product>
+			<number>55</number>
+			<name>9.Комплекты для детских кроваток (ГОСТ 31307-2005, СТБ
+				638-2001,СТБ 753-2000): Большой полог, малый полог, покрывало,
+				пододеяльник, простыня, подушка декоративная</name>
+			<code>6302210000</code>
+		</product>
+		<product>
+			<number>56</number>
+			<name>10.Подушки (СТБ 753-2000): Подушки спальные, подушки диванные
+				(декоративного назначения)</name>
+			<code>9404909000</code>
+		</product>
+		<product>
+			<number>57</number>
+			<name>11.Одеяла и покрывала стеганые (СТБ 936-93)</name>
+			<code>6304199000</code>
+		</product>
+		<product>
+			<number>58</number>
+			<name>12.Полотенца вафельные (СТБ 1017-96)</name>
+			<code>6302910000</code>
+		</product>
+		<product>
+			<number>59</number>
+			<name>13.Полотно стеганое (ТУ BY 200166488.187-2015)</name>
+			<code>5811000000</code>
+		</product>
+		<product>
+			<number>60</number>
+			<name>14.Рукавицы и перчатки хозяйственные (СТБ 916-2009): Средства
+				защиты рук от минимальных рисков - рукавицы хозяйственные</name>
+			<code>6216000000</code>
+		</product>
+		<product>
+			<number>61</number>
+			<name>15.Одежда производственная и специальная (СТБ 1387-2003):
+				Одежда производственная и специальная для защиты от общих
+				производственных загрязнений и механических воздействий: Халат
+				женский</name>
+			<code>6211421000</code>
+		</product>
+		<product>
+			<number>62</number>
+			<name>Халат мужской</name>
+			<code>6211321000</code>
+		</product>
+		<product>
+			<number>63</number>
+			<name>Одежда производственная и специальная для защиты от общих
+				производственных загрязнений и механических воздействий: Костюмы
+				мужские</name>
+			<code>6203221000</code>
+		</product>
+		<product>
+			<number>64</number>
+			<name>Костюмы женские</name>
+			<code>6204221000</code>
+		</product>
+		<product>
+			<number>65</number>
+			<name>Куртка мужская</name>
+			<code>6203321000</code>
+		</product>
+		<product>
+			<number>66</number>
+			<name>Куртка женская</name>
+			<code>6204321000</code>
+		</product>
+		<product>
+			<number>67</number>
+			<name>Брюки мужские</name>
+			<code>6203421100</code>
+		</product>
+		<product>
+			<number>68</number>
+			<name>Средства индивидуальной защиты от пониженных температур из
+				хлопчатобумажных тканей с утепляющей прокладкой из ватина
+				холстопрошивного хлопкольняного: Костюмы мужские</name>
+			<code>6203299000</code>
+		</product>
+		<product>
+			<number>69</number>
+			<name>Куртка мужская</name>
+			<code>6203321000</code>
+		</product>
+		<product>
+			<number>70</number>
+			<name>Брюки мужские</name>
+			<code>6203421100</code>
+		</product>
+		<product>
+			<number>71</number>
+			<name>Фартуки специальные для защиты от общих производственных
+				загрязнений и механических воздействий</name>
+			<code>6211421000</code>
+		</product>
+		<product>
+			<number>72</number>
+			<name>16.Изделия швейные штучные из лоскута (СТБ 782-2002): Салфетка
+				хозяйственная, салфетка бытовая , салфетка обтирочная, набор лоскута
+				для труда</name>
+			<code>6307109000</code>
+		</product>
+		<product>
+			<number>73</number>
+			<name>17.Круги шлифовальные (ТУ BY 200166488.175-2007): Круг
+				шлифовальный из отходов ткани</name>
+			<code>5911909000</code>
+		</product>
+		<product>
+			<number>74</number>
+			<name>18.Изделия обтирочные (ТУ BY 200166488.176-2010): Салфетка
+				обтирочная, крой салфетки обтирочной</name>
+			<code>6307109000</code>
+		</product>
+		<product>
+			<number>75</number>
+			<name>19.Набор тканей для рукоделия (ТУ BY 200166488.189-2017)</name>
+			<code>6308000000</code>
+		</product>
+		<product>
+			<number>76</number>
+			<name>20.Марля медицинская хлопчатобумажная (ГОСТ 9412-93): Марля
+				медицинская хлопчатобумажная:</name>
+			<code>5208111000, 5208211000</code>
+		</product>
+		<product>
+			<number>77</number>
+			<name>Марля медицинская хлопчатобумажная в индивидуальной упаковке
+			</name>
+			<code>3005903100</code>
+		</product>
+		<product>
+			<number>78</number>
+			<name>Марля медицинская хлопчатобумажная в кусках</name>
+			<code>3005903100</code>
+		</product>
+		<product>
+			<number>79</number>
+			<name>21.Марля хлопчатобумажная и смешанная медицинская (ТУ BY
+				200166488.180-2013/ ТО BY 200166488.1264-2015): Марля
+				хлопчатобумажная медицинская суровая</name>
+			<code>5208111000</code>
+		</product>
+		<product>
+			<number>80</number>
+			<name>Марля хлопчатобумажная медицинская отбеленная</name>
+			<code>5208211000</code>
+		</product>
+		<product>
+			<number>81</number>
+			<name>Марля хлопчатобумажная медицинская в индивидуальной упаковке
+			</name>
+			<code>3005903100</code>
+		</product>
+		<product>
+			<number>82</number>
+			<name>Марля хлопчатобумажная медицинская в кусках</name>
+			<code>3005903100</code>
+		</product>
+		<product>
+			<number>83</number>
+			<name>22.Бинты медицинские (ГОСТ 2144-2010/ТО BY
+				200166488.1537-2017): Бинты ленточные фиксирующие неэластичные
+				резаные из медицинской марли нестерильные в групповой упаковке
+			</name>
+			<code>3005903100</code>
+		</product>
+		<product>
+			<number>84</number>
+			<name>Бинты ленточные фиксирующие неэластичные резаные из медицинской
+				марли нестерильные в индивидуальной упаковке</name>
+			<code>3005903100</code>
+		</product>
+		<product>
+			<number>85</number>
+			<name>23.Марля бытовая хлопчатобумажная (ГОСТ 11109-90): Марля
+				бытовая хлопчатобумажная суровая</name>
+			<code>5208111000</code>
+		</product>
+		<product>
+			<number>86</number>
+			<name>Марля бытовая двухслойная хлопчатобумажная отбеленная</name>
+			<code>5208290000</code>
+		</product>
+		<product>
+			<number>87</number>
+			<name>24.Нетканые материалы (ТУ BY 200166488.185-2015, ТУ BY
+				200166488.186-2015): Ватины холстопрошивные хлопчатобумажные</name>
+			<code>5601211000</code>
+		</product>
+		<product>
+			<number>88</number>
+			<name>Полотно холстопрошивное обтирочное хлопчатобумажное</name>
+			<code>5601211000</code>
+		</product>
+		<product>
+			<number>89</number>
+			<name>26.Пряжа хлопчатобумажная (ТУ РБ 00311645.116-2000): Пряжа
+				хлопчатобумажная пневмомеханического способа прядения для ткацкого
+				производства</name>
+			<code>5205110000, 5205120000, 5205130000, 5205140000</code>
+		</product>
+		<product>
+			<number>90</number>
+			<name>Пряжа хлопчатобумажная пневмомеханического способа прядения для
+				трикотажного производства</name>
+			<code>5205110000, 5205120000, 5205140000</code>
+		</product>
+		<product>
+			<number>91</number>
+			<name>27.Отходы хлопчатобумажные и смешанные (ТУ BY
+				200166488.039-2010): Отходы хлопчатобумажные прядильные</name>
+			<code>5202100000</code>
+		</product>
+		<product>
+			<number>92</number>
+			<name>Отходы хлопчатобумажные ткацкие</name>
+			<code>5202990000, 6310100009</code>
+		</product>
+		<product>
+			<number>93</number>
+			<name>Обрезки тканей хлопчатобумажных, смешанных, льняных,
+				синтетических тканей</name>
+			<code>6310100002, 6310100009, 6310900000</code>
+		</product>
+		<product>
+			<number>94</number>
+			<name>Нить полиэфирная</name>
+			<code>5402330000</code>
+		</product>
+		<product>
+			<number>95</number>
+			<name>28.Брикеты прессованные из отходов производства (ТУ BY
+				200166488.182-2013): Брикеты прессованные из отходов прядильного
+				производства</name>
+			<code>5202100000</code>
+		</product>
 	</products>
-</cert>
+</ownCertificate>

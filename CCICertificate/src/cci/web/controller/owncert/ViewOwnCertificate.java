@@ -9,7 +9,7 @@ public class ViewOwnCertificate extends OwnCertificate {
 	private String datecertto;
 	private String additionalblanksfrom;
 	private String additionalblanksto;
-	private String otd_id;
+	//private String otd_id;
 	
 	public String getProductname() {
 		return productname;
@@ -47,17 +47,19 @@ public class ViewOwnCertificate extends OwnCertificate {
 	public void setAdditionalliststo(String additionalblanksto) {
 		this.additionalblanksto = additionalblanksto;
 	}
-	public String getOtd_id() {
-		return otd_id;
-	}
-	public void setOtd_id(String otd_id) {
-		this.otd_id = otd_id;
-	}
+	
+	//public String getOtd_id() {
+	//	return otd_id;
+	//}
+	//public void setOtd_id(String otd_id) {
+	//	this.otd_id = otd_id;
+	//}
+	
 	@Override
 	public String toString() {
 		return "ViewOwnCertificate [" + super.toString() + " productname=" + productname + ", productcode=" + productcode + ", datecertfrom="
 				+ datecertfrom + ", datecertto=" + datecertto + ", additionalblanksfrom=" + additionalblanksfrom
-				+ ", additionalblanksto=" + additionalblanksto + ", otd_id=" + otd_id + "]";
+				+ ", additionalblanksto=" + additionalblanksto  + "]";
 	}
 	
     

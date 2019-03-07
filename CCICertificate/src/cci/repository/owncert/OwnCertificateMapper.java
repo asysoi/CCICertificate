@@ -39,20 +39,23 @@ public class OwnCertificateMapper<T> implements RowMapper<OwnCertificate> {
 			cert.setCustomeraddress(resultSet.getString("customeraddress"));
 			cert.setCustomerunp(resultSet.getString("customerunp"));
 			cert.setAdditionalblanks(resultSet.getString("additionalblanks"));
-			cert.setDatestart(formatter.format(resultSet.getDate("datestart")));
-			cert.setDateexpire(formatter.format(resultSet.getDate("dateexpire")));
 			cert.setExpert(resultSet.getString("expert"));
 			cert.setSigner(resultSet.getString("signer"));
 			cert.setSignerjob(resultSet.getString("signerjob"));
-			cert.setDatecert(formatter.format(resultSet.getDate("datecert")));
-			cert.setDateload(time.format(resultSet.getTimestamp("dateload")));
+			
+			cert.setDatestart(resultSet.getDate("datestart") == null ? null : formatter.format(resultSet.getDate("datestart")));
+			cert.setDateexpire(resultSet.getDate("dateexpire") ==  null ? null : formatter.format(resultSet.getDate("dateexpire")));
+			cert.setDatecert(resultSet.getDate("datecert") == null ? null : formatter.format(resultSet.getDate("datecert")));
+			cert.setDateload(resultSet.getTimestamp("dateload") == null ? null : time.format(resultSet.getTimestamp("dateload")));
 			cert.setDatestop(resultSet.getDate("datestop") == null ? null : time.format(resultSet.getDate("datestop")));
-			cert.setDatechange(time.format(resultSet.getDate("datechange")) == null ? null : time.format(resultSet.getDate("datechange")));
+			cert.setDatechange(resultSet.getDate("datechange") == null ? null : time.format(resultSet.getDate("datechange")));
+			
 			cert.setNumbernext(resultSet.getString("numbernext"));
 			cert.setNumberprev(resultSet.getString("numberprev"));
 			cert.setFilename(resultSet.getString("filename"));
 			cert.setStatus(resultSet.getString("status"));
 			cert.setProductdescription(resultSet.getString("productdescription"));
+			cert.setOtd_id(resultSet.getInt("otd_id"));
 			
 			beltpp = new Company();
 			beltpp.setName(resultSet.getString("beltppname")); 
@@ -74,6 +77,7 @@ public class OwnCertificateMapper<T> implements RowMapper<OwnCertificate> {
 			cert.setBranches(branches);
 			
 		 } catch (Exception ex ) {
+			LOG.error("Mapping certificate error: " + ex.getMessage());
 		    throw new SQLException ("Mapping certificate error: " + ex.getMessage());  	 
 		 }
 			

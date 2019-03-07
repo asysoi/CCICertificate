@@ -1,13 +1,13 @@
-package cci.web.controller.cert.exception;
+package cci.web.controller.owncert.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class NotFoundCertificateException extends RuntimeException {
+public class NotDeleteOwnCertificateException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public NotFoundCertificateException(String err) {
+	public NotDeleteOwnCertificateException(String err) {
 		super(err);
 	}
 }

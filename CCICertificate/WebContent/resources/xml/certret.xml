@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="windows-1251" ?>
+<ownCertificate>
+	<type>с/п</type>
+	<number>61.7/2430000</number>
+	<blanknumber>0061100000</blanknumber>
+	<beltpp>
+		<name>Унитарное предприятие по оказанию услуг "Брестское отделение
+			Белорусской торгово-промышленной палаты"
+		</name>
+		<address>220113, г.Брест, ул.Гоголя, 13, +375 162 217 885</address>
+		<phone>+375 162 217 885</phone>
+	</beltpp>
+	<factories>
+		<factory>
+			<address>Минская область, Борисовский район, д.Углы, ул.Октябрьская,
+				5, Резервуарная, Республика Беларусь; Минская область, Борисовский
+				райрон, ул.О
+				ктябрьская, 5Ж, Республика Беларусь.
+			</address>
+		</factory>
+	</factories>
+
+		<branches>
+			<branch>
+				<name>нет</name>
+				<address></address>
+			</branch>
+		</branches>
+	<customername>
+		Общество с ограниченной ответственностью "СИДТРЕЙД"
+	</customername>
+		<customeraddress>222521 Минская обл., Борисовский р-н, д.Углы,
+			ул.Октябрьск
+			ая, д.5,к.24 Республика Беларусь
+		</customeraddress>
+		<customerunp>691929257</customerunp>
+		<additionalblanks>0093738</additionalblanks>
+		<datestart>02.01.2019</datestart>
+		<dateexpire>01.01.2020</dateexpire>
+		<expert>А.М.Федорович</expert>
+		<signer>О.В.Зимогляд</signer>
+		<signerjob>Директор Борисовского филиала</signerjob>
+		<datecert>22.02.2019</datecert>
+		<dateload></dateload>
+		<datestop></datestop>
+		<datechange></datechange>
+		<numbernext></numbernext>
+		<numberprev></numberprev>
+		<status>valid</status>
+		<productdescription></productdescription>
+		<filename></filename>
+
+		<products>
+			<product>
+				<number>1.</number>
+				<name>Лесоматериалы распиленные вдоль, толщиной более 6 мм - пиломат
+					ериалы обрезные (брус, брусок, доска, доска паллетная), необрезные
+					(полубрус, до
+					ска), в том числе:
+				</name>
+				<code></code>
+			</product>
+			<product>
+				<number></number>
+				<name>- из ели</name>
+				<code>4407 12 910 0</code>
+			</product>
+			<product>
+				<number></number>
+				<name>- из сосны</name>
+				<code>4407 11 930 0</code>
+			</product>
+			<product>
+				<number>2.</number>
+				<name>Древесные отходы: горбыль, обрезки</name>
+				<code>4401 40 900 0</code>
+			</product>
+			<product>
+				<number>3.</number>
+				<name>Опилки</name>
+				<code>4401 40 100 0</code>
+			</product>
+			<product>
+				<number>4.</number>
+				<name>Шпалы деревянные непропитанные хвойных пород</name>
+				<code>4406 11 000 0</code>
+			</product>
+		</products>
+</ownCertificate>
