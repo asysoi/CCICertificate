@@ -17,27 +17,29 @@ public class OwnFilter extends Filter {
 	public static Logger LOG=Logger.getLogger(OwnFilter.class);
 	
 	public OwnFilter() { 
-		String[] fields = new String[] {"ID","ID_BELTPP", "TYPE", "NUMBER", "BLANKNUMBER",
+		// "ID","ID_BELTPP",
+		String[] fields = new String[] { "TYPE", "NUMBER", "BLANKNUMBER",
 				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP", "FACTORYADDRESS", "BRANCHNAME", "BRANCHADDRESS", 
 				"ADDITIONALBLANKS", "DATESTART", "DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
 				"DATECERT", "DATELOAD", "BELTPPNAME", "BELTPPADDRESS", 
 				"PRODUCTNAME", "PRODUCTCODE", "DATESTARTFROM", "DATESTARTTO", "DATEEXPIREFROM", "DATEEXPIRETO",
 				"DATECERTFROM", "DATECERTTO", "OTD_ID",};
 		
-		String[] dbfields = new String[] {"ID","ID_BELTPP", "TYPE","NUMBER","BLANKNUMBER",
+		// "ID","ID_BELTPP",
+		String[] dbfields = new String[] { "TYPE","NUMBER","BLANKNUMBER",
 				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP","FACTORIES","BRANCHES", "BRANCHES", 
 				"ADDITIONALBLANKS","DATESTART","DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
 				"DATECERT","DATELOAD","BELTPPNAME","BELTPPADDRESS",
 				"PRODUCTS", "PRODUCTS", "DATESTART", "DATESTART", "DATEEXPIRE", "DATEEXPIRE", 
 				"DATECERT", "DATECERT", "OTD_ID"};
-		
+		// FieldType.ID, FieldType.ID, 
 		FieldType[] types = new FieldType[] {
-				FieldType.ID, FieldType.ID, FieldType.STRING,FieldType.STRING,FieldType.STRING,
+				FieldType.STRING,FieldType.STRING,FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, 
 				FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.DATE, FieldType.DATE, FieldType.STRING,FieldType.STRING,  
 				FieldType.STRING, FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.DATE, FieldType.DATE,
-				FieldType.DATE, FieldType.DATE, FieldType.NUMBER };
+				FieldType.DATE, FieldType.DATE, FieldType.STRING };
 		
 		this.init(fields, dbfields, types);
 	}

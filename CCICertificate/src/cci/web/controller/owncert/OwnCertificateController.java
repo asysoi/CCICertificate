@@ -175,21 +175,22 @@ public class OwnCertificateController {
 	/* -----------------------------------------------------------------------------
 	*    Own Certificate filter handling Method GET
 	* -----------------------------------------------------------------------------*/
-	@RequestMapping(value = "owncertfilter.do", method = RequestMethod.GET)
+	@RequestMapping(value = "owncertfilter.do", method=RequestMethod.GET)
 	public String openFilter(
 				@ModelAttribute("owncertfilter") OwnFilter fc, ModelMap model) {
 
 			if (fc == null) {
 				fc = new OwnFilter();
-				LOG.debug("New filterOwnCertificate created in GET method");
+				LOG.info("New filterOwnCertificate created in GET method");
 				model.addAttribute("owncertfilter", fc);
 			} else {
-				LOG.debug("Found FilterOwnCertificate in GET : ");
+				LOG.info("Found FilterOwnCertificate in GET : ");
 			}
 
 			ViewOwnCertificateFilter vf = new ViewOwnCertificateFilter(
 					((OwnFilter) fc).getViewcertificate(),
 					((OwnFilter) fc).getCondition());
+			
 			model.addAttribute("viewownfilter", vf);
 			return "own/ownfilter";
 	}
@@ -197,18 +198,22 @@ public class OwnCertificateController {
 	/* -----------------------------------------------------------------------------
 	*   Own Certificate filter handling Method POST
 	* ----------------------------------------------------------------------------- */
-	@RequestMapping(value = "owncertfilter.do", method = RequestMethod.POST)
+	@RequestMapping(value = "owncertfilter.do", method=RequestMethod.POST)
 	public String submitFilter(
 				@ModelAttribute("viewownfilter") ViewOwnCertificateFilter viewfilter,
 				@ModelAttribute("owncertfilter") OwnFilter fc,
 				BindingResult result, SessionStatus status, ModelMap model) {
 
+		    System.out.println("=================================================================="); 
+		    LOG.info (viewfilter);
+		    System.out.println("==================================================================");
+		    
 			if (fc == null) {
 				fc = new OwnFilter();
-				LOG.debug
+				LOG.info
 						("New filterOwnCertificate created in the POST method");
 			} else {
-				LOG.debug("Found FilterOwnCertificate in POST");
+				LOG.info("Found FilterOwnCertificate in POST");
 			}
 
 			fc.loadViewcertificate(viewfilter.getViewcertificate());

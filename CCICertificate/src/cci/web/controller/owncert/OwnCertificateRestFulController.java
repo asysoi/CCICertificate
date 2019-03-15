@@ -115,7 +115,8 @@ public class OwnCertificateRestFulController {
 		
 			// get ACL information and store otd_id
 			String otd_id = service.getOtd_idByRole(aut);
-			certificate.setOtd_id(Integer.parseInt(otd_id));
+			//certificate.setOtd_id(Integer.parseInt(otd_id));
+			certificate.setOtd_id(otd_id);
 						
 			// date can't be empty, only null or real date			
 			if (certificate.getDatechange() != null &&  certificate.getDatechange().isEmpty()) {
@@ -292,7 +293,8 @@ public class OwnCertificateRestFulController {
 
 				// get ACL information and store otd_id
 				String otd_id = service.getOtd_idByRole(aut);
-				certificate.setOtd_id(Integer.parseInt(otd_id));
+				//certificate.setOtd_id(Integer.parseInt(otd_id));
+				certificate.setOtd_id(otd_id);
 
 				// date can't be empty, only null or real date			
 				if (certificate.getDatechange() != null && certificate.getDatechange().isEmpty()) {

@@ -85,7 +85,7 @@ public class ViewOwnCertificateJSPHelper {
 		return ret;
 	}
 
-	public String getTitleproductlist() {
+	public String getTitleproductslist() {
 		String ret = "";
 		if ("с/п".equals(cert.getType())) {
 			ret = "4. Наименование продукции, код продукции в соответствии с единой Товарной номенклатурой"

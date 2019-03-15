@@ -43,15 +43,19 @@ public class ViewOwnCertificate extends OwnCertificate {
 	}
 	
 	public String getFactoryaddress() {
+		System.out.println("GET factoryaddress" );
 		return factoryaddress;
 	}
 	public void setFactoryaddress(String factoryaddress) {
+		System.out.println("SET factoryaddress = " +  factoryaddress);
 		this.factoryaddress = factoryaddress;
 	}
 	public String getBranchname() {
+		System.out.println("GET branchname = " +  branchname);
 		return branchname;
 	}
 	public void setBranchname(String branchname) {
+		System.out.println("SET branchname = " +  branchname);
 		this.branchname = branchname;
 	}
 	public String getBranchaddress() {

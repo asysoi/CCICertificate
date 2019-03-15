@@ -75,14 +75,11 @@ public abstract class Filter {
 			 try {
 			    m = obj.getClass().getMethod(name, params);
 			 } catch (Exception ex) {
-				// LOG.info("Error get method [" + name + "] for " + obj.getClass().getName() + ": " +  ex.getMessage() ); 
 				m = obj.getClass().getSuperclass().getMethod(name, params); 
 			 }
-			 
 		} catch (Exception ex) {
 			LOG.info("Error get method: " + ex.getMessage());
 		}
-         
 		return m;
 	}
 

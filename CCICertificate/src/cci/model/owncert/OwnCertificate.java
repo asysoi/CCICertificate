@@ -47,7 +47,7 @@ public class OwnCertificate {
 	private List<Factory> factories;
 	private List<Branch> branches;
 	private List<Product> products;
-	private int otd_id;
+	private String otd_id;
 	private String xml;
 	
 		
@@ -61,11 +61,11 @@ public class OwnCertificate {
 	}
 
 	@XmlTransient
-	public int getOtd_id() {
+	public String getOtd_id() {
 		return otd_id;
 	}
 	
-	public void setOtd_id(int otd_id) {
+	public void setOtd_id(String otd_id) {
 		this.otd_id = otd_id;
 	}
 

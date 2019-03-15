@@ -18,8 +18,9 @@
 
 	function submit() {
 		url = $("#ffilter").attr("action");
+		alert("url: " + url);
 		$.post(url, $("#ffilter").serialize());
-		$( document ).ajaxComplete(function(event,request, settings ) {
+		$( document ).ajaxComplete(function(event, request, settings) {
 			  goToList('owncerts.do?page=1&pagesize=${ownmanager.pagesize}&orderby=${ownmanager.orderby}&order=${ownmanager.order}');
 			  $("#pview").dialog("close");
 		});

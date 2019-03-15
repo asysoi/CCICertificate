@@ -90,13 +90,13 @@
 			</tr>
 			<tr>
 				<td>Адрес производства</td>
-				<td><form:input path="viewcertificate.factories" id="factories" /><a
-					href="javascript:clearelement($('#factories'));"> <img
+				<td><form:input path="viewcertificate.factoryaddress" id="factoryaddress" /><a
+					href="javascript:clearelement($('#factoryaddress'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Обособ. подразделения</td>
-				<td><form:input path="viewcertificate.branches" id="branches" /><a
-					href="javascript:clearelement($('#branches'));"> <img
+				<td><form:input path="viewcertificate.branchname" id="branchname" /><a
+					href="javascript:clearelement($('#branchname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
