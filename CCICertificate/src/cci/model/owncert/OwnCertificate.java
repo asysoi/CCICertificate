@@ -105,7 +105,8 @@ public class OwnCertificate {
 		String str="";
 		if (branches != null) {
 		   for (Branch branch: branches) {
-			   str += (str.isEmpty() ? "" : "; ") + branch.getName() + ", " + branch.getAddress();
+			   str += (str.isEmpty() ? "" : "; ") + branch.getName() + 
+					   (branch.getAddress() != null && ! branch.getAddress().trim().isEmpty() ?  ", " + branch.getAddress() : "");
 		   }
 		}
 		return str;
@@ -116,7 +117,8 @@ public class OwnCertificate {
 		String str="";
 		if (products != null) {
 		   for (Product product: products) {
-			   str += (str.isEmpty() ? "" : "; ") + product.getName() + ", " + product.getCode();
+			   str += (str.isEmpty() ? "" : "; ") + product.getName() + 
+					   (product.getCode() != null && ! product.getCode().trim().isEmpty() ?  ", " + product.getCode() : "");
 		   }
 		}
 		return str;

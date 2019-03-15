@@ -1,91 +1,83 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ownCertificate>
-	<type>P</type>
-	<number>4.7_7/46-1</number>
-	<blanknumber>0036592</blanknumber>
-
-	<beltpp>
-		<name>Унитарное предприятие по оказанию услуг "Минское отделение
-			Белорусской торгово-промышленной палаты"</name>
-		<address>220113, г.Минск, ул.Я.Коласа,65</address>
-		<phone> т.280-04-73</phone>
-	</beltpp>
-	
-	<factories>
-		<factory>
-			<address> 222518, Минская область, г.Борисов, ул.Чапаева,56,
-				Республика Беларусь </address>
-		</factory>
-		<factory>
-			<address> 222519, Минская область, г.Борисов, ул.Чапаева,7,
-				Республика Беларусь </address>
-		</factory>
-	</factories>
-	
-	<branches>
-		<branch>
-			<name> Открытое акционерное общество "Борисовский завод
-				"Автогидроусилитель Ф-л 1 </name>
-			<address> 222518, Минская область, г.Борисов, ул.Фурманова,12,
-				Республика Беларусь</address>
-		</branch>
-		<branch>
-			<name> Открытое акционерное общество "Борисовский завод
-				"Автогидроусилитель Ф-л 2 </name>
-			<address> 222518, Минская область, г.Борисов, ул.Фурманова,552,
-				Республика Беларусь</address>
-		</branch>
-	</branches>
-
-	<customername>Открытое акционерное общество "Борисовский завод "Автогидроусилитель"</customername>
-	<customeraddress>222518, Минская область, г.Борисов, ул.Чапаева, 56 </customeraddress>
-	<customerunp>600009233</customerunp>
-	<additionalblanks>0041945-0041967</additionalblanks>
-	<datestart>31.12.2013</datestart>
-	<dateexpire>30.12.2014</dateexpire>
-	<expert>Г.И.Барсукова</expert>
-	<signer>О.В.Зимогляд</signer>
-	<signerjob>Директор Борисовского филиала</signerjob>
-	<datecert>14.01.2014</datecert>
-	<datestop>04.06.2014</datestop>
-	<dateload>15.01.2014</dateload>
-	<numberprev></numberprev>
-	<numbernext>4.7_7/49-8</numbernext>
-	<filename>4.7_7/49-8.pdf</filename>
-	<datechange></datechange>
-	<status>valid</status>
-
-	<products>
-		<product>
-			<number>1.</number>
-			<name>Части и принадлежности транспортных средств товарных позиций
-				8701-8705, прочие:</name>
-			<code></code>
-		</product>
-		<product>
-			<number>1.1.</number>
-			<name>64229-3400010 Механизм рулевой с распределителем</name>
-			<code>8708 99 970 9</code>
-		</product>
-		<product>
-			<number>1.2.</number>
-			<name>64229-3400010 -01 Механизм рулевой с распределителем</name>
-			<code>8708 99 970 9</code>
-		</product>
-		<product>
-			<number>1.3.</number>
-			<name>64229-3400010-20 Механизм рулевой с распределителем</name>
-			<code>8708 99 970 9</code>
-		</product>
-		<product>
-			<number>1.4.</number>
-			<name>64229-3400010-30 Механизм рулевой с распределителем</name>
-			<code>8708 99 970 9</code>
-		</product>
-		<product>
-			<number>1.5.</number>
-			<name>64229-3400010-40 Механизм рулевой с распределителем</name>
-			<code>8708 99 970 9</code>
-		</product>
-	</products>
-</ownCertificate>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ownCertificateHeaders>
+	<owncertificate>
+		<blanknumber>0044453</blanknumber>
+		<number>1402</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044454</blanknumber>
+		<number>12</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044455</blanknumber>
+		<number>1329</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044456</blanknumber>
+		<number>1376</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044457</blanknumber>
+		<number>13</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044460</blanknumber>
+		<number>1406</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044459</blanknumber>
+		<number>32</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044458</blanknumber>
+		<number>36</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044461</blanknumber>
+		<number>53</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044241</blanknumber>
+		<number>11</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044242</blanknumber>
+		<number>12</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044465</blanknumber>
+		<number>1421</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044464</blanknumber>
+		<number>33</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044466</blanknumber>
+		<number>63</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044463</blanknumber>
+		<number>7</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044467</blanknumber>
+		<number>74</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0061537</blanknumber>
+		<number>6/3</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044462</blanknumber>
+		<number>61</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044469</blanknumber>
+		<number>28</number>
+	</owncertificate>
+	<owncertificate>
+		<blanknumber>0044468</blanknumber>
+		<number>44</number>
+	</owncertificate>
+</ownCertificateHeaders>

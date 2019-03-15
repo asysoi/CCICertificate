@@ -2,6 +2,8 @@ package cci.repository.owncert;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.OwnCertificateHeaders;
@@ -15,7 +17,7 @@ public interface OwnCertificateDAO {
 
 	OwnCertificateHeaders getOwnCertificateHeaders(OwnFilter filter, boolean b);
 
-	OwnCertificate findOwnCertificateByID(int id) throws Exception ;
+	OwnCertificate findOwnCertificateByID(OwnFilter filter) throws Exception ;
 
     OwnCertificate saveOwnCertificate(OwnCertificate certificate) throws Exception;
 

@@ -17,26 +17,26 @@ public class OwnFilter extends Filter {
 	public static Logger LOG=Logger.getLogger(OwnFilter.class);
 	
 	public OwnFilter() { 
-		String[] fields = new String[] {"ID","ID_BELTPP", "TYPE","NUMBER","BLANKNUMBER",
-				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP","FACTORYADDRESS","BRANCHES", 
-				"ADDITIONALLISTS", "DATESTART", "DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
-				"DATECERT", "DATELOAD", "BELTPPNAME", "BELTPPADDRESS", "BELTPPUNP",
-				"PRODUCTNAME", "PRODUCTCODE", "ADDITIONALLISTSFROM", "ADDITIONALLISTSTO",
-				"DATECERTFROM", "DATECERTTO", "OTD_ID"};
+		String[] fields = new String[] {"ID","ID_BELTPP", "TYPE", "NUMBER", "BLANKNUMBER",
+				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP", "FACTORYADDRESS", "BRANCHNAME", "BRANCHADDRESS", 
+				"ADDITIONALBLANKS", "DATESTART", "DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
+				"DATECERT", "DATELOAD", "BELTPPNAME", "BELTPPADDRESS", 
+				"PRODUCTNAME", "PRODUCTCODE", "DATESTARTFROM", "DATESTARTTO", "DATEEXPIREFROM", "DATEEXPIRETO",
+				"DATECERTFROM", "DATECERTTO", "OTD_ID",};
 		
 		String[] dbfields = new String[] {"ID","ID_BELTPP", "TYPE","NUMBER","BLANKNUMBER",
-				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP","FACTORYADDRESS","BRANCHES", 
-				"ADDITIONALLISTS","DATESTART","DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
-				"DATECERT","DATELOAD","BELTPPNAME","BELTPPADDRESS","BELTPPUNP",
-				"NAME", "CODE", "ADDITIONALLISTS", "ADDITIONALLISTS",
+				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP","FACTORIES","BRANCHES", "BRANCHES", 
+				"ADDITIONALBLANKS","DATESTART","DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
+				"DATECERT","DATELOAD","BELTPPNAME","BELTPPADDRESS",
+				"PRODUCTS", "PRODUCTS", "DATESTART", "DATESTART", "DATEEXPIRE", "DATEEXPIRE", 
 				"DATECERT", "DATECERT", "OTD_ID"};
 		
 		FieldType[] types = new FieldType[] {
 				FieldType.ID, FieldType.ID, FieldType.STRING,FieldType.STRING,FieldType.STRING,
-				FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, 
+				FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, 
 				FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.STRING, FieldType.STRING, FieldType.STRING,
-				FieldType.DATE, FieldType.DATE, FieldType.STRING,FieldType.STRING, FieldType.STRING, 
-				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, 
+				FieldType.DATE, FieldType.DATE, FieldType.STRING,FieldType.STRING,  
+				FieldType.STRING, FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.DATE, FieldType.DATE,
 				FieldType.DATE, FieldType.DATE, FieldType.NUMBER };
 		
 		this.init(fields, dbfields, types);
@@ -55,7 +55,7 @@ public class OwnFilter extends Filter {
 			
 			if (fcond != null) {
 				try {
-					Method m = getMethod(cert, setter, new Class[] {String.class});
+					Method m = getMethod(cert, setter, new Class[] {fcond.getType() == FieldType.NUMBER ? Integer.class :  String.class});
 					if (m != null) {
 					    m.invoke(cert, new Object[]{fcond.getValue()});
 					}
@@ -80,7 +80,7 @@ public class OwnFilter extends Filter {
 			
 			if (fcond != null) {
 				try {
-					Method m = getMethod(cond, setter, new Class[] {String.class});
+					Method m = getMethod(cond, setter, new Class[] {fcond.getType() == FieldType.NUMBER ? Integer.class :  String.class});
 					if (m != null) {
 					    m.invoke(cond, new Object[]{fcond.getOperator()});
 					}

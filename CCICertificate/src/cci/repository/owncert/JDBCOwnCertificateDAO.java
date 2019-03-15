@@ -1,11 +1,8 @@
 package cci.repository.owncert;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
-
 import javax.sql.DataSource;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -16,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 import cci.model.owncert.Branch;
 import cci.model.owncert.Factory;
 import cci.model.owncert.OwnCertificate;
@@ -31,7 +27,6 @@ import cci.web.controller.owncert.OwnFilter;
 import cci.web.controller.owncert.exception.NotDeleteOwnCertificateException;
 import cci.web.controller.owncert.exception.NotUpdatedOwnCertificateFileNameException;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
-import cci.web.controller.cert.exception.CertificateDeleteException;
 import cci.web.controller.cert.exception.CertificateUpdateException;
 
 @Repository
@@ -63,6 +58,21 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 
 	// ------------------------------------------------------------------------------
 	//  This method returns a current page of the certificate's list
+	/*
+	sql = "select " + flist 
+		+ " from certview where id in "
+		+ " (select  a.id "
+		+ " from (SELECT id FROM (select id from certview "
+		+  filter.getClause()
+		+ " ORDER by " +  orderby + " " + order + ", id " + order  
+		+ ") aa LIMIT :highposition "    
+		+ ") a left join (SELECT id FROM (select id from certview "
+		+  filter.getClause()
+		+ " ORDER by " +  orderby + " " + order + ", id " + order
+		+ ") bb LIMIT :lowposition "   
+		+ ") b on a.id = b.id where b.id is null)" 
+		+ " ORDER by " +  orderby + " " + order + ", id " + order;
+	*/
 	// ------------------------------------------------------------------------------
 	public List<OwnCertificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount, String orderby,
 			String order, SQLBuilder builder) {
@@ -80,24 +90,9 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
         
         
         if (pagesize < pagecount) {
-        	/*
-        	sql = "select " + flist 
-				+ " from certview where id in "
-				+ " (select  a.id "
-				+ " from (SELECT id FROM (select id from certview "
-				+  filter.getClause()
-				+ " ORDER by " +  orderby + " " + order + ", id " + order  
-				+ ") aa LIMIT :highposition "    
-				+ ") a left join (SELECT id FROM (select id from certview "
-				+  filter.getClause()
-				+ " ORDER by " +  orderby + " " + order + ", id " + order
-				+ ") bb LIMIT :lowposition "   
-				+ ") b on a.id = b.id where b.id is null)" 
-				+ " ORDER by " +  orderby + " " + order + ", id " + order;
-        	*/
         	sql = "select " + flist
     				+ " from owncertificate "
-    				+  filter.getClause()
+    				+ filter.getClause()
     				+ " ORDER by " +  orderby + " " + order + ", id " + order  
     				+ " LIMIT :lowposition, :pagesize ";    
 
@@ -162,7 +157,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 
 		String sql = "select * from owncertificate "
 				+ (isLike ? filter.getWhereLikeClause() : filter
-						.getWhereEqualClause()) + " ORDER BY id";
+						.getWhereEqualClause()) + " ORDER BY datecert";
          OwnCertificates certs = new  OwnCertificates();
 		        
 		 certs.setOwncertificates(this.template.getJdbcOperations()
@@ -175,9 +170,9 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ---------------------------------------------------------------
 	public OwnCertificateHeaders getOwnCertificateHeaders(OwnFilter filter, boolean isLike) {
 
-		String sql = "select number, blanknumber from owncertificate "
+		String sql = "select number, blanknumber, datecert from owncertificate "
 				+ (isLike ? filter.getWhereLikeClause() : filter
-						.getWhereEqualClause()) + " ORDER BY id";
+						.getWhereEqualClause()) + " ORDER BY datecert";
          OwnCertificateHeaders certs = new  OwnCertificateHeaders();
 		        
 		 certs.setOwncertificateheaders(this.template.getJdbcOperations()
@@ -186,24 +181,22 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		 return certs; 
 	}
 		
-	// ---------------------------------------------------------------
-	// поиск единственного сертификата по id -> PS
-	// ---------------------------------------------------------------
-	public OwnCertificate findOwnCertificateByID(int id) throws Exception {
+	/* ----------------------------------------------------------------
+	* поиск единственного сертификата по id -> PS
+	* --------------------------------------------------------------- */
+	public OwnCertificate findOwnCertificateByID(OwnFilter filter) throws Exception {
 		OwnCertificate cert = null;
 
-		String sql = "select * from owncertificate WHERE id = ?";
+		String sql = "select * from owncertificate " + filter.getWhereEqualClause();
+		System.out.println("findOwnCertificateByID: " + sql);
+		
 		cert = template.getJdbcOperations()
 				.queryForObject(
 						sql,
-						new Object[] { id },
+						null,
 						new OwnCertificateMapper<OwnCertificate>());
 		
-		sql = "select * from ownproduct WHERE id_certificate = ? ORDER BY id";
-		
-		cert.setProducts(template.getJdbcOperations().query(sql,
-				new Object[] { cert.getId() },
-				new BeanPropertyRowMapper<Product>(Product.class)));
+		loadReletedCertificateEntities(cert);
 		return cert;
 	}
 
@@ -324,7 +317,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 
 	/* ---------------------------------------------------------------
 	 * 
-	 * Update certificate. Run in
+	 * Update certificate
 	 * 
 	 * --------------------------------------------------------------- */
 	public OwnCertificate updateOwnCertificate(OwnCertificate cert) {
@@ -373,26 +366,23 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			LOG.info("Row updated = " + row);
 
 			if (row > 0) {
-
 				template.getJdbcOperations().update("delete from ownproduct where id_certificate = ?", cert.getId());
 				template.getJdbcOperations().update("delete from ownbranch where id_certificate = ?", cert.getId());
 				template.getJdbcOperations().update("delete from ownfactory where id_certificate = ?", cert.getId());
-
 				saveCertificateData(cert);
-
 			}
 		} catch (Exception ex) {
 			throw (new CertificateUpdateException(
 					"Ошибка обновления сертификата. Сертификат был найден, но обновление выполнить не удалось: "
 							+ ex.getLocalizedMessage()));
 		}
-
 		return cert;
 		
 	}
 
 	/* ---------------------------------------------------------------
-	 * Find certificate by number. Updated 07.02.2019
+	 * 
+	 * Find certificate by unique identification. Updated 07.02.2019
 	 * 
 	 *  --------------------------------------------------------------- */
 	public OwnCertificate findOwnCertificateByNumber(String number, String blanknumber, String datecert, String otd_id) {
@@ -405,26 +395,32 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 						new Object[] { number.trim(), blanknumber.trim(), datecert.trim(), otd_id},
 						new OwnCertificateMapper<OwnCertificate>());
 		
-		sql = "select * from ownproduct WHERE id_certificate = ? ORDER BY id";
-		
-		cert.setProducts(template.getJdbcOperations().query(sql,
-				new Object[] { cert.getId() },
+		loadReletedCertificateEntities(cert);
+		return cert;	
+	}
+	
+	/* ---------------------------------------------------------------
+	 * 
+	 * Load all certificate's attributes 
+	 * 
+	 *  --------------------------------------------------------------- */
+	private void loadReletedCertificateEntities(OwnCertificate cert) {
+		String sql = "select * from ownproduct WHERE id_certificate = ? ORDER BY id";
+
+		cert.setProducts(template.getJdbcOperations().query(sql, new Object[] { cert.getId() },
 				new BeanPropertyRowMapper<Product>(Product.class)));
-		
+
 		sql = "select * from ownbranch WHERE id_certificate = ? ORDER BY id";
-		
-		cert.setBranches(template.getJdbcOperations().query(sql,
-				new Object[] { cert.getId() },
+
+		cert.setBranches(template.getJdbcOperations().query(sql, new Object[] { cert.getId() },
 				new BeanPropertyRowMapper<Branch>(Branch.class)));
 
 		sql = "select * from ownfactory WHERE id_certificate = ? ORDER BY id";
-		
-		cert.setFactories(template.getJdbcOperations().query(sql,
-				new Object[] { cert.getId() },
+
+		cert.setFactories(template.getJdbcOperations().query(sql, new Object[] { cert.getId() },
 				new BeanPropertyRowMapper<Factory>(Factory.class)));
-		
-		return cert;	
 	}
+
 
 	// ---------------------------------------------------------------
 	// Update certificate's file name. If filename is empty there aren't original certificate file 

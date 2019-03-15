@@ -1,17 +1,13 @@
 package cci.web.controller.owncert;
 
-import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateHeaders;
 import cci.model.owncert.OwnCertificates;
+import cci.pdfbuilder.PDFUtils;
 import cci.service.utils.XMLService;
 import cci.web.controller.cert.exception.AddCertificateException;
 import cci.web.controller.cert.exception.CertificateUpdateException;
@@ -37,17 +34,17 @@ import cci.web.controller.cert.exception.NotFoundCertificateException;
 import cci.web.controller.owncert.exception.CheckOwnCertificateException;
 import cci.web.controller.owncert.exception.NotUpdatedOwnCertificateFileNameException;
 
-
 @RestController
 public class OwnCertificateRestFulController {
-
-	String relativeWebPath = "/resources/in";
+	private static final Logger LOG=Logger.getLogger(OwnCertificateRestFulController.class);
+	private String relativeWebPath = "/resources/in";
 	
 	@Autowired
-	private cci.service.owncert.OwnCertificateService service;
-
+	private PDFUtils pdfutils;
 	@Autowired
-	XMLService xmlService;
+	private cci.service.owncert.OwnCertificateService service;
+	@Autowired
+	private XMLService xmlService;
 
 	/* -----------------------------------------
 	 * Get list of all certificates by filter
@@ -58,12 +55,15 @@ public class OwnCertificateRestFulController {
 			@RequestParam(value = "number", required = false) String number,
 			@RequestParam(value = "blanknumber", required = false) String blanknumber,
 			@RequestParam(value = "from", required = false) String from,
-			@RequestParam(value = "to", required = false) String to ) {
+			@RequestParam(value = "to", required = false) String to,
+			Authentication aut) {
 		OwnCertificates certificates;
 					
 		OwnFilter filter = new OwnFilter(number, blanknumber, 
 		           from == null ? from : convertDateToMySQLFormat(from), 
-		           to == null ? to : convertDateToMySQLFormat(to));
+		           to == null ? to : convertDateToMySQLFormat(to),
+		           service.getOtd_idByRole(aut));
+		
 		certificates = service.getOwnCertificates(filter);
 		
 		if (certificates.getOwncertificates().size() == 0 ) {
@@ -81,12 +81,16 @@ public class OwnCertificateRestFulController {
 			@RequestParam(value = "number", required = false) String number,
 			@RequestParam(value = "blanknumber", required = false) String blanknumber,
 			@RequestParam(value = "from", required = false) String from,
-			@RequestParam(value = "to", required = false) String to ) {
+			@RequestParam(value = "to", required = false) String to,
+			Authentication aut) {
+		
 		OwnCertificateHeaders certificates;
 		
 		OwnFilter filter = new OwnFilter(number, blanknumber, 
 				           from == null ? from : convertDateToMySQLFormat(from), 
-				           to == null ? to : convertDateToMySQLFormat(to));
+				           to == null ? to : convertDateToMySQLFormat(to),
+				           service.getOtd_idByRole(aut));
+		
 		certificates = service.getOwnCertificateHeaders(filter);
 		
 		if (certificates.getOwncertificateheaders().size() == 0 ) {
@@ -153,10 +157,11 @@ public class OwnCertificateRestFulController {
 			 OwnCertificate owncert = service.getOwnCertificateByNumber(number, blanknumber, datecert, otd_id);
 		     
 			 if  (owncert != null) {
-				 System.out.println("Сертификат найден");
+				 LOG.info("Сертификат найден");
 				 
 				 String fileName = multipartFile.getOriginalFilename();
-				 String absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+				 
+				 String absoluteDiskPath = request.getSession().getServletContext().getInitParameter("upload.location");
 				 fileName = number+"_" + blanknumber+"." + FilenameUtils.getExtension(fileName);
 				 
 				 File certFile = new File(absoluteDiskPath, fileName);  		
@@ -176,7 +181,7 @@ public class OwnCertificateRestFulController {
 	
 	/* ---------------------------------------------------
 	 * Convert date from format dd.mm.yyyy to yyyy-mm-dd  
-	 *
+	 * It return original date now. Modification is ignored.
 	 * --------------------------------------------------- */
 	private String convertDateToMySQLFormat(String datecert) {
 		String retdate = datecert;
@@ -191,7 +196,7 @@ public class OwnCertificateRestFulController {
 	}
 
 	/* ---------------------------------------------------
-	 * Get certificate by NUmber
+	 * Get certificate by identification
 	 * ------------------------------------------------- */
 	@RequestMapping(value = "rowncert.do", method = RequestMethod.GET, 
 			headers = "Accept=application/json,application/xml")
@@ -207,15 +212,15 @@ public class OwnCertificateRestFulController {
 			 
 		    return service.getOwnCertificateByNumber(number, blanknumber, datecert, otd_id);
 		} catch (Exception ex) {
-			throw(new NotFoundCertificateException("Серитификат " + datecert + " с номером " + number 
+			throw(new NotFoundCertificateException("Сертификат " + datecert + " с номером " + number 
 									+ " на бланке " + blanknumber +  " не найден или отсутствуют права доступа к нему"));			
 		}
 	}
 	
 
-	// ---------------------------------------------------------------------------------------
-	//  Download OwnCertificate file in PDF 
-	// ---------------------------------------------------------------------------------------
+	/* ---------------------------------------------------------------------------------------
+	*  Download OwnCertificate file in PDF 
+	* ---------------------------------------------------------------------------------------*/
 	@RequestMapping(value = "rowncertfile.do", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public void ownCertificateFileDownload (
@@ -231,34 +236,47 @@ public class OwnCertificateRestFulController {
 			OwnCertificate owncert = getOwnCertificateByNumber(number, blanknumber, datecert, aut);
 
 			if (owncert != null && !owncert.getFilename().trim().isEmpty()) {
+				
 				response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition", "attachment; filename=" + owncert.getFilename());
-				String absoluteDiskPath = request.getSession().getServletContext().getRealPath(relativeWebPath);
-				File file = (new File(absoluteDiskPath, owncert.getFilename()));
-				InputStream fileIn = null;
+				
+				String templateDiskPath = request.getSession().getServletContext().getRealPath(relativeWebPath);
+				String pdfFilePath = request.getSession().getServletContext().getInitParameter("upload.location");
+				
+				String pagefirst = null;
+				String pagenext = null;
 
-				try {
-					fileIn = new BufferedInputStream(new FileInputStream(file));
-					int a;
-					while ((a = fileIn.read()) != -1) {
-						response.getOutputStream().write(a);
-					}
-					response.flushBuffer();
-				} catch (FileNotFoundException ex) {
-					throw new NotFoundCertificateException("Печатная форма сертификата не найдена.");
-				} finally {
-					if (fileIn != null)
-						fileIn.close();
+				if ("с/п".equals(owncert.getType()) ) {
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownproductfirst.pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownproductnext.pdf";
+				} else if ("р/у".equals(owncert.getType()) ) {
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownservicefirst.pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownservicenext.pdf";
+				} else if ("б/у".equals(owncert.getType()) ) {
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownbankfirst.pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownbanknext.pdf";
+				} else {
+					throw new NotFoundCertificateException("Для данного типа сертификата не определены формы бланков.");
+				}
+								
+				String pdffile = pdfFilePath + System.getProperty("file.separator") + owncert.getFilename();
+				List<String> numbers = service.splitOwnCertNumbers (owncert.getBlanknumber(), owncert.getAdditionalblanks()); 
+				ByteArrayOutputStream  output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers);
+				
+				if (output != null) { 
+				   response.getOutputStream().write(output.toByteArray());
+				   output.close();
+				} else {
+				   throw new NotFoundCertificateException("Ошибка обработки файла печатной формы сертификата.");	
 				}
 			} else {
 				throw new NotFoundCertificateException("Сертификат не найден или у сертификата нет печатной формы.");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			throw new NotFoundCertificateException(ex.getMessage());
 		}
 	}
-	
-
+		
 	/* -----------------------------
 	 *  Update certificate
 	 *  Certificate must be exist
@@ -371,7 +389,7 @@ public class OwnCertificateRestFulController {
 			Authentication aut ) throws Exception {
 		
 	    String otd_id = service.getOtd_idByRole(aut);
-		// datecert = convertDateToMySQLFormat(datecert);
+		datecert = convertDateToMySQLFormat(datecert);
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("DeleteResponseHeader", "Own Certificate deletion");

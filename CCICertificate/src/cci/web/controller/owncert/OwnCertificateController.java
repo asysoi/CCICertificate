@@ -1,39 +1,37 @@
 package cci.web.controller.owncert;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import cci.config.cert.ExportCertConfig;
 import cci.config.own.ExportOwnCertConfig;
-import cci.model.cert.Certificate;
 import cci.model.owncert.OwnCertificate;
+import cci.pdfbuilder.PDFUtils;
 import cci.repository.SQLBuilder;
-import cci.repository.cert.SQLBuilderCertificate;
 import cci.repository.owncert.SQLBuilderOwnCertificate;
 import cci.service.FieldType;
 import cci.service.Filter;
@@ -44,7 +42,7 @@ import cci.service.owncert.OwnCertificateService;
 import cci.service.owncert.OwnFilter;
 import cci.web.controller.ViewManager;
 import cci.web.controller.cert.CertificateController;
-import cci.web.controller.cert.ViewCertFilter;
+import cci.web.controller.cert.exception.NotFoundCertificateException;
 
 
 @Controller
@@ -52,16 +50,18 @@ import cci.web.controller.cert.ViewCertFilter;
 public class OwnCertificateController {
 	
 	private static final Logger LOG=Logger.getLogger(CertificateController.class);
+	private final String relativeWebPath = "/resources/in";
 	
 	@Autowired
+	private PDFUtils pdfutils;
+	@Autowired
 	private OwnCertificateService ownCertService;
-	
 	@Autowired
 	private CertService certService;
 
-	// ---------------------------------------------------------------------------------------
-	//  Main Request - Get List of Own Certificates
-	// ---------------------------------------------------------------------------------------
+	/* ---------------------------------------------------------------------------------------
+	*  Main Request - Get List of Own Certificates
+	* --------------------------------------------------------------------------------------- */
 	@RequestMapping(value = "owncerts.do", method = RequestMethod.GET)
 	public String listcerts(
 			// HttpServletRequest request,
@@ -117,13 +117,10 @@ public class OwnCertificateController {
 		if (filter == null) {
 			filter = new OwnFilter();
 		}
-		
-		
+				
 		Iterator iterator = aut.getAuthorities().iterator(); 
 		while (iterator.hasNext()) {
-			
 		      String roleName = ((GrantedAuthority) iterator.next()).getAuthority();
-		      
 		      if  (certService.getACL().containsKey(roleName)) {      
 			      filter.setConditionValue("OTD_ID", "OTD_ID", "=", 
 			    		  certService.getACL().get(roleName), FieldType.NUMBER);
@@ -161,9 +158,9 @@ public class OwnCertificateController {
 		return "listowncertificates";
 	}
 	
-	//------------------------------------------------------------------------------
-	//  Init viewmanager 
-	//------------------------------------------------------------------------------
+	/* -----------------------------------------------------------------------------
+	*  Init viewmanager 
+	* ------------------------------------------------------------------------------ */
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager vmanager = new ViewManager();
 		vmanager.setHnames(new String[] {"Номер Сертификата",  "Отделение", 
@@ -172,13 +169,12 @@ public class OwnCertificateController {
 				"blanknumber", "datecert", "additionalblanks"});
 		vmanager.setWidths(new int[] { 15, 20, 40, 10, 10, 5 });
 		model.addAttribute("ownmanager", vmanager);
-
 		return vmanager;
 	}
 	
-  	// ---------------------------------------------------------------------------------------
-	//    Own Certificate filter handling Method GET
-	// ---------------------------------------------------------------------------------------
+	/* -----------------------------------------------------------------------------
+	*    Own Certificate filter handling Method GET
+	* -----------------------------------------------------------------------------*/
 	@RequestMapping(value = "owncertfilter.do", method = RequestMethod.GET)
 	public String openFilter(
 				@ModelAttribute("owncertfilter") OwnFilter fc, ModelMap model) {
@@ -198,9 +194,9 @@ public class OwnCertificateController {
 			return "own/ownfilter";
 	}
 		
-	// ---------------------------------------------------------------------------------------
-	//   Own Certificate filter handling Method POST
-	// ---------------------------------------------------------------------------------------
+	/* -----------------------------------------------------------------------------
+	*   Own Certificate filter handling Method POST
+	* ----------------------------------------------------------------------------- */
 	@RequestMapping(value = "owncertfilter.do", method = RequestMethod.POST)
 	public String submitFilter(
 				@ModelAttribute("viewownfilter") ViewOwnCertificateFilter viewfilter,
@@ -222,9 +218,9 @@ public class OwnCertificateController {
 			return "own/ownfilter";
 	}
 	
-	// ---------------------------------------------------------------------------------------
-	// View own certs table config  for Export certificates to Excel format
-	// ---------------------------------------------------------------------------------------
+	/* -----------------------------------------------------------------------------
+	*  View own certs table config  for Export certificates to Excel format
+	* ----------------------------------------------------------------------------- */
 	@RequestMapping(value = "owncertconfig.do", method = RequestMethod.GET)
 	public String openConfig(ModelMap model) {
 		ViewManager vmanager = (ViewManager) model.get("ownmanager");
@@ -305,24 +301,106 @@ public class OwnCertificateController {
 			}
 	}
 	
-	// ---------------------------------------------------------------------------------------
-	//   View Own Certificate as HTML page 
-	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "owncert.do",  method = RequestMethod.GET)
-	
-	public String gocert(@RequestParam(value = "certid", required = true) Integer certid,
-				ModelMap model) {
+	/*
+	 * -------------------------------------------------------------------------
+	 * ---- View Own Certificate as HTML or PDF page
+	 * -------------------------------------------------------------------------
+	 */
+	@RequestMapping(value = "owncert.do", method = RequestMethod.GET)
+	public void gocert(@RequestParam(value = "certid", required = true) Integer certid, Authentication aut,
+			HttpServletRequest request, HttpServletResponse response, ModelMap model) throws IOException, ServletException {
+        
+		String pathToTempFile = "/resources/out/own";
+		String pathToJSP = "/WEB-INF/jsp/";
+		
+		OwnCertificate cert = null;
+		
+		try {
+			cci.web.controller.owncert.OwnFilter filter = new cci.web.controller.owncert.OwnFilter();
+			filter.setId(certid);
+			filter.setOtd_id(ownCertService.getOtd_idByRole(aut));
+			cert = ownCertService.getOwnCertificateById(filter);
+		} catch (EmptyResultDataAccessException emex) {
+			model.addAttribute("error", "Сертификат не найден или отсутстуют права доступа к нему.");
+			request.setAttribute("error", "Сертификат не найден или отсутстуют права доступа к нему.");
+			request.getRequestDispatcher(pathToJSP+"400.jsp").forward(request, response);
+		} catch (Exception ex) {
+			model.addAttribute("error", ex.getClass().getName() + " - " + ex.getLocalizedMessage());
+			request.setAttribute("error", ex.getClass().getName() + " - " + ex.getLocalizedMessage());
+			request.getRequestDispatcher(pathToJSP+"400.jsp").forward(request, response);
+		} 
+		
+		if (cert != null && cert.getFilename() != null && !cert.getFilename().isEmpty()) {
 			try {
-			     OwnCertificate cert = ownCertService.getOwnCertificateById(certid);
-			     model.addAttribute("owncert", cert);
-			     LOG.info(cert); 
+				
+				String templateDiskPath = request.getSession().getServletContext().getRealPath(relativeWebPath);
+				String pdfFilePath = request.getSession().getServletContext().getInitParameter("upload.location");
+				String tempname = cert.getBlanknumber() + ".pdf";
+				//String tempfile = request.getSession().getServletContext().getRealPath(pathToTempFile) 
+				//		          + System.getProperty("file.separator") + tempname;
+
+				String pagefirst = null;
+				String pagenext = null;
+
+				if ("с/п".equals(cert.getType())) {
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownproductfirst.pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownproductnext.pdf";
+				} else if ("р/у".equals(cert.getType())) {
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownservicefirst.pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownservicenext.pdf";
+				} else if ("б/у".equals(cert.getType())) {
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownbankfirst.pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownbanknext.pdf";
+				} else {
+					throw new NotFoundCertificateException("Для данного типа сертификата не определены формы бланков.");
+				}
+
+				String pdffile = pdfFilePath + System.getProperty("file.separator") + cert.getFilename();
+				List<String> numbers = ownCertService.splitOwnCertNumbers(cert.getBlanknumber(),
+						cert.getAdditionalblanks());
+				ByteArrayOutputStream output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers);
+				
+				if (output != null) {
+					// Firefox Browser doesn't display the file correctly
+					response.setContentType("application/pdf");
+					response.setHeader("Accept-Ranges", "bytes");
+					response.setHeader("Content-Disposition", "inline; filename=" + tempname);
+					// response.setHeader("Content-Disposition", "attachment; filename=" + tempname);
+					response.setContentLength(output.size());
+					response.getOutputStream().write(output.toByteArray());
+					response.getOutputStream().flush();
+					response.getOutputStream().close();
+					response.flushBuffer();
+									
+					// It's need to make redirect
+					// This is unsafe process because file can be corrucpted in case of concurrent identical request
+					/*
+					FileOutputStream fos = new FileOutputStream(tempfile);
+				    fos.write(output.toByteArray());
+				    fos.close();
+				    return "redirect:" + pathToTempFile + System.getProperty("file.separator") + tempname;
+				    */
+				    output.close();
+				    
+				} else {
+					model.addAttribute("error", "Ошибка формирования файла с изображением выданного сертификата.");
+					request.setAttribute("error", "Ошибка формирования файла с изображением выданного сертификата.");
+					request.getRequestDispatcher(pathToJSP+"400.jsp").forward(request, response);
+					// return "error";
+				}
 			} catch (Exception ex) {
 				model.addAttribute("error", ex.getMessage());
-				return "error";
+				request.setAttribute("error", ex.getMessage());
+				request.getRequestDispatcher(pathToJSP+"400.jsp").forward(request, response);
+				// return "400";
 			}
-			return "own/viewowncertificate";
+		} else if (cert != null) {
+			model.addAttribute("owncert", cert);
+			ViewOwnCertificateJSPHelper viewcert = new ViewOwnCertificateJSPHelper(cert); 
+			request.setAttribute("viewcert", viewcert);
+			request.getRequestDispatcher(pathToJSP+"own/ownview.jsp").forward(request, response);
 		}
-
+	}
 	
 	// ---------------------------------------------------------------
 	// Get LIst od Own Certificate Types
@@ -330,8 +408,9 @@ public class OwnCertificateController {
 	@ModelAttribute("types")
 	public Map<String, String> populateOwnCertificateTypesList() {
 		Map<String, String> types = new HashMap<String, String>();
-		types.put("P", "Продукция");
-		types.put("S", "Услуги");
+		types.put("с/п", "Продукция");
+		types.put("р/у", "Работы/Услуги");
+		types.put("б/у", "Банковские услуги");
 		return types;
 	}
 		

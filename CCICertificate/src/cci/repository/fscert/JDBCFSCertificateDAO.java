@@ -32,7 +32,6 @@ import cci.model.fscert.FSProduct;
 import cci.model.fscert.Producer;
 import cci.model.fscert.Signer;
 import cci.model.owncert.OwnCertificate;
-import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.Product;
 import cci.repository.SQLBuilder;
 import cci.repository.owncert.OwnCertificateMapper;

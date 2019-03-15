@@ -1,5 +1,7 @@
 ﻿package cci.service.owncert;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -9,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.OwnCertificateHeaders;
@@ -83,9 +83,9 @@ public class OwnCertificateService {
 	 * ----------------------------- */
 	public String getOtd_idByRole(Authentication aut) {
 		String ret = null;
+		
 		if (aut != null) {
 			Iterator iterator = aut.getAuthorities().iterator();
-		    
 			while (iterator.hasNext()) {
 				String roleName = ((GrantedAuthority) iterator.next()).getAuthority();
 								
@@ -99,6 +99,61 @@ public class OwnCertificateService {
 		return ret;
 	}
 	
+	/* ----------------------------------------------- 
+	 * Convert certificate's
+	 * numbers splited by delimeter into List 
+	 * to write into certificate blanks
+	 * ----------------------------------------------
+	 */
+	public List<String> splitOwnCertNumbers(String number, String addblanks) {
+		List<String> ret = new ArrayList<String>();
+		ret.add(number);
+		if (addblanks != null && !addblanks.trim().isEmpty()) {
+
+			addblanks = addblanks.trim().replaceAll("\\s*-\\s*", "-");
+			addblanks = addblanks.replaceAll(",", ";");
+			addblanks = addblanks.replaceAll("\\s+", ";");
+			addblanks = addblanks.replaceAll(";+", ";");
+			addblanks = addblanks.replaceAll(";\\D+;", ";");
+
+			String[] lst = addblanks.split(";");
+
+			for (String str : lst) {
+				ret.addAll(getSequenceNumbers(str));
+			}
+		}
+		return ret;
+	}
+
+	
+	/* ----------------------------------------------- 
+	 * Convert certificate's
+	 * numbers range into List of separated numbers to write into certificate
+	 * blanks ----------------------------------------------
+	 */
+	private Collection<String> getSequenceNumbers(String addblanks) {
+		List<String> numbers = new ArrayList<String>();
+		int pos = addblanks.indexOf("-");
+		
+		if (pos > 0) {
+			int firstnumber = Integer.parseInt((addblanks.substring(0, pos)));
+			int lastnumber = Integer.parseInt(addblanks.substring(pos + 1));
+			
+			for (int i = firstnumber; i <= lastnumber; i++) {
+				numbers.add(addnull(i + ""));
+			}
+		} else if (!addblanks.trim().isEmpty())
+			numbers.add(addblanks);
+		return numbers;
+	}
+	
+	private String addnull(String number) {
+		if (number.length() < 7) {
+			number = addnull("0"+number);
+		}
+		return number;
+	}
+	
 	// ------------------------------------------------------------------------------------
 	//       RESTFUL methods  
 	// ------------------------------------------------------------------------------------
@@ -110,8 +165,8 @@ public class OwnCertificateService {
 		   return owncertificateDAO.getOwnCertificateHeaders(filter, true);
 	}
 	
-	public OwnCertificate getOwnCertificateById(int id) throws Exception {
-		return owncertificateDAO.findOwnCertificateByID(id);
+	public OwnCertificate getOwnCertificateById(OwnFilter filter) throws Exception {
+		return owncertificateDAO.findOwnCertificateByID(filter);
 	}
 	
 	// propagation=Propagation.REQUIRED, rollbackFor=Exception.class

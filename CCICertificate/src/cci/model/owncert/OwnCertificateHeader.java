@@ -7,6 +7,7 @@ package cci.model.owncert;
 public class OwnCertificateHeader {
 	private String number;
 	private String blanknumber;
+	private String datecert;
 	
 	public String getNumber() {
 		return number;
@@ -20,6 +21,10 @@ public class OwnCertificateHeader {
 	public void setBlanknumber(String blanknumber) {
 		this.blanknumber = blanknumber;
 	}
-	
-
+	public String getDatecert() {
+		return datecert;
+	}
+	public void setDatecert(String datecert) {
+		this.datecert = datecert;
+	}
 }

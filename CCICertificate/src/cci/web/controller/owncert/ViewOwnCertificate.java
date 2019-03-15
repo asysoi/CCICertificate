@@ -3,14 +3,76 @@ package cci.web.controller.owncert;
 import cci.model.owncert.OwnCertificate;
 
 public class ViewOwnCertificate extends OwnCertificate {
+	private String factoryaddress;	
+	private String branchname;
+	private String branchaddress;
+	private String beltppname;
+	private String beltppaddress;
 	private String productname;
 	private String productcode;
 	private String datecertfrom;
 	private String datecertto;
-	private String additionalblanksfrom;
-	private String additionalblanksto;
-	//private String otd_id;
+	private String datestartfrom;
+	private String datestartto;
+	private String dateexpirefrom;
+	private String dateexpireto;
+
+	public String getDatestartfrom() {
+		return datestartfrom;
+	}
+	public void setDatestartfrom(String datestartfrom) {
+		this.datestartfrom = datestartfrom;
+	}
+	public String getDatestartto() {
+		return datestartto;
+	}
+	public void setDatestartto(String datestartto) {
+		this.datestartto = datestartto;
+	}
+	public String getDateexpirefrom() {
+		return dateexpirefrom;
+	}
+	public void setDateexpirefrom(String dateexpirefrom) {
+		this.dateexpirefrom = dateexpirefrom;
+	}
+	public String getDateexpireto() {
+		return dateexpireto;
+	}
+	public void setDateexpireto(String dateexpireto) {
+		this.dateexpireto = dateexpireto;
+	}
 	
+	public String getFactoryaddress() {
+		return factoryaddress;
+	}
+	public void setFactoryaddress(String factoryaddress) {
+		this.factoryaddress = factoryaddress;
+	}
+	public String getBranchname() {
+		return branchname;
+	}
+	public void setBranchname(String branchname) {
+		this.branchname = branchname;
+	}
+	public String getBranchaddress() {
+		return branchaddress;
+	}
+	public void setBranchaddress(String branchaddress) {
+		this.branchaddress = branchaddress;
+	}
+	public String getBeltppname() {
+		return beltppname;
+	}
+	public void setBeltppname(String beltppname) {
+		this.beltppname = beltppname;
+	}
+	public String getBeltppaddress() {
+		return beltppaddress;
+	}
+	public void setBeltppaddress(String beltppaddress) {
+		this.beltppaddress = beltppaddress;
+	}
+
 	public String getProductname() {
 		return productname;
 	}
@@ -35,33 +97,13 @@ public class ViewOwnCertificate extends OwnCertificate {
 	public void setDatecertto(String datecertto) {
 		this.datecertto = datecertto;
 	}
-	public String getAdditionalblanksfrom() {
-		return additionalblanksfrom;
-	}
-	public void setAdditionallistsfrom(String additionalblanksfrom) {
-		this.additionalblanksfrom = additionalblanksfrom;
-	}
-	public String getAdditionalliststo() {
-		return additionalblanksto;
-	}
-	public void setAdditionalliststo(String additionalblanksto) {
-		this.additionalblanksto = additionalblanksto;
-	}
-	
-	//public String getOtd_id() {
-	//	return otd_id;
-	//}
-	//public void setOtd_id(String otd_id) {
-	//	this.otd_id = otd_id;
-	//}
-	
 	@Override
 	public String toString() {
-		return "ViewOwnCertificate [" + super.toString() + " productname=" + productname + ", productcode=" + productcode + ", datecertfrom="
-				+ datecertfrom + ", datecertto=" + datecertto + ", additionalblanksfrom=" + additionalblanksfrom
-				+ ", additionalblanksto=" + additionalblanksto  + "]";
+		return "ViewOwnCertificate [factoryaddress=" + factoryaddress + ", branchname=" + branchname
+				+ ", branchaddress=" + branchaddress + ", beltppname=" + beltppname + ", beltppaddress=" + beltppaddress
+				+ ", productname=" + productname + ", productcode=" + productcode + ", datecertfrom=" + datecertfrom
+				+ ", datecertto=" + datecertto + "]";
 	}
-	
-    
+
 
 }

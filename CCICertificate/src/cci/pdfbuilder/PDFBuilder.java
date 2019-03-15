@@ -1,10 +1,9 @@
 ﻿package cci.pdfbuilder;
  
+
 import java.io.IOException;
 import java.util.List;
-
 import org.apache.log4j.Logger;
-
 import cci.config.cert.BoxConfig;
 import cci.config.cert.CTCell;
 import cci.config.cert.ImageBox;
@@ -15,7 +14,6 @@ import cci.model.cert.Certificate;
 import cci.model.cert.Product;
 import cci.model.cert.ProductIterator;
 import cci.service.CountryConverter;
-
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -110,7 +108,6 @@ public abstract class PDFBuilder {
 
 		drawStamp(writer, stamps);
 	}
-
 
 	public void makeBorderedTexBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
@@ -547,7 +544,6 @@ public abstract class PDFBuilder {
 		return exporter;
 	}
 
-
 	protected boolean checkfield(String field) {
 		return (trim(field).length() > 0);
 	}
@@ -563,4 +559,5 @@ public abstract class PDFBuilder {
 	protected String renderString(String field, String strtermination) {
 		return (field != null && field.trim() != "") ? field.trim() + strtermination : "";
 	}
+
 }
