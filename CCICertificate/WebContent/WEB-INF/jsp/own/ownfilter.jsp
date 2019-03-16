@@ -48,14 +48,14 @@
 				</a></td>
 			</tr>
 			<tr>
-				<td>Номер сертификата</td>
+				<td>Номер сертификата ${viewownfilter.condition.number}</td>
 				<td><form:input path="viewcertificate.number" id="number" /><a
 					href="javascript:clearelement($('#number'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
-				<td>Номер бланка</td>
+				<td>Номер бланка ${viewownfilter.condition.blanknumber}</td>
 				<td><form:input path="viewcertificate.blanknumber" id="blanknumber" /><a
 					href="javascript:clearelement($('#blanknumber'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
