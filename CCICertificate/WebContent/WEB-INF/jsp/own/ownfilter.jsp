@@ -74,10 +74,11 @@
 		</table>
 	</fieldset>
 	<fieldset>
+	
 		<legend class="grp_title">Производство</legend>
 		<table class="filter">
 			<tr>
-				<td>Производитель</td>
+				<td>Производитель ${viewownfilter.condition.customername}</td>
 				<td><form:input path="viewcertificate.customername" id="customername" /><a
 					href="javascript:clearelement($('#customername'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
