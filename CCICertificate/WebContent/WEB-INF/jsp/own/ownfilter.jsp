@@ -41,8 +41,8 @@
 
 		<table class="filter">
 			<tr>
-				<td>Тип сертификата</td>
-				<td><form:select path="viewcertificate.type" items="${types}"
+				<td>Тип сертификата ${viewownfilter.condition.type}</td>
+				<td> <form:select path="viewcertificate.type" items="${types}"
 						id="types" /><a href="javascript:clearelement($('#types'));">
 						<img src="resources/images/delete-16.png" alt="удл." />
 				</a></td>

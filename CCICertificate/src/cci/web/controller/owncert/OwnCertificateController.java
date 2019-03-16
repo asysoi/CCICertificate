@@ -204,9 +204,7 @@ public class OwnCertificateController {
 				@ModelAttribute("owncertfilter") OwnFilter fc,
 				BindingResult result, SessionStatus status, ModelMap model) {
 
-		    System.out.println("=================================================================="); 
 		    LOG.info (viewfilter);
-		    System.out.println("==================================================================");
 		    
 			if (fc == null) {
 				fc = new OwnFilter();
