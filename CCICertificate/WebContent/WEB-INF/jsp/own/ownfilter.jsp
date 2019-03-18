@@ -41,21 +41,21 @@
 
 		<table class="filter">
 			<tr>
-				<td>Тип сертификата ${viewownfilter.condition.type}</td>
+				<td>Тип сертификата </td>
 				<td> <form:select path="viewcertificate.type" items="${types}"
 						id="types" /><a href="javascript:clearelement($('#types'));">
 						<img src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
-				<td>Номер сертификата ${viewownfilter.condition.number}</td>
+				<td>Номер сертификата </td>
 				<td><form:input path="viewcertificate.number" id="number" /><a
 					href="javascript:clearelement($('#number'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
-				<td>Номер бланка ${viewownfilter.condition.blanknumber}</td>
+				<td>Номер бланка </td>
 				<td><form:input path="viewcertificate.blanknumber" id="blanknumber" /><a
 					href="javascript:clearelement($('#blanknumber'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
@@ -78,29 +78,43 @@
 		<legend class="grp_title">Производство</legend>
 		<table class="filter">
 			<tr>
-				<td>Производитель ${viewownfilter.condition.customername}</td>
+				<td>УНП производителя </td>
+				<td><form:input path="viewcertificate.customerunp" id="customerunp" /><a
+					href="javascript:clearelement($('#customerunp'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+				<td>Наимен. производителя </td>
 				<td><form:input path="viewcertificate.customername" id="customername" /><a
 					href="javascript:clearelement($('#customername'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
+			</tr>
+			<tr>
 				<td>Адрес производителя</td>
 				<td><form:input path="viewcertificate.customeraddress" id="customeraddress" /><a
 					href="javascript:clearelement($('#customeraddress'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
-			</tr>
-			<tr>
 				<td>Адрес производства</td>
 				<td><form:input path="viewcertificate.factoryaddress" id="factoryaddress" /><a
 					href="javascript:clearelement($('#factoryaddress'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
-				<td>Обособ. подразделения</td>
+			</tr>
+			
+			<tr>
+				<td>Наимен. подразделения</td>
 				<td><form:input path="viewcertificate.branchname" id="branchname" /><a
 					href="javascript:clearelement($('#branchname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
+				<td>Адрес подразделения</td>
+				<td><form:input path="viewcertificate.branchaddress" id="branchaddress" /><a
+					href="javascript:clearelement($('#branchaddress'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
 			</tr>
+			
 		</table>
 	</fieldset>
 

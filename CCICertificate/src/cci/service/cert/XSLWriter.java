@@ -46,13 +46,15 @@ public class XSLWriter {
 
 		for (Object obj : data) {
 			cell = row.createCell(cellnum++);
-			System.out.println(obj);
+			// System.out.println(obj);
 			if (obj instanceof String)
 				cell.setCellValue((String) obj);
 			else if (obj instanceof Integer)
 				cell.setCellValue((Integer) obj);
 			else if (obj instanceof Long)
 				cell.setCellValue((Long) obj);
+			else if (obj instanceof List) 
+                cell.setCellValue(obj.toString());      
 			else if (obj instanceof Date)
 				cell.setCellValue( 			
 					new SimpleDateFormat("dd/MM/yyyy").format((Date) obj));

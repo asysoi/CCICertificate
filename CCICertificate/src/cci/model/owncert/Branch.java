@@ -44,7 +44,7 @@ public class Branch {
 
 	@Override
 	public String toString() {
-		return name + ", address=" + address + ";";
+		return name + (address != null && ! address.isEmpty() ? "," + address + "; ": "; ");
 	}
 
 	@Override

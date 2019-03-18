@@ -1,8 +1,8 @@
 package cci.web.controller.owncert;
 
 public class ViewOwnCertificateFilter {
-	private ViewOwnCertificateCondition condition = new ViewOwnCertificateCondition();
-   	private ViewOwnCertificate viewcertificate = new ViewOwnCertificate();
+	private ViewOwnCertificateCondition condition;
+   	private ViewOwnCertificate viewcertificate;
    
 	public ViewOwnCertificateCondition getCondition() {
 		return condition;

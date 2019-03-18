@@ -214,7 +214,9 @@ public class OwnCertificateController {
 				LOG.info("Found FilterOwnCertificate in POST");
 			}
 
+			LOG.info("viewfilter.getViewcertificate() = " + viewfilter.getViewcertificate());
 			fc.loadViewcertificate(viewfilter.getViewcertificate());
+			LOG.info("viewfilter.getCondition() = " + viewfilter.getCondition());
 			fc.loadCondition(viewfilter.getCondition());
 
 			model.addAttribute("owncertfilter", fc);

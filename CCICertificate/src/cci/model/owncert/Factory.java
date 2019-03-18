@@ -35,7 +35,7 @@ public class Factory {
 
 	@Override
 	public String toString() {
-		return "Factory [address=" + address + "]";
+		return address != null && ! address.isEmpty() ? address + "; " : "";
 	}
 
 	@Override

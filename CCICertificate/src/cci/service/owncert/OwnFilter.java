@@ -15,10 +15,12 @@ import cci.web.controller.owncert.ViewOwnCertificateCondition;
 public class OwnFilter extends Filter {
 	
 	public static Logger LOG=Logger.getLogger(OwnFilter.class);
-	
+	private ViewOwnCertificateCondition condition;
+   	private ViewOwnCertificate viewcertificate;
+   	
 	public OwnFilter() { 
 		// "ID","ID_BELTPP",
-		String[] fields = new String[] { "TYPE", "NUMBER", "BLANKNUMBER",
+		String[] fields = new String[] { "TYPE", "NUMBER", "BLANKNUMBER", "CUSTOMERUNP",
 				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP", "FACTORYADDRESS", "BRANCHNAME", "BRANCHADDRESS", 
 				"ADDITIONALBLANKS", "DATESTART", "DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
 				"DATECERT", "DATELOAD", "BELTPPNAME", "BELTPPADDRESS", 
@@ -26,15 +28,16 @@ public class OwnFilter extends Filter {
 				"DATECERTFROM", "DATECERTTO", "OTD_ID",};
 		
 		// "ID","ID_BELTPP",
-		String[] dbfields = new String[] { "TYPE","NUMBER","BLANKNUMBER",
+		String[] dbfields = new String[] { "TYPE","NUMBER","BLANKNUMBER", "CUSTOMERUNP",
 				"CUSTOMERNAME","CUSTOMERADDRESS", "CUSTOMERUNP","FACTORIES","BRANCHES", "BRANCHES", 
 				"ADDITIONALBLANKS","DATESTART","DATEEXPIRE","EXPERT","SIGNER", "SIGNERJOB", 
 				"DATECERT","DATELOAD","BELTPPNAME","BELTPPADDRESS",
 				"PRODUCTS", "PRODUCTS", "DATESTART", "DATESTART", "DATEEXPIRE", "DATEEXPIRE", 
 				"DATECERT", "DATECERT", "OTD_ID"};
+		
 		// FieldType.ID, FieldType.ID, 
 		FieldType[] types = new FieldType[] {
-				FieldType.STRING,FieldType.STRING,FieldType.STRING,
+				FieldType.STRING,FieldType.STRING,FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, 
 				FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.DATE, FieldType.DATE, FieldType.STRING,FieldType.STRING,  
@@ -42,6 +45,9 @@ public class OwnFilter extends Filter {
 				FieldType.DATE, FieldType.DATE, FieldType.STRING };
 		
 		this.init(fields, dbfields, types);
+   		condition = new ViewOwnCertificateCondition();
+   	   	viewcertificate = new ViewOwnCertificate();
+
 	}
 		
 	// -------------------------------------------------------------
@@ -49,24 +55,28 @@ public class OwnFilter extends Filter {
 	//  to ViewCertificate in order using for View goals  
 	// -------------------------------------------------------------
 	public ViewOwnCertificate getViewcertificate() {
-		ViewOwnCertificate cert = new ViewOwnCertificate();
 		
-		for (String field : getConditions().keySet()) {
-			FilterCondition fcond = getConditions().get(field);
-			String setter = convertFieldNameToSetter(field);
-			
-			if (fcond != null) {
-				try {
-					Method m = getMethod(cert, setter, new Class[] {fcond.getType() == FieldType.NUMBER ? Integer.class :  String.class});
-					if (m != null) {
-					    m.invoke(cert, new Object[]{fcond.getValue()});
+		if (viewcertificate == null) {
+			viewcertificate = new ViewOwnCertificate();
+
+			for (String field : getConditions().keySet()) {
+				FilterCondition fcond = getConditions().get(field);
+				String setter = convertFieldNameToSetter(field);
+
+				if (fcond != null) {
+					try {
+						Method m = getMethod(viewcertificate, setter,
+								new Class[] { fcond.getType() == FieldType.NUMBER ? Integer.class : String.class });
+						if (m != null) {
+							m.invoke(viewcertificate, new Object[] { fcond.getValue() });
+						}
+					} catch (Exception ex) {
+						LOG.info("Error get view own certificate." + ex.getMessage());
 					}
-				} catch (Exception ex) {
-					LOG.info("Error get view own certificate." + ex.getMessage());
 				}
 			}
 		}
-		return cert;
+		return viewcertificate;
 	}
 	
 
@@ -74,24 +84,28 @@ public class OwnFilter extends Filter {
     //  Return list of condition operators filled in ViewCertCondition   
 	// -----------------------------------------------------------------------
 	public ViewOwnCertificateCondition getCondition() {
-		ViewOwnCertificateCondition cond = new ViewOwnCertificateCondition();
 		
-		for (String field : getConditions().keySet()) {
-			FilterCondition fcond = getConditions().get(field);
-			String setter = convertFieldNameToSetter(field);
-			
-			if (fcond != null) {
-				try {
-					Method m = getMethod(cond, setter, new Class[] {fcond.getType() == FieldType.NUMBER ? Integer.class :  String.class});
-					if (m != null) {
-					    m.invoke(cond, new Object[]{fcond.getOperator()});
+		if (condition == null) {
+			condition = new ViewOwnCertificateCondition();
+
+			for (String field : getConditions().keySet()) {
+				FilterCondition fcond = getConditions().get(field);
+				String setter = convertFieldNameToSetter(field);
+
+				if (fcond != null) {
+					try {
+						Method m = getMethod(condition, setter,
+								new Class[] { fcond.getType() == FieldType.NUMBER ? Integer.class : String.class });
+						if (m != null) {
+							m.invoke(condition, new Object[] { fcond.getOperator() });
+						}
+					} catch (Exception ex) {
+						LOG.info("Error get own view condition." + ex.getMessage());
 					}
-				} catch (Exception ex) {
-    				LOG.info("Error get own view condition." + ex.getMessage());
 				}
 			}
 		}
-		return cond;
+		return condition;
 	}
 	
 	
@@ -99,7 +113,10 @@ public class OwnFilter extends Filter {
 	// Convert viewCertificate into list of conditions by setting FilterCondition value property 
 	// -------------------------------------------------------------------------------------------
 	public void loadViewcertificate (ViewOwnCertificate cert) {
-	
+		if (cert != null) {
+            viewcertificate = cert;
+		}
+        
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
 			
@@ -107,9 +124,9 @@ public class OwnFilter extends Filter {
 			
 			if (fcond != null) {
 				try {
-					Method m = getMethod(cert, getter, new Class[] {});
+					Method m = getMethod(viewcertificate, getter, new Class[] {});
 					if (m != null) {
-						fcond.setValue((String) m.invoke(cert, new Object[]{}));
+						fcond.setValue((String) m.invoke(viewcertificate, new Object[]{}));
 					}
 				} catch (Exception ex) {
 					LOG.info("Error view own certificate load." + ex.getMessage());
@@ -120,19 +137,22 @@ public class OwnFilter extends Filter {
 
 	
 	// ------------------------------------------------------------
-	// Set operators of conditions into storage variable of filter  
+	// Set operators of conditions into storage variable of filter
 	// ------------------------------------------------------------
-    public void loadCondition (ViewOwnCertificateCondition cond) {
-    	
+	public void loadCondition(ViewOwnCertificateCondition cond) {
+
+		if (cond != null) {
+			condition = cond;
+		}
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
 			String getter = convertFieldNameToGetter(field);
-			
+
 			if (fcond != null) {
 				try {
-					Method m = getMethod(cond, getter, new Class[] {});
+					Method m = getMethod(condition, getter, new Class[] {});
 					if (m != null) {
-						fcond.setOperator((String) m.invoke(cond, new Object[]{}));
+						fcond.setOperator((String) m.invoke(condition, new Object[] {}));
 					}
 				} catch (Exception ex) {
 					LOG.info("Error view own condition load." + ex.getMessage());
@@ -140,4 +160,5 @@ public class OwnFilter extends Filter {
 			}
 		}
 	}
+
 }

@@ -124,13 +124,12 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	public List<OwnCertificateExport> getCertificates(String[] dbfields, 
 			String orderby,	String order, SQLBuilder builder) {
 
-		String flist = "id";
-		/*
-		for (String field : dbfields) {
-		    flist += ", " + field;  	
-		} */
+		//String flist = "id";
+		//for (String field : dbfields) {
+		//    flist += ", " + field;  	
+		//}
 		
-		flist = "*";
+		String flist = "*"; 
 		
 		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
     	Map<String, Object> params = filter.getParams();
@@ -141,7 +140,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		LOG.info("Get certificates: " + sql);
 		
 		return this.template.query(sql,	params, 
-				new BeanPropertyRowMapper<OwnCertificateExport>(OwnCertificateExport.class));
+				new OwnCertificateExportMapper<OwnCertificateExport>() );
 	}
 	
 	

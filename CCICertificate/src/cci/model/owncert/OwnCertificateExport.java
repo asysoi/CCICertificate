@@ -1,41 +1,20 @@
 package cci.model.owncert;
 
 public class OwnCertificateExport extends OwnCertificate {
-	private String beltppname;
-	private String beltppunp;
-	private String productname;
-	private String beltppaddress;
 
 	public String getBeltppname() {
-		return beltppname;
+		return getBeltpp().getName();
 	}
 
 	public void setBeltppname(String beltppname) {
-		this.beltppname = beltppname;
+		getBeltpp().setName(beltppname);;
 	}
 
 	public String getBeltppaddress() {
-		return beltppaddress;
+		return getBeltpp().getAddress();
 	}
 
 	public void setBeltppaddress(String beltppaddress) {
-		this.beltppaddress = beltppaddress;
+		getBeltpp().setAddress(beltppaddress);;
 	}
-
-	public String getBeltppunp() {
-		return beltppunp;
-	}
-
-	public void setBeltppunp(String beltppunp) {
-		this.beltppunp = beltppunp;
-	}
-
-	public String getProductname() {
-		return productname;
-	}
-
-	public void setProductname(String productname) {
-		this.productname = productname;
-	}
-
 }

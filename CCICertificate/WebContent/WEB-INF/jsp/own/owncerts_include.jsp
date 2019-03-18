@@ -96,8 +96,8 @@
         link="owncertfilter.do?&pagesize=${ownmanager.pagesize}&orderby=${ownmanager.orderby}&order=${ownmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
-		$("#pview").dialog("option", "width", 800);
-		$("#pview").dialog("option", "height", 520);
+		$("#pview").dialog("option", "width", 850);
+		$("#pview").dialog("option", "height", 535);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -106,7 +106,8 @@
 				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
                   	                                               ] });
               
-		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+110', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
 		$("#pview").dialog("open");
 	}
 
@@ -159,7 +160,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
 		$("#pview").dialog("option", "width", 850);
-		$("#pview").dialog("option", "height", 370);
+		$("#pview").dialog("option", "height", 380);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({
@@ -170,11 +171,8 @@
 			} ]
 		});
 
-		$("#pview").dialog("option", "position", {
-			my : "center",
-			at : "center",
-			of : window
-		});
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+110', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
 		$("#pview").dialog("open");
 	}
 
@@ -218,17 +216,11 @@
 		$("#pview").dialog({
 			buttons : [ { text : "Закрыть",	click : function() {close();} } ]
 		});
-
-		$("#pview").dialog("option", "position", {
-			my : "center",
-			at : "center",
-			of : window
-		});
+		
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+110', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
 		$("#pview").dialog("open");
 	}
-
-
-
 </script>
 
 
