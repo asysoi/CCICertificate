@@ -20,6 +20,9 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 public class XSLWriter {
 	public static Logger LOG=Logger.getLogger(XSLWriter.class);
 	
+	/* --------------------------------------------------------------
+	 * Create Excel workbook 
+	 * ------------------------------------------------------------- */
 	public Workbook makeWorkbook(List<Object> items, String[] headers, String[] dbfields, String title) {
 		long start = System.currentTimeMillis();
 		
@@ -39,28 +42,57 @@ public class XSLWriter {
 		return workbook;
 	}
 	
+	/* --------------------------------------------------------------
+	 *  Fill in row
+	 * ------------------------------------------------------------- */
 	private void createRow(Sheet sheet, int rownum, Object[] data) {
 		Row row = sheet.createRow(rownum);
 		Cell cell;
 		int cellnum = 0;
 
 		for (Object obj : data) {
-			cell = row.createCell(cellnum++);
-			// System.out.println(obj);
-			if (obj instanceof String)
+			if (obj instanceof String) {
+				cell = row.createCell(cellnum++);
 				cell.setCellValue((String) obj);
-			else if (obj instanceof Integer)
+			} else if (obj instanceof Integer) {
+				cell = row.createCell(cellnum++);
 				cell.setCellValue((Integer) obj);
-			else if (obj instanceof Long)
+			} else if (obj instanceof Long) {
+				cell = row.createCell(cellnum++);
 				cell.setCellValue((Long) obj);
-			else if (obj instanceof List) 
-                cell.setCellValue(obj.toString());      
-			else if (obj instanceof Date)
-				cell.setCellValue( 			
+			} else if (obj instanceof List) {
+				String[] strs;
+				if (obj.toString().length() > 32000) { 
+				   strs = split( obj.toString(), 32000);
+				} else {
+				   strs = new String[]{obj.toString()};	
+				}
+				
+			    for (String str : strs) {
+			    	cell = row.createCell(cellnum++);
+			    	cell.setCellValue(str);    	
+			    }
+			} else if (obj instanceof Date) {
+			   	cell = row.createCell(cellnum++);
+				cell.setCellValue(	
 					new SimpleDateFormat("dd/MM/yyyy").format((Date) obj));
+			}
 		}
 	}
 	
+	public static String[] split(String str, int len) {
+		List<String> strs = new ArrayList<String>();
+		do {
+			strs.add(str.substring(0, len));
+			str = str.substring(len);
+		} while (str.length() > len);
+		if (str.length() > 0 ) strs.add(str);
+		return strs.toArray(new String[strs.size()]);
+	}
+	
+	/* -----------------------------------------------------------
+	 *  Extract data from object
+	 * --------------------------------------------------------- */
 	private Object[] getData(Object cert, String[] dbfields) {
 		List<Object> data = new ArrayList<Object>();
 
@@ -80,6 +112,9 @@ public class XSLWriter {
 		return data.toArray();
 	}
 
+	/* -----------------------------------------------------------------
+	 *  Reflection mrthod 
+	 * ---------------------------------------------------------------- */
 	private Method getMethod(Object obj, String name, Class[] params) {
 		Method m = null;
 		try {

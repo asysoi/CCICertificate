@@ -15,12 +15,12 @@ public class ExportOwnCertConfig implements ExportConfig {
 		"Адрес производителя","УНП производителя","Адрес производства","Обособленные подразделения",
 		"Коды дополнительных бланков",	"Дата сертификата", "Действителен с ","Действителен до ",  "Эксперт", "Кем выдан",
 		"Должность выдавшего","Дата загрузки",
-		"Отделение","Адрес отделения", "Продукция/Услуги и коды", "Краткое описание продукции"};
+		"Отделение","Адрес отделения", "Краткое описание продукции/услуг", "Продукция/Услуги и коды" };
 
 	private String[] fieldnames = new String[] { "number",	"blanknumber",	"customername",
 			"customeraddress","customerunp","factories","branches","additionalblanks",
 			"datecert", "datestart","dateexpire","expert","signer",
-			"signerjob","dateload","beltppname", "beltppaddress", "products", "productdescription"};
+			"signerjob","dateload","beltppname", "beltppaddress", "productdescription" , "products"};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
 	private String[] headers = new String[]{};

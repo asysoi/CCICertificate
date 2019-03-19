@@ -78,10 +78,6 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			String order, SQLBuilder builder) {
 		String sql;
 
-		//String flist = "id, id_beltpp";
-		//for (String field : dbfields) {
-		//    flist += ", " + field;  	
-		//}
 		String flist = "*";
 		
         SQLQueryUnit filter = builder.getSQLUnitWhereClause();
@@ -123,11 +119,6 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ------------------------------------------------------------------------------
 	public List<OwnCertificateExport> getCertificates(String[] dbfields, 
 			String orderby,	String order, SQLBuilder builder) {
-
-		//String flist = "id";
-		//for (String field : dbfields) {
-		//    flist += ", " + field;  	
-		//}
 		
 		String flist = "*"; 
 		
