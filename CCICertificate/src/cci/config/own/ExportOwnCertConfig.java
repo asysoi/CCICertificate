@@ -11,16 +11,16 @@ import cci.config.ExportConfig;
 
 public class ExportOwnCertConfig implements ExportConfig {
 	
-	private String[] headernames = new String[] { "Номер сертификата",	"Номер бланка",	"Производитель",
-		"Адрес производителя","Регитсрационный номер производителя","Адрес производства","Обособленные подразделения",
-		"Коды дополнительных бланков",	"Действителен с ","Действителен до ","Эксперт","Удостоверен",
-		"Должность удостоверителя","Дата сертификата","Дата загрузки",
-		"Отделение","Адрес отделения"};
+	private String[] headernames = new String[] { "Номер сертификата",	"Номер бланка",	"Наименование производителя",
+		"Адрес производителя","УНП производителя","Адрес производства","Обособленные подразделения",
+		"Коды дополнительных бланков",	"Дата сертификата", "Действителен с ","Действителен до ",  "Эксперт", "Кем выдан",
+		"Должность выдавшего","Дата загрузки",
+		"Отделение","Адрес отделения", "Продукция/Услуги и коды", "Краткое описание продукции"};
 
 	private String[] fieldnames = new String[] { "number",	"blanknumber",	"customername",
-			"customeraddress","customerunp","factories","branches","additionalblanks","datestart",
-			"dateexpire","expert","signer","signerjob","datecert","dateload","beltppname",
-			"beltppaddress"};
+			"customeraddress","customerunp","factories","branches","additionalblanks",
+			"datecert", "datestart","dateexpire","expert","signer",
+			"signerjob","dateload","beltppname", "beltppaddress", "products", "productdescription"};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
 	private String[] headers = new String[]{};

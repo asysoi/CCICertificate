@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 
+import cci.model.owncert.Product;
 import cci.model.owncert.Branch;
 import cci.model.owncert.Company;
 import cci.model.owncert.Factory;
-import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateExport;
 
 
@@ -76,6 +75,12 @@ public class OwnCertificateExportMapper<T> implements RowMapper<OwnCertificateEx
 			List<Branch> branches = new ArrayList<Branch>();
 			branches.add(branch);
 			cert.setBranches(branches);
+			
+			Product product = new Product();
+			product.setName(resultSet.getString("products"));
+			List<Product> products = new ArrayList<Product>();
+			products.add(product);
+			cert.setProducts(products);
 			
 		 } catch (Exception ex ) {
 			LOG.error("Mapping certificate error: " + ex.getMessage());

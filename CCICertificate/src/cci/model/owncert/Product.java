@@ -55,8 +55,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", number=" + number + ", name=" + name
-				+ ", code=" + code + "]";
+		return  name + ( code !=null && ! code.isEmpty() ? ", " + code + "; " : ";" );
 	}
 
 	@Override

@@ -1,6 +1,16 @@
 ﻿<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+<style>
+.navbar-fixed-top {
+  min-height: 58px;
+}
+.container-fluid {
+  min-height: 58px;
+}
+</style>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
 
 
 				
@@ -13,8 +23,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="main.do" style="font-size: 240%">
-          <img src="resources/images/logo_40.png" width="32" height="32" style="vertical-align: middle;"/>
+          <a class="navbar-brand" href="main.do" style="font-size: 200%">
+          <img src="resources/images/logo_40.png" width="40" height="40" style="vertical-align: middle;"/>
           Портал БелТПП
           </a>
         </div>
@@ -29,7 +39,7 @@
 
 			    <!-- 
 				<li><a href="main.do">Главная</a></li>
-				 -->
+				-->
 	
 				<security:authorize ifAnyGranted="ROLE_CLIENT,ROLE_EXPERT">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -105,7 +115,7 @@
     				Выйти <security:authentication property="principal.username" /> 
 					</security:authorize>
 				    </a>
-				 </li>
+				</li>
 				
 				<li><a href="help.do">Справка</a></li>
 			</ul>
@@ -113,4 +123,6 @@
 		</div>
 						
       </div>
+      <div style="height: 2px; width: 100%; background-color: yellow; border: none   !important;"> </div>
     </div>
+

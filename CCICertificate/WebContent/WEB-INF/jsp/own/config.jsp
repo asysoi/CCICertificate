@@ -26,7 +26,8 @@
 <form:form id="config" method="POST" commandName="downloadconfig">
 <div id="content" style="display: none">
 	<ul>
-		<form:checkboxes element="li" path="fields"	items="${downloadconfig.headermap}" />
+		<form:checkboxes element="li" path="fields"	items="${downloadconfig.headermap}" style="list-style: none;"/>
+		
 	</ul>
 </div>
 	

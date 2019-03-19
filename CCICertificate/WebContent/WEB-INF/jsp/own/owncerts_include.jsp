@@ -160,7 +160,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
 		$("#pview").dialog("option", "width", 850);
-		$("#pview").dialog("option", "height", 380);
+		$("#pview").dialog("option", "height", 410);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({
