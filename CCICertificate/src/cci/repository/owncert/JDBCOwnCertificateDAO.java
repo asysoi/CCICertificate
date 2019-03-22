@@ -1,5 +1,6 @@
 package cci.repository.owncert;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -13,6 +14,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import cci.model.cert.Report;
 import cci.model.owncert.Branch;
 import cci.model.owncert.Factory;
 import cci.model.owncert.OwnCertificate;
@@ -82,8 +85,6 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		
         SQLQueryUnit filter = builder.getSQLUnitWhereClause();
         Map<String, Object> params = filter.getParams();
-        LOG.info("SQLQueryUnit : " + filter);
-        
         
         if (pagesize < pagecount) {
         	sql = "select " + flist
@@ -111,27 +112,6 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		} else {
 			return null;
 		}
-	}
-
-	
-	// ------------------------------------------------------------------------------
-	//  This method returns list of own certificates for export to Excel file
-	// ------------------------------------------------------------------------------
-	public List<OwnCertificateExport> getCertificates(String[] dbfields, 
-			String orderby,	String order, SQLBuilder builder) {
-		
-		String flist = "*"; 
-		
-		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
-    	Map<String, Object> params = filter.getParams();
-
-		String sql = " SELECT " + flist + " FROM owncertificate " 
-				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
-
-		LOG.info("Get certificates: " + sql);
-		
-		return this.template.query(sql,	params, 
-				new OwnCertificateExportMapper<OwnCertificateExport>() );
 	}
 	
 	
@@ -474,5 +454,81 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			throw (new NotDeleteOwnCertificateException("Сертификат не удален " + ex.getMessage()));
 		}
 		return ret;
+	}
+
+	// ------------------------------------------------------------------------------
+	// This method returns list of own certificates for export to Excel file
+	// ------------------------------------------------------------------------------
+	public List<OwnCertificateExport> getCertificates(String[] dbfields, String orderby, String order,
+			SQLBuilder builder) {
+
+		String flist = "*";
+
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+		Map<String, Object> params = filter.getParams();
+
+		String sql = " SELECT " + flist + " FROM owncertificate " + filter.getClause() + " ORDER BY " + orderby + " "
+				+ order;
+
+		LOG.info("Get certificates for export: " + sql);
+
+		return this.template.query(sql, params, new OwnCertificateExportMapper<OwnCertificateExport>());
+	}
+
+	/* ---------------------------------------------------------------
+	* Get Analytic Report grouped by Fields
+	* --------------------------------------------------------------- */
+	public List<Report> getReport(String[] fields, SQLBuilder builder) {
+		String field = fields[0]; // берем только одно поле для группировки
+		
+        System.out.println("Report field: " + field);
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+		String sql;
+		
+        if (field.equals("code")) {
+        	sql = "SELECT " + field + "  as field, COUNT(*) as value FROM (SELECT DISTINCT ID_CERTIFICATE," 
+        			+ field + " FROM OWNPRODUCT where id_certificate in  (select id from owncertificate "
+        			+ filter.getClause() 
+        			+ ")) own group by " + field + " ORDER BY value DESC";
+        } else {
+        	
+		    sql = "SELECT " + field + " as field, COUNT(*) as value FROM (select "
+		    		+ field + " from owncertificate "
+		    		+ filter.getClause() 
+		    		+ " ) own group by " + field + " ORDER BY value DESC";
+        }
+		
+		LOG.info("Make pivot report: " + sql);
+
+		Map<String, Object> params = filter.getParams();
+
+		return this.template.query(sql, params, new BeanPropertyRowMapper<Report>(Report.class));
+	}
+
+	/* ---------------------------------------------------------------
+	* Get list orsha' factories for report
+	* --------------------------------------------------------------- */
+	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
+		
+        Map<String, Object> params = new HashMap<String,Object>();
+        
+    	String sql = "select * from owncertificate where " 
+          + " ((UPPER(factories) like :orsha and UPPER(customeraddress) like :orsha and type= :typeproduct) "  
+          + " OR  (UPPER(factories) like :orsha and UPPER(branches) like :orsha and type=:typeproduct) "
+          + " OR  (UPPER(customeraddress) like :orsha and type=:typeservice) "  
+          + " OR  (UPPER(branches) like :orsha and type=:typeservice) ) " 
+          + " AND datestart < STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire > STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+          + " and otd_id = :otd_id " 
+          + " ORDER by customerunp ";   
+        
+     	params.put("orsha", "%" + query  +"%");
+     	params.put("typeproduct", "с/п");
+     	params.put("typeservice", "р/у");
+     	params.put("reportdate", reportdate);
+    	params.put("otd_id", Integer.valueOf(otd_id));
+    		
+        
+		return this.template.query(sql,	params, 
+				new OwnCertificateMapper<OwnCertificate>());
 	}
 }

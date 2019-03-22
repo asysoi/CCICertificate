@@ -243,7 +243,7 @@
             </td>
 
 			<td style="width: 40%; text-align: right">
-			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Отчет"/></a>
+			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Сводная таблица"/></a>
 				   &nbsp;
 				   <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
 				   &nbsp;			        

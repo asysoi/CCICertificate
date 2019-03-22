@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 
+import cci.model.cert.Report;
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.OwnCertificateHeaders;
@@ -36,8 +37,11 @@ public interface OwnCertificateDAO {
 			String order, SQLBuilder builder);
 
 	List<OwnCertificateExport> getCertificates(String[] fields, String orderby, String order, SQLBuilder builder);
+	
+	List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id);
 
 	boolean updateOwnCertificateFileName(String number, String blanknumber, String datecert, String filename);
 
+	List<Report> getReport(String[] fields, SQLBuilder builder);
 
 }

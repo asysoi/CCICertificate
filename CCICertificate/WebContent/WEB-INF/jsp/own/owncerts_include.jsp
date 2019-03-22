@@ -97,7 +97,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
 		$("#pview").dialog("option", "width", 850);
-		$("#pview").dialog("option", "height", 535);
+		$("#pview").dialog("option", "height", 545);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -106,7 +106,7 @@
 				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
                   	                                               ] });
               
-		$("#pview").dialog({position: {  my: 'top',  at: 'top+110', of: window, collision: "none"}});
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
 		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
 		$("#pview").dialog("open");
 	}
@@ -160,7 +160,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
 		$("#pview").dialog("option", "width", 850);
-		$("#pview").dialog("option", "height", 410);
+		$("#pview").dialog("option", "height", 420);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({
@@ -171,7 +171,7 @@
 			} ]
 		});
 
-		$("#pview").dialog({position: {  my: 'top',  at: 'top+110', of: window, collision: "none"}});
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
 		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
 		$("#pview").dialog("open");
 	}
@@ -203,10 +203,10 @@
 	
 	
 	// ---------------------------------------------------------------------------------
-    // Open Report Window  
+    // Open Pivot tables Window  
     // ---------------------------------------------------------------------------------
 	function reportWindow() {
-		link = "certconfigreport.do";
+		link = "ownconfigreport.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Отчет');
 		$("#pview").dialog("option", "width", 850);
@@ -216,10 +216,28 @@
 		$("#pview").dialog({
 			buttons : [ { text : "Закрыть",	click : function() {close();} } ]
 		});
-		
-		$("#pview").dialog({position: {  my: 'top',  at: 'top+110', of: window, collision: "none"}});
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
 		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
 		$("#pview").dialog("open");
+	}
+
+	// ---------------------------------------------------------------------------------
+    // Create report Open Pivot tables Window  
+    // ---------------------------------------------------------------------------------	
+	function reportOrsha() {
+		// url = $("#config").attr("action");
+		// $.post(url, $("#config").serialize());
+		
+   		var hiddenIFrameID = 'hiddenDownloader';
+        var iframe = document.getElementById(hiddenIFrameID);
+        
+    	if (iframe == null) {
+        	iframe = document.createElement('iframe');
+        	iframe.id = hiddenIFrameID;
+	    	iframe.style.display = 'none';
+	    	document.body.appendChild(iframe);
+    	}
+    	iframe.src = "ownorshareport.do";
 	}
 </script>
 
@@ -235,14 +253,15 @@
             </td>
 
 			<td style="width: 40%; text-align: right">
-			       <!--  a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Отчет"/></a -->
+			       <a href="javascript:reportOrsha();"><img src="resources/images/exp_excel.png"alt="Отчет по Орше"/></a>
 				   &nbsp;
+			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Сводный отчет"/></a>
+                   &nbsp;
 				   <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
 				   &nbsp;			        
 			       Строк в списке: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
-	               <a
-						href="javascript: goToList('owncerts.do?page=1&pagesize=${item}&orderby=${ownmanager.orderby}
+	               <a href="javascript: goToList('owncerts.do?page=1&pagesize=${item}&orderby=${ownmanager.orderby}
 							&order=${ownmanager.order}');">${item}</a>
 				</c:forEach>
 			</td>
@@ -267,7 +286,7 @@
 				<td>${cert.customername}</td>
 				<td>${cert.blanknumber}</td>
                 <td>${cert.datecert}</td>
-                <td>${cert.additionalblanks}</td> 
+                <!--  td>${cert.additionalblanks}</td --> 
 			</tr>
 		</c:forEach>
 	</table>

@@ -11,7 +11,7 @@ public abstract class SQLBuilder {
        };
        
        public SQLQueryUnit getSQLUnitWhereClause() {
-                  return null;
+           return null;
        }
 
        public void setFilter(Filter filter) {

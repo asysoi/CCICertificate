@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import cci.model.cert.Report;
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.OwnCertificateHeaders;
@@ -154,6 +156,36 @@ public class OwnCertificateService {
 		return number;
 	}
 	
+	/* --------------------------------------------------------------------------------------
+	 * Create pivot report grouped by selected parameter 
+	 * ------------------------------------------------------------------------------------- */
+	public List<Report> makeReports(String[] fields, SQLBuilder builder) {
+
+		Locale.setDefault(new Locale("en", "en"));
+		List<Report> reports = null;
+
+		try {
+			reports = owncertificateDAO.getReport(fields, builder);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return reports;
+	}
+
+	/* --------------------------------------------------------------------------------------
+	 * Create pivot report grouped by selected parameter 
+	 * ------------------------------------------------------------------------------------- */
+	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
+		List<OwnCertificate> certs = null;
+
+		try {
+			certs = owncertificateDAO.getOrshaCertificates(reportdate, query, otd_id);
+		} catch (Exception ex) {
+			LOG.info(ex.getMessage());
+		}
+		return certs;
+	}
+	
 	// ------------------------------------------------------------------------------------
 	//       RESTFUL methods  
 	// ------------------------------------------------------------------------------------
@@ -193,5 +225,6 @@ public class OwnCertificateService {
 	public boolean updateOwnCertificateFileName(String number, String blanknumber, String datecert, String filename) throws Exception {
 		return owncertificateDAO.updateOwnCertificateFileName(number, blanknumber, datecert, filename);
 	}
+
 	
 }

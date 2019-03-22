@@ -29,13 +29,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.config.own.ExportOwnCertConfig;
+import cci.config.own.ReportOwnCertConfig;
 import cci.model.owncert.OwnCertificate;
 import cci.pdfbuilder.PDFUtils;
 import cci.repository.SQLBuilder;
 import cci.repository.owncert.SQLBuilderOwnCertificate;
 import cci.service.FieldType;
 import cci.service.Filter;
-import cci.service.cert.CertFilter;
 import cci.service.cert.CertService;
 import cci.service.cert.XSLWriter;
 import cci.service.owncert.OwnCertificateService;
@@ -164,10 +164,10 @@ public class OwnCertificateController {
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager vmanager = new ViewManager();
 		vmanager.setHnames(new String[] {"Номер Сертификата",  "Отделение", 
-				"Предприятие", "Номер бланка", "Дата", "Доп. лист"});
+				"Предприятие", "Номер бланка", "Дата"});
 		vmanager.setOrdnames(new String[] { "number", "beltppname", "customername",
-				"blanknumber", "datecert", "additionalblanks"});
-		vmanager.setWidths(new int[] { 15, 20, 40, 10, 10, 5 });
+				"blanknumber", "datecert"});
+		vmanager.setWidths(new int[] { 15, 20, 40, 10, 15});
 		model.addAttribute("ownmanager", vmanager);
 		return vmanager;
 	}
@@ -263,29 +263,20 @@ public class OwnCertificateController {
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "owncertdownload.do", method = RequestMethod.GET)
 	public void XSLFileDownload(HttpSession session,
-				HttpServletResponse response, ModelMap model) {
+				HttpServletResponse response,
+				Authentication aut,
+				ModelMap model) {
 			try {
 				
 	            LOG.debug("Download started...");   
 				ViewManager vmanager = (ViewManager) model.get("ownmanager");
-
-				Filter filter = vmanager.getFilter();
-				if (filter == null) {
-					if (model.get("certfilter") != null) {
-						filter = (Filter) model.get("certfilter");
-					} else {
-						filter = new CertFilter();
-						model.addAttribute("certfilter", filter);
-					}
-					vmanager.setFilter(filter);
-				}
-
+				
+				SQLBuilder builder = getBuilder(vmanager, model, aut);
+				
 				if (vmanager.getDownloadconfig() == null) {
 					vmanager.setDownloadconfig(new ExportOwnCertConfig());
 				}
-
-				SQLBuilder builder = new SQLBuilderOwnCertificate();
-				builder.setFilter(filter);
+				
 				List certs = ownCertService.readCertificates(vmanager.getDownloadconfig().getFields(),
 						vmanager.getOrderby(), vmanager.getOrder(), builder);
 				
@@ -395,8 +386,12 @@ public class OwnCertificateController {
 				}
 			} catch (Exception ex) {
 				model.addAttribute("error", ex.getMessage());
+				model.addAttribute("owncert", cert);
 				request.setAttribute("error", ex.getMessage());
-				request.getRequestDispatcher(pathToJSP+"400.jsp").forward(request, response);
+				ViewOwnCertificateJSPHelper viewcert = new ViewOwnCertificateJSPHelper(cert); 
+				request.setAttribute("viewcert", viewcert);
+				request.getRequestDispatcher(pathToJSP+"own/ownview.jsp").forward(request, response);
+				//request.getRequestDispatcher(pathToJSP+"400.jsp").forward(request, response);
 				// return "400";
 			}
 		} else if (cert != null) {
@@ -406,6 +401,114 @@ public class OwnCertificateController {
 			request.getRequestDispatcher(pathToJSP+"own/ownview.jsp").forward(request, response);
 		}
 	}
+	
+	/* ---------------------------------------------------------------------------------------
+	* Report Page making
+	* --------------------------------------------------------------------------------------- */
+	@RequestMapping(value = "ownconfigreport.do", method = RequestMethod.GET)
+	public String openPreprt(ModelMap model) {
+
+		ReportOwnCertConfig reportconfig = new ReportOwnCertConfig();
+
+		model.addAttribute("ownreportconfig", reportconfig);
+		model.addAttribute("ownheadermap", reportconfig.getHeadermap());
+		return "own/ownconfigreport";
+	}
+
+	// ---------------------------------------------------------------------------------------
+	// Generate report
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "owncertmakereport.do", method = RequestMethod.POST)
+	public String submitReport(@ModelAttribute("ownreportconfig") ReportOwnCertConfig ownreportconfig,
+			BindingResult result, SessionStatus status, Authentication aut, ModelMap model) {
+
+		List reports = null;
+		LOG.debug("Own Report generation started...");
+		ViewManager vmanager = (ViewManager) model.get("ownmanager");
+
+		try {
+		    SQLBuilder builder = getBuilder(vmanager, model, aut);
+			reports = ownCertService.makeReports(ownreportconfig.getFields(), builder);
+
+			LOG.debug("Own Reporting finished...");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		model.addAttribute("ownreports", reports);
+		model.addAttribute("ownheaders", ownreportconfig.getHeaders());
+		return "own/ownviewreport";
+	}
+	
+	// ---------------------------------------------------------------------------------------
+	// Create builder and set filter depending onFilter
+	// ---------------------------------------------------------------------------------------
+	private SQLBuilder getBuilder(ViewManager vmanager, ModelMap model, Authentication aut) {
+		SQLBuilder builder = new SQLBuilderOwnCertificate();
+		Filter filter;
+
+		if (vmanager.getOnfilter()) {
+			filter = vmanager.getFilter();
+
+			if (filter == null) {
+				if (model.get("owncertfilter") != null) {
+					filter = (Filter) model.get("owncertfilter");
+				} else {
+					filter = new OwnFilter();
+					model.addAttribute("owncertfilter", filter);
+				}
+			}
+			vmanager.setFilter(filter);
+		} else {
+			filter = new OwnFilter();
+		}
+
+		String otd_id = ownCertService.getOtd_idByRole(aut);
+		if (otd_id != null)
+			filter.setConditionValue("OTD_ID", "OTD_ID", "=", otd_id, FieldType.NUMBER);
+
+		builder.setFilter(filter);
+		return builder;
+	}
+
+	
+		// ---------------------------------------------------------------------------------------
+		//  Download Orsha Report as Excel file
+		// ---------------------------------------------------------------------------------------
+		@RequestMapping(value = "ownorshareport.do", method = RequestMethod.GET)
+		public void OrshaReportDownload(
+				    @RequestParam(value = "reportdate", required = false) String reportdate,				    
+				    HttpSession session,
+					HttpServletResponse response,
+					Authentication aut,
+					ModelMap model) {
+				try {
+					if (reportdate == null)
+						reportdate = "02.03.2019";
+					
+					List certs = ownCertService.getOrshaCertificates(reportdate, "ОРША", ownCertService.getOtd_idByRole(aut));
+					
+					response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+					response.setHeader("Content-Disposition",
+							"attachment; filename=certificates.xlsx");
+					
+					String[] headers = new String[]{"Производитель", "Дата выдачи", "Номер сертификата",
+						          "Срок действия С", "Срок действия ДО", "Форма сертификата", "Укрупненное"};
+					String[] fields = new String[]{"customername", "datecert", "number", "datestart", 
+								  "dateexpire", "type", "productdescription"};
+					String title = "Реестр сертификатов";
+							
+					(new XSLWriter()).makeWorkbook(certs, headers, fields, title).write(
+							response.getOutputStream());
+					response.flushBuffer();
+					LOG.debug("Download report finished...");
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+		
 	
 	// ---------------------------------------------------------------
 	// Get LIst od Own Certificate Types
