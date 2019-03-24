@@ -1,4 +1,5 @@
-﻿<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+﻿<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -7,6 +8,8 @@
 <link href="${CCICss}" rel="stylesheet" />
 
 <script>
+
+
 	function clear() {
 		$('input').val('');
 		$('select').val('');
@@ -31,6 +34,12 @@
 	}
 	
 	$(document).ready(function() {
+		
+		$(".datepicker").datepicker({
+			changeMonth : true,
+			changeYear : true
+		});
+		
 		$("#pview").dialog({
 			autoOpen : false
 		});
@@ -44,9 +53,10 @@
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 		}
+		$(".datepicker").datepicker("option", "dateFormat", 'dd.mm.yy');
 
 	});
-
+	
 	function goToList(link) {
 		var url = link;
 		spin();
@@ -55,7 +65,6 @@
 			        + document.getElementById("filter").checked;
    	    }
   		document.location.href = url;
-
 	}
 
     function spin() {
@@ -222,7 +231,7 @@
 	}
 
 	// ---------------------------------------------------------------------------------
-    // Create report Open Pivot tables Window  
+    // Create Orsha report  
     // ---------------------------------------------------------------------------------	
 	function reportOrsha() {
 		// url = $("#config").attr("action");
@@ -237,7 +246,30 @@
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
     	}
-    	iframe.src = "ownorshareport.do";
+    	if ($("#reportdate").val() === "")  {
+    	    iframe.src = "ownorshareport.do";
+    	} else {
+    		iframe.src = "ownorshareport.do?reportdate=" + $("#reportdate").val();
+    	}
+	}
+	
+	// ---------------------------------------------------------------------------------
+    // Create Orsha report  
+    // ---------------------------------------------------------------------------------	
+	function wastereport() {
+		// url = $("#config").attr("action");
+		// $.post(url, $("#config").serialize());
+		
+   		var hiddenIFrameID = 'hiddenDownloader';
+        var iframe = document.getElementById(hiddenIFrameID);
+        
+    	if (iframe == null) {
+        	iframe = document.createElement('iframe');
+        	iframe.id = hiddenIFrameID;
+	    	iframe.style.display = 'none';
+	    	document.body.appendChild(iframe);
+    	}
+        iframe.src = "ownwastereport.do";
 	}
 </script>
 
@@ -247,19 +279,30 @@
 	<table style="width: 100%">
 		<tr>
 
-			<td style="width: 60%">
+			<td style="width: 20%">
                 <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" >
                 <span id="filterlink"></span>
             </td>
 
-			<td style="width: 40%; text-align: right">
-			       <a href="javascript:reportOrsha();"><img src="resources/images/exp_excel.png"alt="Отчет по Орше"/></a>
+			<td style="width: 80%; text-align: right">
+			       <security:authorize ifAnyGranted="ROLE_EXPERT">		
+			       <a href="javascript:wastereport();" title="Выгрузить отчет по отходам">
+			       <img src="resources/images/wastereport.png" alt="Отчет по отходам" /></a>
 				   &nbsp;
-			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Сводный отчет"/></a>
+				   </security:authorize>
+			       <security:authorize ifAnyGranted="ROLE_VITEBSK,ROLE_EXPERT">		
+			       <input id="reportdate" class="datepicker" size="12" placeholder="дата отчета"/>
+			       <a href="javascript:reportOrsha();" title="Выгрузить отчет по Оршанскому региону">
+			       <img src="resources/images/orshareport.png" alt="Отчет по Орше" /></a>
+				   &nbsp;
+				   </security:authorize>
+			       <a href="javascript:reportWindow();" title="Получить сводный отчет по сертификатам">
+			       <img src="resources/images/report_24.png" alt="Сводный отчет"/></a>
                    &nbsp;
-				   <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
+				   <a href="javascript:downloadCertificates();"  title="Экспортировать список сертификатов в формате Excel">
+				   <img src="resources/images/exp_excel.png" alt="Экспорт в файл формата Excel"/></a>
 				   &nbsp;			        
-			       Строк в списке: <c:forEach items="${sizes}" var="item">
+			       Строк на странице: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a href="javascript: goToList('owncerts.do?page=1&pagesize=${item}&orderby=${ownmanager.orderby}
 							&order=${ownmanager.order}');">${item}</a>

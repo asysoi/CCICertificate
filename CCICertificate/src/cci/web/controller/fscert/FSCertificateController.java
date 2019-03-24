@@ -50,9 +50,9 @@ import cci.repository.fscert.SQLBuilderFSCertificate;
 import cci.service.CountryConverter;
 import cci.service.FieldType;
 import cci.service.Filter;
+import cci.service.XSLService;
 import cci.service.cert.CertFilter;
 import cci.service.cert.CertService;
-import cci.service.cert.XSLWriter;
 import cci.service.client.ClientService;
 import cci.service.fscert.FSCertificateService;
 import cci.service.fscert.FSFilter;
@@ -408,7 +408,7 @@ public class FSCertificateController {
 
 				response.setHeader("Content-Disposition",
 						"attachment; filename=fscertificates.xlsx");
-				(new XSLWriter()).makeWorkbook(certs,
+				(new XSLService()).makeWorkbook(certs,
 						vmanager.getDownloadconfig().getHeaders(),  
 						vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
 						response.getOutputStream());

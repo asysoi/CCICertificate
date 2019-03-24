@@ -22,7 +22,7 @@ import cci.repository.SQLBuilder;
 import cci.repository.owncert.OwnCertificateDAO;
 import cci.service.cert.CertService;
 import cci.web.controller.owncert.OwnFilter;
-
+import cci.web.controller.owncert.ViewWasteOwnCertificate;
 
 @Service
 public class OwnCertificateService {
@@ -173,7 +173,7 @@ public class OwnCertificateService {
 	}
 
 	/* --------------------------------------------------------------------------------------
-	 * Create pivot report grouped by selected parameter 
+	 * Create Orsha report  
 	 * ------------------------------------------------------------------------------------- */
 	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
 		List<OwnCertificate> certs = null;
@@ -185,6 +185,21 @@ public class OwnCertificateService {
 		}
 		return certs;
 	}
+	
+	/* --------------------------------------------------------------------------------------
+	 * Create Orsha report  
+	 * ------------------------------------------------------------------------------------- */
+	public List<ViewWasteOwnCertificate> getWasteOwnReport(String reportdate, List<String> numbers) {
+		   List<ViewWasteOwnCertificate> certs = null;
+
+		try {
+			certs = owncertificateDAO.getWasteOwnCertificates(reportdate, numbers);
+		} catch (Exception ex) {
+			LOG.info(ex.getMessage());
+		}
+		return certs;
+	}
+
 	
 	// ------------------------------------------------------------------------------------
 	//       RESTFUL methods  

@@ -27,6 +27,7 @@ import cci.model.owncert.Product;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
 import cci.web.controller.owncert.OwnFilter;
+import cci.web.controller.owncert.ViewWasteOwnCertificate;
 import cci.web.controller.owncert.exception.NotDeleteOwnCertificateException;
 import cci.web.controller.owncert.exception.NotUpdatedOwnCertificateFileNameException;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
@@ -509,26 +510,47 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	* Get list orsha' factories for report
 	* --------------------------------------------------------------- */
 	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
-		
-        Map<String, Object> params = new HashMap<String,Object>();
         
     	String sql = "select * from owncertificate where " 
           + " ((UPPER(factories) like :orsha and UPPER(customeraddress) like :orsha and type= :typeproduct) "  
           + " OR  (UPPER(factories) like :orsha and UPPER(branches) like :orsha and type=:typeproduct) "
           + " OR  (UPPER(customeraddress) like :orsha and type=:typeservice) "  
           + " OR  (UPPER(branches) like :orsha and type=:typeservice) ) " 
-          + " AND datestart < STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire > STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+          + " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
           + " and otd_id = :otd_id " 
-          + " ORDER by customerunp ";   
+          + " ORDER by customername, datecert ";   
+
+        Map<String, Object> params = new HashMap<String,Object>();
         
      	params.put("orsha", "%" + query  +"%");
      	params.put("typeproduct", "с/п");
      	params.put("typeservice", "р/у");
      	params.put("reportdate", reportdate);
     	params.put("otd_id", Integer.valueOf(otd_id));
-    		
-        
+    	
 		return this.template.query(sql,	params, 
 				new OwnCertificateMapper<OwnCertificate>());
 	}
+
+	/* ---------------------------------------------------------------
+	 * Get list waste certificates for report
+	 * --------------------------------------------------------------- */
+	public List<ViewWasteOwnCertificate> getWasteOwnCertificates(String reportdate, List<String> numbers) {
+		String sql = "";
+		
+		LOG.info("Code numbers: " + numbers.toString());
+		
+		for (String code : numbers) {
+		          sql += (sql.isEmpty() ? "" : " union ") + " select '" + code + "'" 
+		        		  + " as productcode, customername, number, datecert, datestart, dateexpire " 
+	 	        		  + " from owncertificate where products like '%" + code + "%'"; 
+		}
+		sql += " order by productcode, customername, datecert ";
+		LOG.info("SQL Waste Request: " + sql);
+		
+  	    return this.template.query(sql, 
+  	    		new BeanPropertyRowMapper<ViewWasteOwnCertificate>(ViewWasteOwnCertificate.class));
+	}
+	
+	
 }

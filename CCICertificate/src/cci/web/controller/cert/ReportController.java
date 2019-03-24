@@ -25,10 +25,10 @@ import cci.repository.SQLBuilder;
 import cci.repository.cert.SQLBuilderCertificate;
 import cci.service.FieldType;
 import cci.service.Filter;
+import cci.service.XSLService;
 import cci.service.cert.CertService;
 import cci.service.cert.ReportFilter;
 import cci.service.cert.ReportService;
-import cci.service.cert.XSLWriter;
 import cci.web.controller.ViewManager;
 
 @Controller
@@ -121,7 +121,7 @@ public class ReportController {
 			response.setHeader("Content-Disposition",
 					"attachment; filename=certificates.xlsx");
 					
-			(new XSLWriter()).makeWorkbook(certs,
+			(new XSLService()).makeWorkbook(certs,
 					rmanager.getDownloadconfig().getHeaders(),
 					rmanager.getDownloadconfig().getFields(),
 					"Лист Сертификатов").write(response.getOutputStream());

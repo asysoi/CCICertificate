@@ -3,6 +3,9 @@ package cci.web.controller.owncert;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.sun.glass.ui.SystemClipboard;
+
 import cci.config.own.ExportOwnCertConfig;
 import cci.config.own.ReportOwnCertConfig;
 import cci.model.owncert.OwnCertificate;
@@ -36,13 +41,14 @@ import cci.repository.SQLBuilder;
 import cci.repository.owncert.SQLBuilderOwnCertificate;
 import cci.service.FieldType;
 import cci.service.Filter;
+import cci.service.XSLService;
 import cci.service.cert.CertService;
-import cci.service.cert.XSLWriter;
 import cci.service.owncert.OwnCertificateService;
 import cci.service.owncert.OwnFilter;
 import cci.web.controller.ViewManager;
 import cci.web.controller.cert.CertificateController;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
+import oracle.sql.DATE;
 
 
 @Controller
@@ -285,7 +291,7 @@ public class OwnCertificateController {
 
 				response.setHeader("Content-Disposition",
 						"attachment; filename=certificates.xlsx");
-				(new XSLWriter()).makeWorkbook(certs,
+				(new XSLService()).makeWorkbook(certs,
 						vmanager.getDownloadconfig().getHeaders(),
 						vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
 						response.getOutputStream());
@@ -473,43 +479,98 @@ public class OwnCertificateController {
 	}
 
 	
-		// ---------------------------------------------------------------------------------------
-		//  Download Orsha Report as Excel file
-		// ---------------------------------------------------------------------------------------
-		@RequestMapping(value = "ownorshareport.do", method = RequestMethod.GET)
-		public void OrshaReportDownload(
-				    @RequestParam(value = "reportdate", required = false) String reportdate,				    
-				    HttpSession session,
-					HttpServletResponse response,
-					Authentication aut,
-					ModelMap model) {
-				try {
-					if (reportdate == null)
-						reportdate = "02.03.2019";
-					
-					List certs = ownCertService.getOrshaCertificates(reportdate, "ОРША", ownCertService.getOtd_idByRole(aut));
-					
-					response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-					response.setHeader("Content-Disposition",
-							"attachment; filename=certificates.xlsx");
-					
-					String[] headers = new String[]{"Производитель", "Дата выдачи", "Номер сертификата",
-						          "Срок действия С", "Срок действия ДО", "Форма сертификата", "Укрупненное"};
-					String[] fields = new String[]{"customername", "datecert", "number", "datestart", 
-								  "dateexpire", "type", "productdescription"};
-					String title = "Реестр сертификатов";
-							
-					(new XSLWriter()).makeWorkbook(certs, headers, fields, title).write(
-							response.getOutputStream());
-					response.flushBuffer();
-					LOG.debug("Download report finished...");
+	/* ---------------------------------------------------------------------------------------
+	* Download Orsha Report as Excel file
+	* --------------------------------------------------------------------------------------- */
+	@RequestMapping(value = "ownorshareport.do", method = RequestMethod.GET)
+	public void OrshaReportDownload(
+			@RequestParam(value = "reportdate", required = false) String reportdate,
+			HttpSession session, 
+			HttpServletRequest request, HttpServletResponse response, 
+			Authentication aut, ModelMap model) {
+		try {
+			if (reportdate == null)
+				reportdate = (new SimpleDateFormat("dd.MM.yyyy")).format(new Date());
+            
+			String otd_id = ownCertService.getOtd_idByRole(aut);
+			
+			if (otd_id == null) {
+				otd_id = certService.getACL().get("ROLE_VITEBSK"); 
+			}
+			
+			List<OwnCertificate> certs = ownCertService.getOrshaCertificates(reportdate, "ОРША", otd_id);
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			response.setHeader("Content-Disposition", "attachment; filename=certificates.xlsx");
+			
+			String filetemplate = request.getSession().getServletContext().getRealPath(relativeWebPath) 
+									+ System.getProperty("file.separator") 
+									+ "ReportOrsha.xlsx";
+			
+			(new XSLService()).makeWorkbookReportOrsha(certs, filetemplate, reportdate).write(response.getOutputStream());
+			response.flushBuffer();
+			LOG.debug("Download report finished...");
+
+		} catch (Exception ex) {
+			model.addAttribute("error", ex.getMessage());
+			LOG.error("OrshaReportDownload: " + ex.getLocalizedMessage());
+			ex.printStackTrace();
 		}
-		
+	}
 	
+	
+	/*-------------------------------------------------------------------------
+	 * Download Orsha Report as Excel file
+	 * -------------------------------------------------------------------------	 */
+	@RequestMapping(value = "ownwastereport.do", method = RequestMethod.GET)
+	public void wasteReportDownload(@RequestParam(value = "reportdate", required = false) String reportdate,
+			HttpSession session, HttpServletRequest request, HttpServletResponse response, Authentication aut,
+			ModelMap model) {
+		
+		try {
+			if (reportdate == null)
+				reportdate = (new SimpleDateFormat("dd.MM.yyyy")).format(new Date());
+
+			String otd_id = ownCertService.getOtd_idByRole(aut);
+
+			if (otd_id == null) {
+				String filetwastenumbers = request.getSession().getServletContext().getRealPath(relativeWebPath)
+						+ System.getProperty("file.separator") + "WasteNumbers.xlsx";
+
+				List<String> numbers = loadProductCodeNumbers(filetwastenumbers);
+
+				if (numbers != null) {
+					List<ViewWasteOwnCertificate> certs = ownCertService.getWasteOwnReport(reportdate, numbers);
+
+					response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+					response.setHeader("Content-Disposition", "attachment; filename=certificates.xlsx");
+
+					String filetemplate = request.getSession().getServletContext().getRealPath(relativeWebPath)
+							+ System.getProperty("file.separator") + "WasteReport.xlsx";
+
+					(new XSLService()).makeWorkbookWasteReport(certs, filetemplate, reportdate)
+							.write(response.getOutputStream());
+					response.flushBuffer();
+				} else {
+					LOG.error("WasteReportDownload: list of product codes is not defined. It's empty");
+				}
+				LOG.debug("Download waste report finished...");
+			}
+
+		} catch (Exception ex) {
+			model.addAttribute("error", ex.getMessage());
+			LOG.error("WasteReportDownload: " + ex.getLocalizedMessage());
+			ex.printStackTrace();
+		}
+	}
+			
+	private List<String> loadProductCodeNumbers(String filename) {
+		List<String> numbers = 
+			(new XSLService()).getWasteNumbers(filename);
+		
+		return numbers;
+	}
+
 	// ---------------------------------------------------------------
 	// Get LIst od Own Certificate Types
 	// ---------------------------------------------------------------

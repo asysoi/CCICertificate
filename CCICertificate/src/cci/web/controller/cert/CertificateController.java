@@ -35,9 +35,9 @@ import cci.repository.cert.SQLBuilderCertificate;
 import cci.service.CountryConverter;
 import cci.service.FieldType;
 import cci.service.Filter;
+import cci.service.XSLService;
 import cci.service.cert.CertService;
 import cci.service.cert.CertFilter;
-import cci.service.cert.XSLWriter;
 import cci.web.controller.ViewManager;
 
 @Controller
@@ -134,7 +134,7 @@ public class CertificateController {
 			//response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition",
 					"attachment; filename=certificates.xlsx");
-			(new XSLWriter()).makeWorkbook(certs,
+			(new XSLService()).makeWorkbook(certs,
 					vmanager.getDownloadconfig().getHeaders(),
 					vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
 					response.getOutputStream());

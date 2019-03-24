@@ -11,6 +11,7 @@ import cci.model.owncert.OwnCertificateHeaders;
 import cci.model.owncert.OwnCertificates;
 import cci.repository.SQLBuilder;
 import cci.web.controller.owncert.OwnFilter;
+import cci.web.controller.owncert.ViewWasteOwnCertificate;
 
 public interface OwnCertificateDAO {
     // ------------   RESTFUL methods -------------------------------
@@ -43,5 +44,7 @@ public interface OwnCertificateDAO {
 	boolean updateOwnCertificateFileName(String number, String blanknumber, String datecert, String filename);
 
 	List<Report> getReport(String[] fields, SQLBuilder builder);
+
+	List<ViewWasteOwnCertificate> getWasteOwnCertificates(String reportdate, List<String> numbers);
 
 }

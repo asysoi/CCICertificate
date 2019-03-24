@@ -34,8 +34,8 @@ import cci.repository.client.SQLBuilderClient;
 import cci.repository.fscert.SQLBuilderFSCertificate;
 import cci.service.FieldType;
 import cci.service.Filter;
+import cci.service.XSLService;
 import cci.service.cert.CertFilter;
-import cci.service.cert.XSLWriter;
 import cci.service.client.ClientService;
 import cci.service.fscert.FSFilter;
 import cci.service.client.ClientFilter;
@@ -489,7 +489,7 @@ public class ClientController {
 			response.setHeader("Content-Disposition",
 					"attachment; filename=companies.xlsx");
 
-			(new XSLWriter()).makeWorkbook(clients, dconfig.getHeaders(),
+			(new XSLService()).makeWorkbook(clients, dconfig.getHeaders(),
 					dconfig.getFields(), "Список контрагентов").write(
 					response.getOutputStream());
 

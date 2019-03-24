@@ -28,8 +28,8 @@ import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
 import cci.repository.purchase.SQLBuilderPurchase;
 import cci.service.Filter;
+import cci.service.XSLService;
 import cci.service.cert.CertFilter;
-import cci.service.cert.XSLWriter;
 import cci.service.purchase.PurchaseFilter;
 import cci.service.purchase.PurchaseService;
 import cci.web.controller.ViewManager;
@@ -279,7 +279,7 @@ public class PurchaseController {
 			response.setHeader("Content-Disposition",
 					"attachment; filename=purchases.xlsx");
 
-			(new XSLWriter()).makeWorkbook(purchases, dconfig.getHeaders(),
+			(new XSLService()).makeWorkbook(purchases, dconfig.getHeaders(),
 					dconfig.getFields(), "Список сделок").write(
 					response.getOutputStream());
 

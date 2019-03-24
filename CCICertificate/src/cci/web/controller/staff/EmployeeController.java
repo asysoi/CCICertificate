@@ -23,8 +23,8 @@ import cci.repository.client.SQLBuilderClient;
 import cci.repository.staff.SQLBuilderEmployee;
 import cci.service.FieldType;
 import cci.service.Filter;
+import cci.service.XSLService;
 import cci.service.cert.CertService;
-import cci.service.cert.XSLWriter;
 import cci.service.fscert.FSFilter;
 import cci.service.staff.EmployeeFilter;
 import cci.service.staff.EmployeeService;
@@ -449,7 +449,7 @@ public class EmployeeController {
 			response.setHeader("Content-Disposition",
 					"attachment; filename=companies.xlsx");
 
-			(new XSLWriter()).makeWorkbook(employees, dconfig.getHeaders(),
+			(new XSLService()).makeWorkbook(employees, dconfig.getHeaders(),
 					dconfig.getFields(), "Список контрагентов").write(
 					response.getOutputStream());
 
