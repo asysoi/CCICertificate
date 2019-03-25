@@ -59,7 +59,7 @@
 	
 	function goToList(link) {
 		var url = link;
-		spin();
+		spin('listwindow');
 		if (document.getElementById("filter").checked) {
 			url = url + "&filter="
 			        + document.getElementById("filter").checked;
@@ -67,7 +67,7 @@
   		document.location.href = url;
 	}
 
-    function spin() {
+    function spin(element) {
 	   var opts = {
 		  lines: 13, // The number of lines to draw
 		  length: 20, // The length of each line
@@ -85,10 +85,11 @@
 		  zIndex: 2e9, // The z-index (defaults to 2000000000)
 		  top: '50%', // Top position relative to parent
 		  left: '50%' // Left position relative to parent
-	        };
-	        var target = document.getElementById('listwindow');
-	        var spinner = new Spinner(opts).spin(target);
-
+	   };
+	   //var target = document.getElementById('listwindow');
+	   var target = document.getElementById(element);
+	   var spinner = new Spinner(opts).spin(target);
+	   $(target).data('spinner', spinner); 
 	}
 
 	function swithFilter() {
@@ -245,12 +246,16 @@
         	iframe.id = hiddenIFrameID;
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
+	    	$("#iframe").on('load', function(event) {alert("IFrame loaded");});	    	
     	}
+    	
+    	spin('hiddenDownloader');
     	if ($("#reportdate").val() === "")  {
     	    iframe.src = "ownorshareport.do";
     	} else {
     		iframe.src = "ownorshareport.do?reportdate=" + $("#reportdate").val();
     	}
+    	$('#hiddenDownloader').data('spinner').stop();
 	}
 	
 	// ---------------------------------------------------------------------------------
@@ -268,8 +273,12 @@
         	iframe.id = hiddenIFrameID;
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
+	    	 $("#iframe").on('load', function(event) {alert("IFrame loaded");});	    	
     	}
+    	spin('hiddenDownloader');
         iframe.src = "ownwastereport.do";
+        $('#hiddenDownloader').data('spinner').stop();
+        
 	}
 </script>
 

@@ -315,17 +315,26 @@ public class XSLService {
 				setStyleLeft(cell, wb);
 				cell.setCellValue(certs.get(i).getCustomername().trim());
 				cell = row.createCell(3);
-				setStyleCenter(cell, wb);
-				cell.setCellValue(certs.get(i).getDatecert().trim());
+				setStyleLeft(cell, wb);
+				cell.setCellValue(certs.get(i).getCustomerunp().trim());
 				cell = row.createCell(4);
-				setStyleCenter(cell, wb);
-				cell.setCellValue(certs.get(i).getNumber().trim());
+				setStyleLeft(cell, wb);
+				cell.setCellValue(certs.get(i).getCustomeraddress().trim());
 				cell = row.createCell(5);
 				setStyleCenter(cell, wb);
-				cell.setCellValue(certs.get(i).getDatestart().trim());
+				cell.setCellValue(certs.get(i).getDatecert().trim());
 				cell = row.createCell(6);
 				setStyleCenter(cell, wb);
+				cell.setCellValue(certs.get(i).getNumber().trim());
+				cell = row.createCell(7);
+				setStyleCenter(cell, wb);
+				cell.setCellValue(certs.get(i).getDatestart().trim());
+				cell = row.createCell(8);
+				setStyleCenter(cell, wb);
 				cell.setCellValue(certs.get(i).getDateexpire().trim());
+				cell = row.createCell(9);
+				setStyleCenter(cell, wb);
+				cell.setCellValue(certs.get(i).getProducts().trim());
 			}
 			
 

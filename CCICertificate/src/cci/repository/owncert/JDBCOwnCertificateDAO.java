@@ -1,4 +1,4 @@
-package cci.repository.owncert;
+ package cci.repository.owncert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -549,10 +549,13 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		
 		for (String code : numbers) {
 		          sql += (sql.isEmpty() ? "" : " union ") + " select '" + code + "'" 
-		        		  + " as productcode, customername, number, datecert, datestart, dateexpire " 
-	 	        		  + " from owncertificate where products like '%" + code + "%'"; 
+		        		  + " as productcode, customername, customerunp, customeraddress, datecert,"
+		        		  + " number, datestart, dateexpire" 
+	 	        		  + " from owncertificate where"
+	 	        		  + " id in (select distinct id_certificate from ownproduct where code like "
+	 	        		  + " '%" + code + "%')"; 
 		}
-		sql += " order by productcode, customername, datecert ";
+		sql += " order by productcode, customername, datecert";
 		LOG.info("SQL Waste Request: " + sql);
 		
   	    return this.template.query(sql, 
