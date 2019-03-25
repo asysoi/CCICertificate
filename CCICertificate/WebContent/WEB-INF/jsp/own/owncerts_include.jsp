@@ -275,7 +275,7 @@
 
 
 <div id="listwindow" class="main">
-	<h3>Список сертификатов собственного производства</h3>
+	<h3>Список сертификатов собственного производства (${ownmanager.pagecount})</h3>
 	<table style="width: 100%">
 		<tr>
 
@@ -291,7 +291,7 @@
 				   &nbsp;
 				   </security:authorize>
 			       <security:authorize ifAnyGranted="ROLE_VITEBSK,ROLE_EXPERT">		
-			       <input id="reportdate" class="datepicker" size="12" placeholder="дата отчета"/>
+			       <input id="reportdate" class="datepicker" size="12" placeholder="отчет на дату"/>
 			       <a href="javascript:reportOrsha();" title="Выгрузить отчет по Оршанскому региону">
 			       <img src="resources/images/orshareport.png" alt="Отчет по Орше" /></a>
 				   &nbsp;

@@ -511,15 +511,22 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	* --------------------------------------------------------------- */
 	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
         
-    	String sql = "select * from owncertificate where " 
+    	/*String sql = "select * from owncertificate where " 
           + " ((UPPER(factories) like :orsha and UPPER(customeraddress) like :orsha and type= :typeproduct) "  
           + " OR  (UPPER(factories) like :orsha and UPPER(branches) like :orsha and type=:typeproduct) "
           + " OR  (UPPER(customeraddress) like :orsha and type=:typeservice) "  
           + " OR  (UPPER(branches) like :orsha and type=:typeservice) ) " 
           + " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
           + " and otd_id = :otd_id " 
-          + " ORDER by customername, datecert ";   
-
+          + " ORDER by customername, datecert ";
+        */     
+		String sql = "select * from owncertificate where " 
+		          + " ((UPPER(factories) like :orsha and UPPER(customeraddress) like :orsha and type= :typeproduct) "  
+		          + " OR  (UPPER(customeraddress) like :orsha and type=:typeservice) ) " 
+		          + " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+		          + " and otd_id = :otd_id " 
+		          + " ORDER by customername, datecert ";
+		
         Map<String, Object> params = new HashMap<String,Object>();
         
      	params.put("orsha", "%" + query  +"%");

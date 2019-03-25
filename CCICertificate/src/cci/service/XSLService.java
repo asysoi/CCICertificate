@@ -175,8 +175,9 @@ public class XSLService {
 			int lnum = sheet.getLastRowNum() + 1;
 			int nrow = 1;
 			int iprev = -1;
+			int i;
 
-			for (int i = 0; i < certs.size(); i++) {
+			for (i = 0; i < certs.size(); i++) {
 				row = sheet.createRow(lnum + i);
 				Cell cell;
 
@@ -184,10 +185,12 @@ public class XSLService {
 					cell = row.createCell(0);
 					setStyleCenter(cell, wb);
 					cell.setCellValue(nrow++ + ".");
-
+                    
+					String address = certs.get(i).getCustomeraddress().trim();
 					cell = row.createCell(1);
 					setStyleLeft(cell, wb);
-					cell.setCellValue(certs.get(i).getCustomername().trim());
+					cell.setCellValue(certs.get(i).getCustomername().trim() + 
+							(address == null || address.isEmpty() ? "" :  ", " + address));
 
 					if (iprev != i - 1) {
 						CellRangeAddress range;
@@ -218,6 +221,17 @@ public class XSLService {
 				cell = row.createCell(7);
 				setStyleCenter(cell, wb);
 				cell.setCellValue(certs.get(i).getProductdescription().trim());
+				cell = row.createCell(8);
+				setStyleCenter(cell, wb);
+				cell.setCellValue(certs.get(i).getFactorylist().trim());
+			}
+			if (iprev != i - 1) {
+				CellRangeAddress range;
+				range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 0, 0);
+				sheet.addMergedRegion(range);
+
+				range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 1, 1);
+				sheet.addMergedRegion(range);
 			}
 			sheet.autoSizeColumn(2);
 		} catch (Exception ex) {
