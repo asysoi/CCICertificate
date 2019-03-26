@@ -1,0 +1,8 @@
+update ownproduct set ncode=replace(ncode, " ", "");
+
+update ownproduct set ncode = unhex(replace(hex(ncode),'C2A0','20'));
+update ownproduct set ncode = unhex(replace(hex(ncode),'20',''));
+SELECT id, ncode, HEX(ncode) FROM ownproduct WHERE ncode LIKE '%730590%';
+
+SET group_concat_max_len = 5000;
+update owncertificate set codes = (SELECT GROUP_CONCAT(DISTINCT ncode) codes FROM ownproduct where ownproduct.id_certificate = owncertificate.id);

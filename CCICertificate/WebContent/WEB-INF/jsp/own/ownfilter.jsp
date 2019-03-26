@@ -165,8 +165,8 @@
 			</tr>
 			<tr>
 				<td>Код товара</td>
-				<td><form:input path="viewcertificate.productcode" id="productcode" style="width: 250px"/><a
-					href="javascript:clearelement($('#productcode'));"> <img
+				<td><form:input path="viewcertificate.viewcode" id="viewcode" style="width: 250px"/><a
+					href="javascript:clearelement($('#viewcode'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>

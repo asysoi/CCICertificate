@@ -249,13 +249,13 @@
 	    	$("#iframe").on('load', function(event) {alert("IFrame loaded");});	    	
     	}
     	
-    	spin('hiddenDownloader');
+    	//spin('hiddenDownloader');
     	if ($("#reportdate").val() === "")  {
     	    iframe.src = "ownorshareport.do";
     	} else {
     		iframe.src = "ownorshareport.do?reportdate=" + $("#reportdate").val();
     	}
-    	$('#hiddenDownloader').data('spinner').stop();
+    	//$('#hiddenDownloader').data('spinner').stop();
 	}
 	
 	// ---------------------------------------------------------------------------------
@@ -275,9 +275,9 @@
 	    	document.body.appendChild(iframe);
 	    	 $("#iframe").on('load', function(event) {alert("IFrame loaded");});	    	
     	}
-    	spin('hiddenDownloader');
+    	//spin('hiddenDownloader');
         iframe.src = "ownwastereport.do";
-        $('#hiddenDownloader').data('spinner').stop();
+        //$('#hiddenDownloader').data('spinner').stop();
         
 	}
 </script>
@@ -333,7 +333,12 @@
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="javascript:openCertificate('${cert.id}')">${cert.number}</a></td>
+				<td><a href="javascript:openCertificate('${cert.id}')">${cert.number}
+				</a>
+				<c:if test="${cert.filename != null && !cert.filename.isEmpty() && cert.filename.indexOf('pdf') > -1}">
+				     <img src="resources/images/pdf.png" style="height: 16; vertical-align: top;" alt="PDF"/>  
+				</c:if>
+				</td>
 				<td>${cert.beltpp.name}</td>
 				<td>${cert.customername}</td>
 				<td>${cert.blanknumber}</td>

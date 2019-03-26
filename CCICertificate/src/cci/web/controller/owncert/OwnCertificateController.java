@@ -219,10 +219,10 @@ public class OwnCertificateController {
 			} else {
 				LOG.info("Found FilterOwnCertificate in POST");
 			}
-
-			LOG.info("viewfilter.getViewcertificate() = " + viewfilter.getViewcertificate());
+			// remove space
+			viewfilter.getViewcertificate().setProductcode( 
+					viewfilter.getViewcertificate().getViewcode().replaceAll("\\s", ""));
 			fc.loadViewcertificate(viewfilter.getViewcertificate());
-			LOG.info("viewfilter.getCondition() = " + viewfilter.getCondition());
 			fc.loadCondition(viewfilter.getCondition());
 
 			model.addAttribute("owncertfilter", fc);

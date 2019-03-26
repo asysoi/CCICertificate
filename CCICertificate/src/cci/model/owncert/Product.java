@@ -12,6 +12,7 @@ public class Product {
 	private String number;
 	private String name;
 	private String code;
+	private String ncode;
 
 	public void init(int id, String number, String name, String code) {
 		this.id = id;
@@ -27,6 +28,15 @@ public class Product {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	@XmlTransient
+	public String getNcode() {
+		return ncode;
+	}
+
+	public void setNcode(String ncode) {
+		this.ncode = ncode;
 	}
 
 	public String getNumber() {
@@ -51,6 +61,7 @@ public class Product {
 
 	public void setCode(String code) {
 		this.code = code;
+		ncode = code.replaceAll("[\\s\\D]", "");
 	}
 
 	@Override

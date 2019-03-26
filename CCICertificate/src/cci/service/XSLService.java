@@ -183,12 +183,12 @@ public class XSLService {
 
 				if (i == 0 || !certs.get(i).getCustomername().equals(certs.get(i - 1).getCustomername())) {
 					cell = row.createCell(0);
-					setStyleCenter(cell, wb);
+					setStyleCenter(cell, wb, true);
 					cell.setCellValue(nrow++ + ".");
                     
 					String address = certs.get(i).getCustomeraddress().trim();
 					cell = row.createCell(1);
-					setStyleLeft(cell, wb);
+					setStyleLeft(cell, wb, true);
 					cell.setCellValue(certs.get(i).getCustomername().trim() + 
 							(address == null || address.isEmpty() ? "" :  ", " + address));
 
@@ -204,25 +204,25 @@ public class XSLService {
 				}
 
 				cell = row.createCell(2);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getDatecert().trim());
 				cell = row.createCell(3);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getNumber().trim());
 				cell = row.createCell(4);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getDatestart().trim());
 				cell = row.createCell(5);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getDateexpire().trim());
 				cell = row.createCell(6);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getType().trim());
 				cell = row.createCell(7);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getProductdescription().trim());
 				cell = row.createCell(8);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getFactorylist().trim());
 			}
 			if (iprev != i - 1) {
@@ -247,20 +247,20 @@ public class XSLService {
 	/* ------------------------------------------------------------
 	 *  Cell style methods 
 	 * ---------------------------------------------------------- */
-	private static void setStyleLeft(Cell cell, Workbook wb) {
+	private static void setStyleLeft(Cell cell, Workbook wb, boolean wrap) {
 		CellStyle cs = wb.createCellStyle();
 		cs.setVerticalAlignment(CellStyle.VERTICAL_TOP);
 		cs.setAlignment(CellStyle.ALIGN_LEFT);
-		cs.setWrapText(true);
+		cs.setWrapText(wrap);
 		cell.setCellStyle(cs);
 		cell.setCellType(Cell.CELL_TYPE_STRING);
 	}
 
-	private static void setStyleCenter(Cell cell, Workbook wb) {
+	private static void setStyleCenter(Cell cell, Workbook wb, boolean wrap) {
 		CellStyle cs = wb.createCellStyle();
 		cs.setVerticalAlignment(CellStyle.VERTICAL_TOP);
 		cs.setAlignment(CellStyle.ALIGN_CENTER);
-		cs.setWrapText(true);
+		cs.setWrapText(wrap);
 		cell.setCellStyle(cs);
 		cell.setCellType(Cell.CELL_TYPE_STRING);
 	}
@@ -293,11 +293,11 @@ public class XSLService {
 
 				if (i == 0 || !certs.get(i).getProductcode().equals(certs.get(i - 1).getProductcode())) {
 					cell = row.createCell(0);
-					setStyleCenter(cell, wb);
+					setStyleCenter(cell, wb, true);
 					cell.setCellValue(nrow++ + ".");
 
 					cell = row.createCell(1);
-					setStyleLeft(cell, wb);
+					setStyleLeft(cell, wb, true);
 					cell.setCellValue(certs.get(i).getProductcode().trim());
 
 					if (iprev != i - 1) {
@@ -312,29 +312,41 @@ public class XSLService {
 				}
 
 				cell = row.createCell(2);
-				setStyleLeft(cell, wb);
+				setStyleLeft(cell, wb, true);
 				cell.setCellValue(certs.get(i).getCustomername().trim());
 				cell = row.createCell(3);
-				setStyleLeft(cell, wb);
+				setStyleLeft(cell, wb, true);
 				cell.setCellValue(certs.get(i).getCustomerunp().trim());
 				cell = row.createCell(4);
-				setStyleLeft(cell, wb);
+				setStyleLeft(cell, wb, true);
 				cell.setCellValue(certs.get(i).getCustomeraddress().trim());
 				cell = row.createCell(5);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getDatecert().trim());
 				cell = row.createCell(6);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getNumber().trim());
 				cell = row.createCell(7);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getDatestart().trim());
 				cell = row.createCell(8);
-				setStyleCenter(cell, wb);
+				setStyleCenter(cell, wb, true);
 				cell.setCellValue(certs.get(i).getDateexpire().trim());
-				cell = row.createCell(9);
-				setStyleCenter(cell, wb);
-				cell.setCellValue(certs.get(i).getProducts().trim());
+				
+			    // split producs to n strings
+				String[] strs;
+				String products = certs.get(i).getProducts().trim().toString();
+				if (products.length() > 32000) { 
+				   strs = split( products, 32000);
+				} else {
+				   strs = new String[]{products};	
+				}
+				int cellnum = 9;
+			    for (String str : strs) {
+			    	cell = row.createCell(cellnum++);
+			    	setStyleLeft(cell, wb, false);
+			    	cell.setCellValue(str);    	
+			    }
 			}
 			
 
@@ -382,7 +394,10 @@ public class XSLService {
 					numbers.add((int) cell.getNumericCellValue() + ""); 		
 					break;
 				case Cell.CELL_TYPE_STRING:
-					numbers.add(cell.getStringCellValue().trim());
+					String code = cell.getStringCellValue().trim();
+					code = code.replaceAll("\\D", " ");
+					LOG.info("String code: " + code);
+					numbers.add(code);
 					break;
 				}
 			}

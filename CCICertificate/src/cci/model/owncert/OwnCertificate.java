@@ -50,6 +50,7 @@ public class OwnCertificate {
 	private String otd_id;
 	private String xml;
 	
+	
 		
 	@XmlTransient
 	public String getXml() {
@@ -118,7 +119,18 @@ public class OwnCertificate {
 		if (products != null) {
 		   for (Product product: products) {
 			   str += (str.isEmpty() ? "" : "; ") + product.getName() + 
-					   (product.getCode() != null && ! product.getCode().trim().isEmpty() ?  ", " + product.getCode() : "");
+					   (product.getNcode() != null && ! product.getNcode().trim().isEmpty() ?  " - " + product.getNcode() : "");
+		   }
+		}
+		return str;
+	}
+	
+	@XmlTransient
+	public String getCodes() {
+		String str="";
+		if (products != null) {
+		   for (Product product: products) {
+			   str += (str.isEmpty() ? "" : ";") + product.getNcode();
 		   }
 		}
 		return str;

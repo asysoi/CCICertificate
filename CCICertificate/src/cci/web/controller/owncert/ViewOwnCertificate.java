@@ -10,6 +10,7 @@ public class ViewOwnCertificate extends OwnCertificate {
 	private String beltppaddress;
 	private String productname;
 	private String productcode;
+	private String viewcode;
 	private String datecertfrom;
 	private String datecertto;
 	private String datestartfrom;
@@ -17,6 +18,12 @@ public class ViewOwnCertificate extends OwnCertificate {
 	private String dateexpirefrom;
 	private String dateexpireto;
 	
+	public String getViewcode() {
+		return viewcode;
+	}
+	public void setViewcode(String viewcode) {
+		this.viewcode = viewcode;
+	}
 	public String getDatestartfrom() {
 		return datestartfrom;
 	}

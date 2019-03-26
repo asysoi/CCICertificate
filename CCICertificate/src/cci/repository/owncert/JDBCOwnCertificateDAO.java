@@ -183,17 +183,17 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		cert.setId_beltpp(getBeltppID(cert));
 
 		String sql_cert = "insert into owncertificate(id_beltpp, number, blanknumber, type, customername, customeraddress, "
-				+ " customerunp, datecert, dateexpire, expert, signer, signerjob, datestart, additionalblanks, factories, branches, products, "
+				+ " customerunp, datecert, dateexpire, expert, signer, signerjob, datestart, additionalblanks, factories, branches, products, codes,  "
 				+ " beltppname, beltppaddress, beltppphone, beltppunp, "
-				+ " datestop, datechange, numberprev, numbernext, filename, status, productdescription, otd_id) "
+				+ " datestop, datechange, numberprev, numbernext, status, productdescription, otd_id) "
 				+ " values ("
 				+ " :id_beltpp, :number, :blanknumber, :type, :customername, :customeraddress, :customerunp, "
 				+ " STR_TO_DATE(:datecert,'%d.%m.%Y'), " + " STR_TO_DATE(:dateexpire,'%d.%m.%Y'), "
-				+ " :expert, :signer, :signerjob, " + " STR_TO_DATE(:datestart,'%d.%m.%Y')"
-				+ ", :additionalblanks, :factorylist, :branchlist, :productlist, "
+				+ " :expert, :signer, :signerjob, " + " STR_TO_DATE(:datestart,'%d.%m.%Y'), "
+				+ " :additionalblanks, :factorylist, :branchlist, :productlist, :codes, "
 				+ " :beltppname, :beltppaddress, :beltppphone, :beltppunp, " + " STR_TO_DATE(:datestop,'%d.%m.%Y'), "
 				+ " STR_TO_DATE(:datechange,'%d.%m.%Y'), "
-				+ " :numberprev, :numbernext, :filename, :status, :productdescription, :otd_id" 
+				+ " :numberprev, :numbernext, :status, :productdescription, :otd_id" 
 				+ ")";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
@@ -210,11 +210,9 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	}
 
 	
-	/* ---------------------------------------------------------------
-	* 
+	/* ----------------------------------------------------------------------------
 	*  Сохранить сведения о продукции, производстве и обособленных подразделениях
-    *    
-	* --------------------------------------------------------------- */
+	* -------------------------------------------------------------------------- */
 	private void saveCertificateData(OwnCertificate cert) {
 		
 		int id  = cert.getId();
@@ -241,8 +239,8 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			LOG.info("Добавлены адреса производств: " + updateCounts.toString());
 		}
 
-		String sql_product = "insert into ownproduct(id_certificate, number, name, code) "
-				+ "values ( :id, :number, :name, :code)";
+		String sql_product = "insert into ownproduct(id_certificate, number, name, code, ncode) "
+				+ "values ( :id, :number, :name, :code, :ncode)";
 
 		if (cert.getProducts() != null && cert.getProducts().size() > 0) {
 			for (Product pr : cert.getProducts()) {
@@ -511,15 +509,6 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	* --------------------------------------------------------------- */
 	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
         
-    	/*String sql = "select * from owncertificate where " 
-          + " ((UPPER(factories) like :orsha and UPPER(customeraddress) like :orsha and type= :typeproduct) "  
-          + " OR  (UPPER(factories) like :orsha and UPPER(branches) like :orsha and type=:typeproduct) "
-          + " OR  (UPPER(customeraddress) like :orsha and type=:typeservice) "  
-          + " OR  (UPPER(branches) like :orsha and type=:typeservice) ) " 
-          + " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
-          + " and otd_id = :otd_id " 
-          + " ORDER by customername, datecert ";
-        */     
 		String sql = "select * from owncertificate where " 
 		          + " ((UPPER(factories) like :orsha and UPPER(customeraddress) like :orsha and type= :typeproduct) "  
 		          + " OR  (UPPER(customeraddress) like :orsha and type=:typeservice) ) " 
@@ -550,10 +539,11 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		for (String code : numbers) {
 		          sql += (sql.isEmpty() ? "" : " union ") + " select '" + code + "'" 
 		        		  + " as productcode, customername, customerunp, customeraddress, datecert,"
-		        		  + " number, datestart, dateexpire" 
+		        		  + " number, datestart, dateexpire, products" 
 	 	        		  + " from owncertificate where"
-	 	        		  + " id in (select distinct id_certificate from ownproduct where code like "
-	 	        		  + " '%" + code + "%')"; 
+	 	        		  // + " id in (select distinct id_certificate from ownproduct where ncode like "
+	 	        		  + " codes like"
+	 	        		  + " '%" + code.replaceAll("\\s", "") + "%')"; 
 		}
 		sql += " order by productcode, customername, datecert";
 		LOG.info("SQL Waste Request: " + sql);
