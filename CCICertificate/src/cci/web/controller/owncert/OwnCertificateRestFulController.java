@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -130,9 +131,11 @@ public class OwnCertificateRestFulController {
 			   certificate = service.getOwnCertificateByNumber(certificate.getNumber(), 
 					certificate.getBlanknumber(), datecert, otd_id);
 			} catch (Exception ex) {
-				throw(new AddCertificateException("Ошибка чтения добавленного сертификата: " + ex.getLocalizedMessage()));	  
+				LOG.error("Ошибка чтения добавленного сертификата: " + ex.getMessage());
+				throw(new AddCertificateException("Ошибка чтения добавленного сертификата: " + ex.getMessage()));	  
 			}
 		} catch (Exception ex) {
+			LOG.error(ex.toString());
 			throw(new AddCertificateException(ex.toString()));
 		}
 		return certificate;
@@ -163,18 +166,26 @@ public class OwnCertificateRestFulController {
 				 String fileName = multipartFile.getOriginalFilename();
 				 
 				 String absoluteDiskPath = request.getSession().getServletContext().getInitParameter("upload.location");
-				 fileName = number+"_" + blanknumber+"." + FilenameUtils.getExtension(fileName);
-				 
-				 File certFile = new File(absoluteDiskPath, fileName);  		
+			     fileName = datecert.replaceAll("..\\...\\.", "") + System.getProperty("file.separator") 
+			     			+ owncert.getOtd_id() + System.getProperty("file.separator") 
+			    		    + (number+"_" + blanknumber).replaceAll("[\\.\\/\\\\]", "_") 
+			    		    + "." + FilenameUtils.getExtension(fileName);
+				 				 
+				 File certFile = new File(absoluteDiskPath, fileName);
 				 multipartFile.transferTo(certFile);
 
 				 if (! service.updateOwnCertificateFileName(number, blanknumber, datecert, fileName)) {
-					 throw(new NotUpdatedOwnCertificateFileNameException("Сcылка на загруженный файл не сохранена для сертификата. Ошибка обновление именим файла")); 
+					 throw(new NotUpdatedOwnCertificateFileNameException("Сcылка на загруженный файл не сохранена для сертификата. Ошибка обновление имени файла")); 
 				 };
 			 } else {
+				 LOG.info("Не найдено сертификата для загрузки файла");
 				 throw(new NotFoundCertificateException("Не найдено сертификата для загрузки файла"));
 			 }
+		} catch (EmptyResultDataAccessException ex) {
+			LOG.info("Не найдено сертификата для загрузки файла");
+			throw(new CertificateUpdateException(" Не найден сертификат с номером: " + number + " на бланке: " + blanknumber + ", выданный  "+ datecert));
 		} catch (Exception ex) {
+			LOG.info(ex.toString());
 			throw(new CertificateUpdateException(ex.toString()));
 		}
 		return "File uploaded and joint to certificate";
@@ -189,9 +200,9 @@ public class OwnCertificateRestFulController {
 		try {
 			 retdate = new SimpleDateFormat("yyyy-mm-dd").format(
 					   new SimpleDateFormat("dd.mm.yyyy").parse(datecert));
-			 System.out.println("Coverted date: " + retdate);
+			 LOG.debug("Coverted date: " + retdate);
 		} catch (Exception ex) {
-			System.out.println("DateStringConverter: " + ex.getMessage());
+			LOG.error("DateStringConverter: " + ex.getMessage());
 		}
 		return datecert;
 	}

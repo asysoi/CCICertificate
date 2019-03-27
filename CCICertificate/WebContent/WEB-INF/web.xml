@@ -43,7 +43,7 @@
   
   <context-param>
     <param-name>upload.location</param-name>
-    <param-value>C:/Java/tomcat8/webapps/files/in</param-value>
+    <param-value>C:/Java/tomcat8/webapps/files</param-value>
 </context-param>   
   
   <listener>

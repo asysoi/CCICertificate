@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.sun.glass.ui.SystemClipboard;
-
 import cci.config.own.ExportOwnCertConfig;
 import cci.config.own.ReportOwnCertConfig;
 import cci.model.owncert.OwnCertificate;
@@ -48,8 +45,6 @@ import cci.service.owncert.OwnFilter;
 import cci.web.controller.ViewManager;
 import cci.web.controller.cert.CertificateController;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
-import oracle.sql.DATE;
-
 
 @Controller
 @SessionAttributes({ "owncertfilter", "ownmanager"})
@@ -80,7 +75,7 @@ public class OwnCertificateController {
 			ModelMap model) {
 
 		long start = System.currentTimeMillis();
-		LOG.info("< =========================== GET OWN CERT LIST =================================== >");
+		LOG.debug("< == GET OWN CERT LIST == >");
 
 		ViewManager vmanager = (ViewManager) model.get("ownmanager");
 
@@ -187,10 +182,10 @@ public class OwnCertificateController {
 
 			if (fc == null) {
 				fc = new OwnFilter();
-				LOG.info("New filterOwnCertificate created in GET method");
+				LOG.debug("New filterOwnCertificate created in GET method");
 				model.addAttribute("owncertfilter", fc);
 			} else {
-				LOG.info("Found FilterOwnCertificate in GET : ");
+				LOG.debug("Found FilterOwnCertificate in GET : ");
 			}
 
 			ViewOwnCertificateFilter vf = new ViewOwnCertificateFilter(
@@ -210,14 +205,13 @@ public class OwnCertificateController {
 				@ModelAttribute("owncertfilter") OwnFilter fc,
 				BindingResult result, SessionStatus status, ModelMap model) {
 
-		    LOG.info (viewfilter);
+		    LOG.debug (viewfilter);
 		    
 			if (fc == null) {
 				fc = new OwnFilter();
-				LOG.info
-						("New filterOwnCertificate created in the POST method");
+				LOG.debug("New filterOwnCertificate created in the POST method");
 			} else {
-				LOG.info("Found FilterOwnCertificate in POST");
+				LOG.debug("Found FilterOwnCertificate in POST");
 			}
 			// remove space
 			viewfilter.getViewcertificate().setProductcode( 

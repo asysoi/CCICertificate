@@ -20,15 +20,16 @@ public class LogInterceptor implements HandlerInterceptor {
 		request.setAttribute("startTime", startTime);
 
 		String action = request.getRequestURI().substring(request.getContextPath().length() + 1);
-		LOG.info("Action " + request.getMethod() + " : [" + action + "] by [" + aut.getName() + "]");
+		LOG.info("Start action " + request.getMethod() + " : [" + action + "] by [" + aut.getName() + "]");
 		return true;
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
+		String action = request.getRequestURI().substring(request.getContextPath().length() + 1);
 		long executeTime = System.currentTimeMillis() - (Long) request.getAttribute("startTime");
-		LOG.info("ExecuteTime of action: " + executeTime + "ms");
+		LOG.info("ExecuteTime of action " + request.getMethod() + " [" + action + "]: " + executeTime + "ms");
 	}
 
 	@Override
@@ -37,5 +38,4 @@ public class LogInterceptor implements HandlerInterceptor {
 
 		// super.afterCompletion(request, response, handler, ex);
 	}
-
 }

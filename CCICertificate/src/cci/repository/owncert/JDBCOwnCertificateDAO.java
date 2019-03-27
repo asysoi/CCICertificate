@@ -56,7 +56,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	
 		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
 		
-		LOG.info(sql);
+		LOG.debug(sql);
 		return count.intValue();
 	}
 
@@ -105,7 +105,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
     				+ " ORDER by " +  orderby + " " + order + ", id " + order;  
         }
 		
-		LOG.info("Next page : " + sql);
+		LOG.debug("Next page : " + sql);
 		
 		if (pagecount != 0) {
 		    return this.template.query(sql,	params, 
@@ -159,7 +159,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		OwnCertificate cert = null;
 
 		String sql = "select * from owncertificate " + filter.getWhereEqualClause();
-		System.out.println("findOwnCertificateByID: " + sql);
+		LOG.debug("DATABASE.findOwnCertificateByID");
 		
 		cert = template.getJdbcOperations()
 				.queryForObject(
@@ -357,7 +357,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	public OwnCertificate findOwnCertificateByNumber(String number, String blanknumber, String datecert, String otd_id) {
 
 		String sql = "select * from owncertificate WHERE number = ? and blanknumber = ? and datecert =  STR_TO_DATE(?,'%d.%m.%Y') and otd_id = ? ";
-		System.out.println("findOwnCertificateByNumber");
+		LOG.info("findOwnCertificateByNumber");
 		OwnCertificate cert = template.getJdbcOperations()
 				.queryForObject(
 						sql,
@@ -418,7 +418,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 						"В базе сертификатов отсутствует сертификат, " + "файл которого необходимо обновить"));
 			}
 		} catch (Exception ex) {
-			LOG.info(ex.getMessage());
+			LOG.error(ex.getMessage());
 			throw (new NotUpdatedOwnCertificateFileNameException(
 					"Ошибка обновления имени файла сертификата " + ex.getMessage()));
 		}
@@ -435,7 +435,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			String sql = "select * from owncertificate WHERE number = ? and blanknumber = ? and datecert =  STR_TO_DATE(?,'%d.%m.%Y') and otd_id= ?";
             
 			boolean active = TransactionSynchronizationManager.isActualTransactionActive();
-			System.out.println("\n\nActive transaction = " + active + "\n\n");
+			LOG.debug("\n\nActive transaction = " + active + "\n\n");
 			
 			OwnCertificate cert = template.getJdbcOperations().queryForObject(sql,
 					new Object[] { number.trim(), blanknumber.trim(), datecert.trim(), otd_id },
@@ -449,7 +449,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			ret = true;
 			
 		} catch (Exception ex) {
-			LOG.info(ex.getMessage());
+			LOG.error(ex.getMessage());
 			throw (new NotDeleteOwnCertificateException("Сертификат не удален " + ex.getMessage()));
 		}
 		return ret;
@@ -480,7 +480,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	public List<Report> getReport(String[] fields, SQLBuilder builder) {
 		String field = fields[0]; // берем только одно поле для группировки
 		
-        System.out.println("Report field: " + field);
+        // System.out.println("Report field: " + field);
 		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
 		String sql;
 		
@@ -534,7 +534,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	public List<ViewWasteOwnCertificate> getWasteOwnCertificates(String reportdate, List<String> numbers) {
 		String sql = "";
 		
-		LOG.info("Code numbers: " + numbers.toString());
+		LOG.debug("Code numbers: " + numbers.toString());
 		
 		for (String code : numbers) {
 		          sql += (sql.isEmpty() ? "" : " union ") + " select '" + code + "'" 
@@ -543,10 +543,10 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	 	        		  + " from owncertificate where"
 	 	        		  // + " id in (select distinct id_certificate from ownproduct where ncode like "
 	 	        		  + " codes like"
-	 	        		  + " '%" + code.replaceAll("\\s", "") + "%')"; 
+	 	        		  + " '%" + code.replaceAll("\\s", "") + "%'"; 
 		}
 		sql += " order by productcode, customername, datecert";
-		LOG.info("SQL Waste Request: " + sql);
+		//LOG.info("SQL Waste Request: " + sql);
 		
   	    return this.template.query(sql, 
   	    		new BeanPropertyRowMapper<ViewWasteOwnCertificate>(ViewWasteOwnCertificate.class));

@@ -97,10 +97,8 @@ public class CertificatePDFBuilder {
 		String pagename; 
 		
 		if (cert.getForms() != null) {
-			System.out.println("Form name: " + cert.getForms());
 			pagename = cert.getForms().trim();
 		} else {
-			System.out.println("Form name: NULL");
 			pagename = PDFBuilderFactory.PAGE_CT1;
 		}
 		
