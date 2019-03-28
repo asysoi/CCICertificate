@@ -331,6 +331,7 @@ public class OwnCertificateController {
 				
 				String templateDiskPath = request.getSession().getServletContext().getRealPath(relativeWebPath);
 				String pdfFilePath = request.getSession().getServletContext().getInitParameter("upload.location");
+				String checksize = request.getSession().getServletContext().getInitParameter("pdfimage.checksize");
 				String tempname = cert.getBlanknumber() + ".pdf";
 				//String tempfile = request.getSession().getServletContext().getRealPath(pathToTempFile) 
 				//		          + System.getProperty("file.separator") + tempname;
@@ -354,7 +355,7 @@ public class OwnCertificateController {
 				String pdffile = pdfFilePath + System.getProperty("file.separator") + cert.getFilename();
 				List<String> numbers = ownCertService.splitOwnCertNumbers(cert.getBlanknumber(),
 						cert.getAdditionalblanks());
-				ByteArrayOutputStream output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers);
+				ByteArrayOutputStream output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers, Integer.parseInt(checksize));
 				
 				if (output != null) {
 					// Firefox Browser doesn't display the file correctly

@@ -166,12 +166,13 @@ public class OwnCertificateRestFulController {
 				 String fileName = multipartFile.getOriginalFilename();
 				 
 				 String absoluteDiskPath = request.getSession().getServletContext().getInitParameter("upload.location");
-			     fileName = datecert.replaceAll("..\\...\\.", "") + System.getProperty("file.separator") 
-			     			+ owncert.getOtd_id() + System.getProperty("file.separator") 
+			     fileName = datecert.replaceAll("..\\...\\.", "").trim() + System.getProperty("file.separator") 
+			     			+ owncert.getOtd_id().trim() + System.getProperty("file.separator") 
 			    		    + (number+"_" + blanknumber).replaceAll("[\\.\\/\\\\]", "_") 
 			    		    + "." + FilenameUtils.getExtension(fileName);
-				 				 
+			     
 				 File certFile = new File(absoluteDiskPath, fileName);
+				 LOG.info("File path: " + certFile.getAbsolutePath());
 				 multipartFile.transferTo(certFile);
 
 				 if (! service.updateOwnCertificateFileName(number, blanknumber, datecert, fileName)) {
@@ -185,8 +186,8 @@ public class OwnCertificateRestFulController {
 			LOG.info("Не найдено сертификата для загрузки файла");
 			throw(new CertificateUpdateException(" Не найден сертификат с номером: " + number + " на бланке: " + blanknumber + ", выданный  "+ datecert));
 		} catch (Exception ex) {
-			LOG.info(ex.toString());
-			throw(new CertificateUpdateException(ex.toString()));
+			LOG.info(ex.getLocalizedMessage());
+			throw(new CertificateUpdateException(ex.getLocalizedMessage()));
 		}
 		return "File uploaded and joint to certificate";
     }
@@ -254,6 +255,7 @@ public class OwnCertificateRestFulController {
 				
 				String templateDiskPath = request.getSession().getServletContext().getRealPath(relativeWebPath);
 				String pdfFilePath = request.getSession().getServletContext().getInitParameter("upload.location");
+				String checksize = request.getSession().getServletContext().getInitParameter("pdfimage.checksize");
 				
 				String pagefirst = null;
 				String pagenext = null;
@@ -273,7 +275,7 @@ public class OwnCertificateRestFulController {
 								
 				String pdffile = pdfFilePath + System.getProperty("file.separator") + owncert.getFilename();
 				List<String> numbers = service.splitOwnCertNumbers (owncert.getBlanknumber(), owncert.getAdditionalblanks()); 
-				ByteArrayOutputStream  output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers);
+				ByteArrayOutputStream  output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers, Integer.parseInt(checksize));
 				
 				if (output != null) { 
 				   response.getOutputStream().write(output.toByteArray());
