@@ -102,8 +102,8 @@
    
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/ -->
-        <property name="url" value="jdbc:oracle:thin:@//192.168.0.72:1521/pdborcl"/>
+        <property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/>
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.72:1521/pdborcl"/ -->
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/ -->
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.179:1521/orclpdb"/ -->  
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.10:1521/orclpdb"/ -->   
@@ -120,9 +120,10 @@
  
     <bean id="dataSourceOwn" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://192.168.0.72:3306/owncert?useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/owncert?useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;"/>
         <property name="username" value="cert"/>
         <property name="password" value="123456"/>
+        <property name="validationQuery" value="SELECT 1"/>
     </bean>
     
     <!-- Database Security 
