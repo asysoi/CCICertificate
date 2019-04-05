@@ -48,7 +48,7 @@
   
   <context-param>
     <param-name>pdfimage.checksize</param-name>
-    <param-value>30000</param-value>
+    <param-value>39000</param-value>
   </context-param>   
   
   <listener>

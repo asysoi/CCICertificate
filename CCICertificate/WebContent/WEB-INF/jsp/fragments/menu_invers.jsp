@@ -45,12 +45,12 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Клиенты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="members.do">Члены БелТПП</a></li>
 						<li><a href="clients.do">Контрагенты</a></li>
 					</ul>
 				</li>
 				</security:authorize>
 				
+				<security:authorize ifAnyGranted="ROLE_VES">	
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">ВЭС<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -59,11 +59,11 @@
 						<li><a href="#">Форумы</a></li>					
 						<li><a href="#">Выствыки</a></li>
 						<li><a href="#">Ярмарки</a></li>
-
 					</ul>
 				</li>
+				</security:authorize>
 				
-
+                <security:authorize ifAnyGranted="ROLE_HR">
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Кадры<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -73,24 +73,20 @@
 
 					</ul>
 				</li>
+				</security:authorize>
 
 				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK,ROLE_BREST,ROLE_GRODNO,ROLE_MOGILEV">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="certs.do">Сертификаты происхождения</a></li>
-						<li><a href="reportcerts.do">Отчет о загрузке сертификатов происхождения</a></li>
-						<li class="divider"></li>
 						<li><a href="owncerts.do">Сертификаты собственного производства</a></li>
-						<li><a href="fscerts.do">Сертификаты свободной продажи</a></li>
 						<li class="divider"></li>						
 						<li><a href="#">Акты экспертиз</a></li>
-						<li><a href="certcheck.do">Верификация</a></li>
 					</ul>
 				</li>
 			    </security:authorize>				
 
-                
+                <security:authorize ifAnyGranted="ROLE_HR">
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Справочники<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -98,6 +94,7 @@
 						<li><a href="#">Арендные помещения</a></li>
 					</ul>
 				</li>
+				</security:authorize>
 
 				<security:authorize ifAnyGranted="ROLE_ACCOUNT">
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
