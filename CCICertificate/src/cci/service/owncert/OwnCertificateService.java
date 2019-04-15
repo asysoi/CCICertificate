@@ -138,8 +138,15 @@ public class OwnCertificateService {
 		int pos = addblanks.indexOf("-");
 		
 		if (pos > 0) {
-			int firstnumber = Integer.parseInt((addblanks.substring(0, pos)));
-			int lastnumber = Integer.parseInt(addblanks.substring(pos + 1));
+			String strFirstNumber = addblanks.substring(0, pos);
+			String strLastNumber = addblanks.substring(pos + 1);
+			
+			if (strLastNumber.length() < strFirstNumber.length()) {
+				strLastNumber = strFirstNumber.substring(0, strFirstNumber.length()-strLastNumber.length()) + strLastNumber; 
+			}
+			
+			int firstnumber = Integer.parseInt(strFirstNumber);
+			int lastnumber = Integer.parseInt(strLastNumber);
 			
 			for (int i = firstnumber; i <= lastnumber; i++) {
 				numbers.add(addnull(i + ""));

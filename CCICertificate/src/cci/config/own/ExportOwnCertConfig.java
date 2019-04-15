@@ -11,13 +11,13 @@ import cci.config.ExportConfig;
 
 public class ExportOwnCertConfig implements ExportConfig {
 	
-	private String[] headernames = new String[] { "Номер сертификата",	"Номер бланка",	"Наименование производителя",
+	private String[] headernames = new String[] { "Номер сертификата",	"Номер бланка", "Тип сертификата", "Наименование производителя",
 		"Адрес производителя","УНП производителя","Адрес производства","Обособленные подразделения",
 		"Коды дополнительных бланков",	"Дата сертификата", "Действителен с ","Действителен до ",  "Эксперт", "Кем выдан",
 		"Должность выдавшего","Дата загрузки",
 		"Отделение","Адрес отделения", "Краткое описание продукции/услуг", "Продукция/Услуги и коды" };
 
-	private String[] fieldnames = new String[] { "number",	"blanknumber",	"customername",
+	private String[] fieldnames = new String[] { "number",	"blanknumber",	"type", "customername",
 			"customeraddress","customerunp","factories","branches","additionalblanks",
 			"datecert", "datestart","dateexpire","expert","signer",
 			"signerjob","dateload","beltppname", "beltppaddress", "productdescription" , "products"};

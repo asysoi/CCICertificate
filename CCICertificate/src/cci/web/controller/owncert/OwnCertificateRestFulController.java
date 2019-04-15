@@ -274,7 +274,7 @@ public class OwnCertificateRestFulController {
 				}
 								
 				String pdffile = pdfFilePath + System.getProperty("file.separator") + owncert.getFilename();
-				List<String> numbers = service.splitOwnCertNumbers (owncert.getBlanknumber(), owncert.getAdditionalblanks()); 
+				List<String> numbers = service.splitOwnCertNumbers(owncert.getBlanknumber(), owncert.getAdditionalblanks()); 
 				ByteArrayOutputStream  output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers, Integer.parseInt(checksize));
 				
 				if (output != null) { 

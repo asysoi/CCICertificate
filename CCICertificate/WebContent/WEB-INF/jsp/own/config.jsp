@@ -9,7 +9,7 @@
 <script>
     $(document).ready(function(){
 	      $( "#content li" ).each(function(index, element) {
-	        if (index < 9) {
+	        if (index < 10) {
 	           $("#col1").append("<li>" + $(element).html() + "</li>");
 	        } else {
 	           $("#col2").append("<li>" + $(element).html() + "</li>");
