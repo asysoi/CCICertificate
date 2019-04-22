@@ -37,10 +37,6 @@
             		<input type="text" class="form-control" placeholder="Поиск..." style="height: 24px"/>
           		</form>
 
-			    <!-- 
-				<li><a href="main.do">Главная</a></li>
-				-->
-	
 				<security:authorize ifAnyGranted="ROLE_CLIENT,ROLE_EXPERT">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Клиенты<b class="caret"></b></a>
