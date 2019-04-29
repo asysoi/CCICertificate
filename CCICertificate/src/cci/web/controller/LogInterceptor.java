@@ -20,7 +20,7 @@ public class LogInterceptor implements HandlerInterceptor {
 		request.setAttribute("startTime", startTime);
 
 		String action = request.getRequestURI().substring(request.getContextPath().length() + 1);
-		LOG.info("Start action " + request.getMethod() + " : [" + action + "] by [" + aut.getName() + "]");
+		LOG.info("Action Portal: [" + action + "] from [" + request.getRemoteAddr() + "] by [" + aut.getName() + "]");
 		return true;
 	}
 
