@@ -20,7 +20,7 @@ public class LogInterceptor implements HandlerInterceptor {
 		request.setAttribute("startTime", startTime);
 
 		String action = request.getRequestURI().substring(request.getContextPath().length() + 1);
-		LOG.info("Action " + request.getMethod() + " : [" + action + "] by [" + aut.getName() + "]");
+		LOG.info("Action Portal: [" + action + "] by [" + request.getRemoteAddr() + "]");
 		return true;
 	}
 
@@ -34,7 +34,6 @@ public class LogInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-
 		// super.afterCompletion(request, response, handler, ex);
 	}
 
