@@ -132,12 +132,13 @@ public class CertificateRestFulController {
 	public Certificate getCertificateByNumber(
 			@RequestParam(value = "number", required = true) String number,
 			@RequestParam(value = "nblank", required = true) String blanknumber,
+			@RequestParam(value = "date", required = true) String date,
 			Authentication aut)  {
 		
 		String otd_id = getOtd_idByRole(aut);
 		try {
 			    
-			    Certificate rcert = restservice.getCertificateByNumber(number, blanknumber);
+			    Certificate rcert = restservice.getCertificateByNumber(number, blanknumber, date);
 			    
 			    if (otd_id != null && rcert.getOtd_id() != Integer.parseInt(otd_id)) {
 			    	throw(new NotFoundCertificateException("Нет доступа к серитификату номер " + number + ", выданному на бланке " +  blanknumber));

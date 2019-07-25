@@ -21,8 +21,8 @@ public class CertificateRestFulService {
 		certificateDAO.save(certificate);
 	}
 
-	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception {
-		return certificateDAO.getCertificateByNumber(number, blanknumber);
+	public Certificate getCertificateByNumber(String number, String blanknumber, String date) throws Exception {
+		return certificateDAO.getCertificateByNumber(number, blanknumber, date);
 	}
 
 	public Certificate updateCertificate(Certificate certificate, String otd_id) throws Exception {
