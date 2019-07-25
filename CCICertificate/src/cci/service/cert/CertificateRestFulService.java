@@ -29,7 +29,7 @@ public class CertificateRestFulService {
 		return certificateDAO.update(certificate, otd_id);
 	}
 
-	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception {
-	  certificateDAO.deleteCertificate(number, blanknumber, otd_id);
+	public void deleteCertificate(String number, String blanknumber, String date, String otd_id) throws Exception {
+	  certificateDAO.deleteCertificate(number, blanknumber, date, otd_id);
 	}
 }

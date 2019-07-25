@@ -1,6 +1,7 @@
 ﻿package cci.repository.cert;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -595,7 +596,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// Update certificate / FOR REST SERVICE
 	// ---------------------------------------------------------------
 	public Certificate update(Certificate cert, String otd_id) throws Exception {
-	  Certificate rcert = getCertificateByNumber(cert.getNomercert(), cert.getNblanka());
+	  Certificate rcert = getCertificateByNumber(cert.getNomercert(), cert.getNblanka(), cert.getDatacert());
 	  
 	  // дата сертификата не может меняться
 	  // номер отделения не меняется
@@ -689,16 +690,16 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//--------------------------------------------------------------------
 	// Get Certificate by certificate number / FOR REST SERVICE
 	//--------------------------------------------------------------------
-	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception {
+	public Certificate getCertificateByNumber(String number, String blanknumber, String date) throws Exception {
 		
 		Certificate rcert = null;
 		long start = System.currentTimeMillis();
 		
 		try {
-			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ?";
+			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND (DATACERT=? OR ISSUEDATE=TO_DATE(?,'DD.MM.YY'))";
 			rcert = template.getJdbcOperations().queryForObject(
 					sql,
-					new Object[] { number, blanknumber},
+					new Object[] { number, blanknumber, date},
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 		
 			if (rcert != null) {
@@ -725,10 +726,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//--------------------------------------------------------------------
 	// Delete Certificate by certificate number / FOR REST SERVICE
 	//--------------------------------------------------------------------
-	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception  {
+	public void deleteCertificate(String number, String blanknumber, String date, String otd_id) throws Exception  {
 		
-		  Certificate rcert = getCertificateByNumber(number, blanknumber);
-			
+		  Certificate rcert = getCertificateByNumber(number, blanknumber, date);
 		  
 	      if (rcert != null ) {
 	    	    if (otd_id == null || rcert.getOtd_id() != Integer.parseInt(otd_id)) {
@@ -749,8 +749,6 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	      } else {
 	    	  throw (new NotFoundCertificateException("Не найдено сертификата с номером "  +  number + " на бланке " + blanknumber));
 	      }
-	      
-
 	}
 		
 	//--------------------------------------------------------------------
@@ -794,4 +792,29 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		
 	   return ret;
 	}
+
+	//--------------------------------------------------------------------
+	// Get set of certificates by page number 
+	//--------------------------------------------------------------------
+	public List<Certificate> getCertificatesPage(int page, int blocksize) throws Exception {
+		
+		String sql = "SELECT c.*, p.tovar tovar from " 
+				+ "(select * from c_cert where cert_id in "
+				+ " (select  a.cert_id " + " from (SELECT cert_id FROM (select cert_id from c_cert) "
+				+ " where rownum <= :endposition " + ") a left join (SELECT cert_id FROM (select cert_id from c_cert )"
+				+ " where rownum < :firstposition " + ") b on a.cert_id = b.cert_id where b.cert_id is null))   "
+				+ " c left join C_PRODUCT_DENORM p on c.cert_id = p.cert_id order by issuedate";
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("endposition",  Integer.valueOf(page * blocksize));
+		params.put("firstposition", Integer.valueOf((page - 1) * blocksize   + 1));
+		
+		if (page != 0) {
+		    return this.template.query(sql,	params, 
+				new BeanPropertyRowMapper<Certificate>(Certificate.class));
+		} else {
+			return null;
+		}
+	}
+	
 }

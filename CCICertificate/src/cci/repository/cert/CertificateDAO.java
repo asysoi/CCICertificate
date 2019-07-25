@@ -58,10 +58,12 @@ public interface CertificateDAO {
 
 	public String getCertificates(CertFilter filter, boolean b) throws Exception;
 
-	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception;
+	public Certificate getCertificateByNumber(String number, String blanknumber, String date) throws Exception;
 
-	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception;
+	public void deleteCertificate(String number, String blanknumber, String date, String otd_id) throws Exception;
 
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
+
+	public List<Certificate> getCertificatesPage(int page, int blocksize) throws Exception;
 	
 }

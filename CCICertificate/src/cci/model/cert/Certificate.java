@@ -26,6 +26,7 @@ public class Certificate {
 	private String adress;
 	private String poluchat;
 	private String adresspol;
+	private String issuedate;
 	private String datacert;
 	private String nomercert;
 	private String expert;
@@ -75,6 +76,14 @@ public class Certificate {
 	private int currentlist;
 	private String date_load;
 	
+	
+	public String getIssuedate() {
+		return issuedate;
+	}
+
+	public void setIssuedate(String issuedate) {
+		this.issuedate = issuedate;
+	}
 	
 	public String getDate_load() {
 		if (date_load != null) {
@@ -488,28 +497,111 @@ public class Certificate {
 		this.eotd_addr_line = eotd_addr_line;
 	}
 
+	@Override
 	public String toString() {
-		// return "Сертификат :" + nomercert + " Бланк: " + nblanka + " Дата: "
-		// + datacert + " Отделение: " + otd_id;
-		return "Certificate [cert_id=" + cert_id + ", forms=" + forms
-				+ ", unn=" + unn + ", kontrp=" + kontrp + ", kontrs=" + kontrs
-				+ ", adress=" + adress + ", poluchat=" + poluchat
-				+ ", adresspol=" + adresspol + ", datacert=" + datacert
-				+ ", nomercert=" + nomercert + ", expert=" + expert
-				+ ", nblanka=" + nblanka + ", rukovod=" + rukovod
-				+ ", transport=" + transport + ", marshrut=" + marshrut
-				+ ", otmetka=" + otmetka + ", stranav=" + stranav
-				+ ", stranapr=" + stranapr + ", status=" + status
-				+ ", koldoplist=" + koldoplist + ", flexp=" + flexp
-				+ ", unnexp=" + unnexp + ", expp=" + expp + ", exps=" + exps
-				+ ", expadress=" + expadress + ", flimp=" + flimp
-				+ ", importer=" + importer + ", adressimp=" + adressimp
-				+ ", flsez=" + flsez + ", sez=" + sez + ", flsezrez="
-				+ flsezrez + ", stranap=" + stranap + ", otd_id=" + otd_id
-				+ ", otd_name=" + otd_name + ", otd_addr_index="
-				+ otd_addr_index + ", otd_addr_city=" + otd_addr_city
-				+ ", otd_addr_line=" + otd_addr_line
-				+ ", otd_addr_building=" + otd_addr_building + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append(getTovar());
+		builder.append(" ");
+		builder.append(getParentnumber());
+		builder.append(" ");
+		builder.append(getParentstatus());
+		builder.append(" ");
+		builder.append(getCert_id());
+		builder.append(" ");
+		builder.append(getForms());
+		builder.append(" ");
+		builder.append(getUnn());
+		builder.append(" ");
+		builder.append(getKontrp());
+		builder.append(" ");
+		builder.append(getKontrs());
+		builder.append(" ");
+		builder.append(getAdress());
+		builder.append(" ");
+		builder.append(getPoluchat());
+		builder.append(" ");
+		builder.append(getAdresspol());
+		builder.append(" ");
+		builder.append(getDatacert());
+		builder.append(" ");
+		builder.append(getNomercert());
+		builder.append(" ");
+		builder.append(getExpert());
+		builder.append(" ");
+		builder.append(getNblanka());
+		builder.append(" ");
+		builder.append(getRukovod());
+		builder.append(" ");
+		builder.append(getTransport());
+		builder.append(" ");
+		builder.append(getMarshrut());
+		builder.append(" ");
+		builder.append(getOtmetka());
+		builder.append(" ");
+		builder.append(getStranav());
+		builder.append(" ");
+		builder.append(getStranapr());
+		builder.append(" ");
+		builder.append(getStatus());
+		builder.append(" ");
+		builder.append(getKoldoplist());
+		builder.append(" ");
+		builder.append(getFlexp());
+		builder.append(" ");
+		builder.append(getUnnexp());
+		builder.append(" ");
+		builder.append(getExpp());
+		builder.append(" ");
+		builder.append(getExps());
+		builder.append(" ");
+		builder.append(getExpadress());
+		builder.append(" ");
+		builder.append(getFlimp());
+		builder.append(" ");
+		builder.append(getImporter());
+		builder.append(" ");
+		builder.append(getAdressimp());
+		builder.append(" ");
+		builder.append(getFlsez());
+		builder.append(" ");
+		builder.append(getSez());
+		builder.append(" ");
+		builder.append(getFlsezrez());
+		builder.append(" ");
+		builder.append(getStranap());
+		builder.append(" ");
+		builder.append(getProducts());
+		builder.append(" ");
+		builder.append(getOtd_addr_index());
+		builder.append(" ");
+		builder.append(getOtd_addr_city());
+		builder.append(" ");
+		builder.append(getOtd_addr_line());
+		builder.append(" ");
+		builder.append(getOtd_addr_building());
+		builder.append(" ");
+		builder.append(getOtd_name());
+		builder.append(" ");
+		builder.append(getShort_kontrp());
+		builder.append(" ");
+		builder.append(getEotd_name());
+		builder.append(" ");
+		builder.append(getEotd_addr_city());
+		builder.append(" ");
+		builder.append(getEotd_addr_line());
+		builder.append(" ");
+		builder.append(getOtd_id());
+		builder.append(" ");
+		builder.append(getParent_id());
+		builder.append(" ");
+		builder.append(getCodestranav());
+		builder.append(" ");
+		builder.append(getCodestranapr());
+		builder.append(" ");
+		builder.append(getCodestranap());
+		builder.append(" ");
+		builder.append(getCategory());
+		return builder.toString();
 	}
 
 	@Override

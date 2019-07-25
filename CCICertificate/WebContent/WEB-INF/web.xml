@@ -50,6 +50,16 @@
     <param-name>pdfimage.checksize</param-name>
     <param-value>39000</param-value>
   </context-param>   
+
+  <context-param>
+    <param-name>index.path</param-name>
+    <param-value>C:/Java/tomcat8/webapps/index</param-value>
+  </context-param>   
+
+  <context-param>
+    <param-name>index.pagesize</param-name>
+    <param-value>10000</param-value>
+  </context-param>   
   
   <listener>
     <listener-class>
