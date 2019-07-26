@@ -76,7 +76,7 @@ public class Certificate {
 	private int currentlist;
 	private String date_load;
 	
-	
+	@XmlTransient
 	public String getIssuedate() {
 		return issuedate;
 	}

@@ -125,7 +125,7 @@ public class CertificateRestFulController {
 	}
 	
 	/* -----------------------------
-	 * Get certificate by number & blanknumber
+	 * Get certificate by number & blanknumber & date
 	 * ----------------------------- */
 	@RequestMapping(value = "rcert.do", method = RequestMethod.GET, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)

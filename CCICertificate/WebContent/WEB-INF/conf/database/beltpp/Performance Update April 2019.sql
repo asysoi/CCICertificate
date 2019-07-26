@@ -28,10 +28,8 @@ update c_cert aa  set
  EOTD_ADDR_CITY = (select EOTD_ADDR_CITY from c_otd where c_otd.id = aa.otd_id),
  EOTD_ADDR_LINE = (select EOTD_ADDR_LINE from c_otd where c_otd.id = aa.otd_id);
  
- 
-alter table c_cert INMEMORY;
 
-CREATE VIEW CERT_VIEW
+CREATE OR REPLACE VIEW CERT_VIEW
 AS select a."CERT_ID",a."FORMS",a."UNN",a."KONTRP",a."KONTRS",a."ADRESS",a."POLUCHAT",a."ADRESSPOL",
 a."DATACERT",a."NOMERCERT",a."EXPERT",a."NBLANKA",a."RUKOVOD",a."TRANSPORT",a."MARSHRUT",a."OTMETKA",
 a."STRANAV",a."STRANAPR",a."STATUS",a."FLEXP",a."UNNEXP",a."EXPP",a."EXPS",a."EXPADRESS",a."FLIMP",

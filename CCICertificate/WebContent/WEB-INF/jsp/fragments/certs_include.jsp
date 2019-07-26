@@ -151,6 +151,43 @@
 		win.focus();
 	}
 	
+	function deleteCertificate(number, nblank, datecert) {
+		$("#pview").dialog("option", "title", 'Удаление сертификата');
+		$("#pview").dialog("option", "width", 550);
+		$("#pview").dialog("option", "height", 320);
+		$("#pview").dialog("option", "modal", true);
+		$("#pview").dialog("option", "resizable", false);
+        $("#pview").html('<p align="center">Удалять сертификат номер ' + number + ' на бланке ' + nblank + ', выданный  '  + datecert + '? <p><p align="center"> Не спеши, подумай ...');
+  
+		$("#pview").dialog({
+			buttons : [ { text : "Удалить",	click : function() {
+			$.ajax({
+				    url: "rcert.do?number=" + number+ "&nblank="+ nblank + "&date=" + datecert,
+				    type: 'DELETE'
+			}).done(function(response) {
+	    	        $("#pview").html(response);
+                    sleep(2000);
+                    location.reload();
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+	    	        $("#pview").html("Ошибка удаления: " +jqXHR.status + " <p> " + jqXHR.responseText);
+			});}}, 
+			       { text : "Закрыть",  click : function() {$(this).dialog("close");}
+			} ]
+		});
+
+		$("#pview").dialog("option", "position", {
+			my : "center",
+			at : "center",
+			of : window
+		});
+		
+		$("#pview").dialog("open");
+	}
+	function sleep(ms) {
+	      setTimeout(sleep, ms);
+	}
+
+		
     // ---------------------------------------------------------------------------------
     // Download list to Excel файл 
     // ---------------------------------------------------------------------------------
@@ -250,13 +287,8 @@
 			       Строк в списке: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=
-
-${vmanager.orderby}
-
-&order=
-
-${vmanager.order}');">${item}</a>
+						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}&order=${vmanager.order}');">${item}
+				   </a>
 				</c:forEach>
 			</td>
 
@@ -277,7 +309,11 @@ ${vmanager.order}');">${item}</a>
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="javascript:openCertificate('${cert.cert_id}')">${cert.nomercert}</a></td>
+				<td><a href="javascript:openCertificate('${cert.cert_id}')">${cert.nomercert}</a>&nbsp;
+  	            <c:if test="${cert.otd_id == otd}">
+					<a href="javascript:deleteCertificate('${cert.nomercert}', '${cert.nblanka}', '${cert.datacert}')">del</a>
+				</c:if>	
+				</td>
 				<td>${cert.otd_name}</td>
 				<td>${cert.kontrp}</td>
 				<td>${cert.nblanka}</td>

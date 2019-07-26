@@ -208,13 +208,15 @@ public class CertificateController {
 					("New filterCertificate created bacause of ACL");
 		}
 		
-		Iterator iterator = aut.getAuthorities().iterator(); 
+		Iterator iterator = aut.getAuthorities().iterator();
+	    String otdID = "";	
 		while (iterator.hasNext()) {
 			
 		      String roleName = ((GrantedAuthority) iterator.next()).getAuthority();
 		      
 		      if  (certService.getACL().containsKey(roleName)) {      
-			      filter.setConditionValue("OTD_ID", "OTD_ID", "=", certService.getACL().get(roleName), FieldType.NUMBER);
+		    	  otdID = certService.getACL().get(roleName);
+			      filter.setConditionValue("OTD_ID", "OTD_ID", "=", otdID, FieldType.NUMBER);
 		      }
 		}
 		// ACL needs
@@ -236,6 +238,7 @@ public class CertificateController {
 
 		model.addAttribute("vmanager", vmanager);
 		model.addAttribute("certs", certs);
+		model.addAttribute("otd", otdID);
 		model.addAttribute("next_page", vmanager.getNextPageLink());
 		model.addAttribute("prev_page", vmanager.getPrevPageLink());
 		model.addAttribute("last_page", vmanager.getLastPageLink());

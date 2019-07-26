@@ -699,7 +699,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND (DATACERT=? OR ISSUEDATE=TO_DATE(?,'DD.MM.YY'))";
 			rcert = template.getJdbcOperations().queryForObject(
 					sql,
-					new Object[] { number, blanknumber, date},
+					new Object[] { number, blanknumber, date, date},
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 		
 			if (rcert != null) {
