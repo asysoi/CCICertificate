@@ -46,6 +46,19 @@ AS select file_in_id, aa.cert_id as cert_id, bb.nomercert, bb.nblanka,
 bb.datacert, bb.issuedate, bb.expert, aa.DATE_LOAD, bb.otd_id, bb.otd_name 
 from C_FILES_IN aa inner join C_CERT bb on bb.cert_id = aa.cert_id;
 
+===========================================================================
+' Создаем CTXCAT индекс на таблице c_product для ускорения поиска
+привлкательность этого индекса в том, что он транзакционный
+В отличии от CONTEXT индекса не требуется запускать 
+exec CTX_DDL.SYNC_INDEX('INDX_CPRODUCT_CONTEXT');
+exec CTX_DDL.SYNC_INDEX('INDX_CPRODUCT_DENORM_CTX');
+после снесение изменения в таблицу.
+Но он применим только к простым текстовым полям. 
+' 
+CREATE INDEX INDX_CPRODUCT_CTXCAT ON C_PRODUCT (TOVAR) INDEXTYPE IS CTXSYS.CTXCAT PARALLEL;
+
+' Этот индекс невозможен, так как поле типа clob не индексируется с типом CTXCAT. Для CLOB возможен только CONTEXT'
+' CREATE INDEX INDX_CPRODUCT_DENORM_CTXCAT ON C_PRODUCTDENORM (TOVAR) INDEXTYPE IS CTXSYS.CTXCAT PARALLEL;'
 
 alter table c_product_denorm INMEMORY INMEMORY(CERT_ID) NO INMEMORY(tovar);  
 

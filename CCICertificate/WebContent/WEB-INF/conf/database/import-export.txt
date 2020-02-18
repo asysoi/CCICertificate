@@ -19,8 +19,22 @@ Import database from dump:
 9. exit from sqlplus
 10. C:\app\OracleHomeUser\product\12.1.0\dbhome_1\BIN>impdp beltpp/123456@pdborcl directory=export dumpfile=beltpp_26_01_2017.dmp logfile=import_26_01_2017_not_full.log
 
+C:\Users\asysoi>impdp beltpp_1/123456@pdborcl REMAP_SCHEMA=beltpp:beltpp_1 directory=export dumpfile=beltpp.dmp logfile=import_not_full.log
 
 Export database to dump:
 1. C:\app\OracleHomeUser\product\12.1.0\dbhome_1\BIN>expdp beltpp/123@pdborcl directory=export dumpfile=beltpp.dmp logfile=export.log
 
 it's all
+
+
+sqlplus / as sysdba
+alter session set container=pdborcl;
+drop user beltpp_1 cascade
+create user beltpp_1 identified by 123456
+grant all privilegies to beltpp_1
+grant dba to beltpp_1
+
+
+impdp beltpp/123456@pdborcl directory=export dumpfile=beltpp_26_01_2017.dmp logfile=import_26_01_2017_not_full.log
+expdp beltpp/123456@pdborcl directory=export dumpfile=beltpp_26_01_2017_windows.dmp logfile=export_26_01_2017.log
+impdp testtpp/123456@pdborcl REMAP_SCHEMA=BELTPP:TESTTPP directory=export dumpfile=dump_linux_15_05.dmp logfile=log.log
