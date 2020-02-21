@@ -541,9 +541,12 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		        		  + " as productcode, customername, customerunp, customeraddress, datecert,"
 		        		  + " number, datestart, dateexpire, products" 
 	 	        		  + " from owncertificate where"
-	 	        		  // + " id in (select distinct id_certificate from ownproduct where ncode like "
-	 	        		  + " codes like"
-	 	        		  + " '%" + code.replaceAll("\\s", "") + "%'"; 
+		        		  // поиск в агрегированном поле кодов  
+	 	        		  // + " codes like"
+	 	        		  // + " '%" + code.replaceAll("\\s", "") + "%'";  
+	 	        		  // сравнение идет всегда идет с начала и поиск идет по таблице ownproducts
+	 	        		  + " id in (select distinct id_certificate from ownproduct where code like "
+	 	        		  + " '" + code.replaceAll("\\s", "") + "%'"; 
 		}
 		sql += " order by productcode, customername, datecert";
 		//LOG.info("SQL Waste Request: " + sql);

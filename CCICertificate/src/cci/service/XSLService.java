@@ -362,7 +362,7 @@ public class XSLService {
 			
 			sheet.autoSizeColumn(2);
 		} catch (Exception ex) {
-			LOG.error("Ошибка формирования оршанского отчета: " + ex.getMessage());
+			LOG.error("Ошибка формирования отчета для ЖКХ: " + ex.getMessage());
 		} finally {
 		  if (inp != null) 
 			  try { inp.close();} catch(Exception ex) {};

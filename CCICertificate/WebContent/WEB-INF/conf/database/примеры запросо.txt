@@ -6,3 +6,51 @@ SELECT id, ncode, HEX(ncode) FROM ownproduct WHERE ncode LIKE '%730590%';
 
 SET group_concat_max_len = 5000;
 update owncertificate set codes = (SELECT GROUP_CONCAT(DISTINCT ncode) codes FROM ownproduct where ownproduct.id_certificate = owncertificate.id);
+
+
+отчет по отходам
+-----
+select * from ownproduct where name REGEXP '8432 [0-9]{2} [0-9]{3} [0-9]';
+
+-----
+select * from ownproduct 
+where length(trim(code)) = 0 
+and 
+(name like '%0%' or name like '%1%' or name like '%2%' or name like '%3%' or name like '%4%' or name like '%5%' or name like '%6%' or name like '%7%' or name like '%8%' or name like '%9%');
+
+select * from ownproduct where id_certificate = 29789;
+select * from owncertificate where id = 29789;
+
+----
+select id, '3920 20' as productcownproductode, customername, customerunp, customeraddress, datecert, number, datestart, dateexpire, products 
+from owncertificate 
+where	
+id in (select distinct id_certificate from ownproduct where ncode like '3922%') 
+or 
+id in (select distinct id_certificate from ownproduct where name like '%3922%')
+or  
+id in (select distinct id_certificate from ownproduct where name RLIKE '3922[0-9]{6}'
+
+----
+select a.* from 
+(select id, '3922' as productcode, customername, customerunp, customeraddress, datecert, number, datestart, dateexpire, products, codes 
+from owncertificate where codes like '%3922%' or products like '%3922%') a   
+left join 
+(select id, '3920 20' as productcownproductode, customername, customerunp, customeraddress, datecert, number, datestart, dateexpire, products, codes 
+from owncertificate 
+where	
+id in (select distinct id_certificate from ownproduct where ncode like '3922%') 
+or 
+id in (select distinct id_certificate from ownproduct where name like '%3922%')) b
+on a.id = b.id 
+where b.id is null;
+
+select * from ownproduct where id_certificate=19657;
+
+-------
+select id, '3920 20' as productcownproductode, customername, customerunp, customeraddress, datecert, number, datestart, dateexpire, products 
+from owncertificate 
+where	
+id in (select distinct id_certificate from ownproduct where name REGEXP '8432[0-9]{5}')
+or
+id in (select distinct id_certificate from ownproduct where name REGEXP '8432 [0-9]{2} [0-9]{3} [0-9]');

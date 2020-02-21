@@ -194,7 +194,7 @@ public class OwnCertificateService {
 	}
 	
 	/* --------------------------------------------------------------------------------------
-	 * Create Orsha report  
+	 * Create Waste Report report  
 	 * ------------------------------------------------------------------------------------- */
 	public List<ViewWasteOwnCertificate> getWasteOwnReport(String reportdate, List<String> numbers) {
 		   List<ViewWasteOwnCertificate> certs = null;
