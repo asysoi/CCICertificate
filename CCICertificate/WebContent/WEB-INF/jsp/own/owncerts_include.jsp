@@ -259,11 +259,9 @@
 	}
 	
 	// ---------------------------------------------------------------------------------
-    // Create Orsha report  
+    // Create Waste report  
     // ---------------------------------------------------------------------------------	
 	function wastereport() {
-		// url = $("#config").attr("action");
-		// $.post(url, $("#config").serialize());
 		
    		var hiddenIFrameID = 'hiddenDownloader';
         var iframe = document.getElementById(hiddenIFrameID);
@@ -275,9 +273,14 @@
 	    	document.body.appendChild(iframe);
 	    	 $("#iframe").on('load', function(event) {alert("IFrame loaded");});	    	
     	}
-    	//spin('hiddenDownloader');
-        iframe.src = "ownwastereport.do";
-        //$('#hiddenDownloader').data('spinner').stop();
+    	
+    	spin('hiddenDownloader');
+    	if ($("#reportdate").val() === "")  {
+    	    iframe.src = "ownwastereport.do";
+    	} else {
+    		iframe.src = "ownwastereport.do?certdate=" + $("#reportdate").val();
+    	}
+        $('#hiddenDownloader').data('spinner').stop();
         
 	}
 </script>

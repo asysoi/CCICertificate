@@ -42,6 +42,7 @@ import cci.service.XSLService;
 import cci.service.cert.CertService;
 import cci.service.owncert.OwnCertificateService;
 import cci.service.owncert.OwnFilter;
+import cci.service.owncert.TNVEDRegexpTemplate;
 import cci.web.controller.ViewManager;
 import cci.web.controller.cert.CertificateController;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
@@ -515,16 +516,16 @@ public class OwnCertificateController {
 	
 	
 	/*-------------------------------------------------------------------------
-	 * Download Orsha Report as Excel file
+	 * Download Waste Report as Excel file
 	 * -------------------------------------------------------------------------	 */
 	@RequestMapping(value = "ownwastereport.do", method = RequestMethod.GET)
-	public void wasteReportDownload(@RequestParam(value = "reportdate", required = false) String reportdate,
+	public void wasteReportDownload(@RequestParam(value = "certdate", required = false) String certdate,
 			HttpSession session, HttpServletRequest request, HttpServletResponse response, Authentication aut,
 			ModelMap model) {
 		
 		try {
-			if (reportdate == null)
-				reportdate = (new SimpleDateFormat("dd.MM.yyyy")).format(new Date());
+			//if (certdate == null)
+			//	certdate = (new SimpleDateFormat("dd.MM.yyyy")).format(new Date());
 
 			String otd_id = ownCertService.getOtd_idByRole(aut);
 
@@ -532,20 +533,23 @@ public class OwnCertificateController {
 				String filetwastenumbers = request.getSession().getServletContext().getRealPath(relativeWebPath)
 						+ System.getProperty("file.separator") + "WasteNumbers.xlsx";
 
-				List<String> numbers = loadProductCodeNumbers(filetwastenumbers);
+				List<TNVEDRegexpTemplate> regtempletes = loadProductCodeNumbers(filetwastenumbers);
 
-				if (numbers != null) {
-					List<ViewWasteOwnCertificate> certs = ownCertService.getWasteOwnReport(reportdate, numbers);
+				if (regtempletes != null) {
+					List<ViewWasteOwnCertificate> certs = ownCertService.getWasteOwnReport(certdate, regtempletes);
+					
+					if (certs != null) {
 
-					response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-					response.setHeader("Content-Disposition", "attachment; filename=certificates.xlsx");
+						response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+						response.setHeader("Content-Disposition", "attachment; filename=certificates.xlsx");
 
-					String filetemplate = request.getSession().getServletContext().getRealPath(relativeWebPath)
+						String filetemplate = request.getSession().getServletContext().getRealPath(relativeWebPath)
 							+ System.getProperty("file.separator") + "WasteReport.xlsx";
 
-					(new XSLService()).makeWorkbookWasteReport(certs, filetemplate, reportdate)
+						(new XSLService()).makeWorkbookWasteReport(certs, filetemplate, certdate)
 							.write(response.getOutputStream());
-					response.flushBuffer();
+						response.flushBuffer();
+					}
 				} else {
 					LOG.error("WasteReportDownload: list of product codes is not defined. It's empty");
 				}
@@ -559,11 +563,10 @@ public class OwnCertificateController {
 		}
 	}
 			
-	private List<String> loadProductCodeNumbers(String filename) {
-		List<String> numbers = 
+	private List<TNVEDRegexpTemplate> loadProductCodeNumbers(String filename) {
+		List<TNVEDRegexpTemplate> regtemplates = 
 			(new XSLService()).getWasteNumbers(filename);
-		
-		return numbers;
+		return regtemplates;
 	}
 
 	// ---------------------------------------------------------------

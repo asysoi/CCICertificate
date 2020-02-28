@@ -95,4 +95,24 @@ select *  from v$sql_plan where sql_id='9js3u3bqw2ywg';
 
 select * from v$sql_plan_MONITOR ;
 
+============================================================================================
+MYSQL
+проблема UTF-8 в MySQL 
+ALTER TABLE ownproductdenorm  MODIFY name VARCHAR(15000) CHARACTER SET utf8mb4;
+ALTER TABLE ownproductdenorm CONVERT TO CHARACTER SET utf8mb4;
+SHOW VARIABLES WHERE Variable_name LIKE 'character\_set\_%' OR Variable_name LIKE 'collation%';
+
+CREATE TABLE `ownproductdenorm` (
+	`idd` INT(11) NOT NULL AUTO_INCREMENT,
+	`id` INT(11) NOT NULL,
+	`id_certificate` INT(11) NOT NULL,
+	`code` VARCHAR(250) NULL DEFAULT NULL,
+	`nncode` BIGINT(20) NULL DEFAULT NULL,
+	INDEX `id_ind` (`idd`),
+	INDEX `ind_nncode` (`nncode`)
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=3891633
+;
 

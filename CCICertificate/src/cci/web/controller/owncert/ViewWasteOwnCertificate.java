@@ -1,6 +1,7 @@
 package cci.web.controller.owncert;
 
 public class ViewWasteOwnCertificate {
+	private int id;
 	private String productcode;
 	private String customername;
 	private String customerunp;
@@ -10,6 +11,24 @@ public class ViewWasteOwnCertificate {
 	private String datestart;
 	private String dateexpire;
 	private String products = "";
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getCodes() {
+		return codes;
+	}
+
+	public void setCodes(String codes) {
+		this.codes = codes;
+	}
+
+	private String codes = "";
 		
 	public String getProducts() {
 		return products;

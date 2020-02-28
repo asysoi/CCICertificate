@@ -26,6 +26,7 @@ import cci.model.owncert.OwnCertificates;
 import cci.model.owncert.Product;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
+import cci.service.owncert.TNVEDRegexpTemplate;
 import cci.web.controller.owncert.OwnFilter;
 import cci.web.controller.owncert.ViewWasteOwnCertificate;
 import cci.web.controller.owncert.exception.NotDeleteOwnCertificateException;
@@ -531,28 +532,58 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	/* ---------------------------------------------------------------
 	 * Get list waste certificates for report
 	 * --------------------------------------------------------------- */
-	public List<ViewWasteOwnCertificate> getWasteOwnCertificates(String reportdate, List<String> numbers) {
+	public List<ViewWasteOwnCertificate> getWasteOwnCertificates(String certdate, List<TNVEDRegexpTemplate> templates) {
 		String sql = "";
+		String nsql = "";
 		
-		LOG.debug("Code numbers: " + numbers.toString());
+		// LOG.debug("Code numbers: " + templates.toString());
 		
-		for (String code : numbers) {
-		          sql += (sql.isEmpty() ? "" : " union ") + " select '" + code + "'" 
-		        		  + " as productcode, customername, customerunp, customeraddress, datecert,"
-		        		  + " number, datestart, dateexpire, products" 
-	 	        		  + " from owncertificate where"
-		        		  // поиск в агрегированном поле кодов  
-	 	        		  // + " codes like"
-	 	        		  // + " '%" + code.replaceAll("\\s", "") + "%'";  
-	 	        		  // сравнение идет всегда идет с начала и поиск идет по таблице ownproducts
-	 	        		  + " id in (select distinct id_certificate from ownproduct where code like "
-	 	        		  + " '" + code.replaceAll("\\s", "") + "%'"; 
+		for (TNVEDRegexpTemplate tmpl : templates) {
+		          sql += (sql.isEmpty() ? "" : "\n union ") + " select distinct id, '" + tmpl.getTnved() + "'" 
+		        		  + " as productcode, customername, customerunp, customeraddress, datecert, number, datestart, dateexpire, products" 
+	 	        		  + " from owncertificate where "
+	 	        		  + " (id in (select id_certificate from ownproduct where code regexp '" + tmpl.getTemplate_frst()+  "') "  
+	 	        		  + " OR id in (select id_certificate from ownproduct where code regexp '" + tmpl.getTemplate_scnd()+ "') "
+	 	        		  + " OR id in (select id_certificate from ownproduct where code regexp '" + tmpl.getTemplate_thrd()+ "') "
+          				  + " OR id in (select id_certificate from ownproduct where name regexp '" + tmpl.getTemplate_frst()+ "') "
+	 	        		  + " OR id in (select id_certificate from ownproduct where name regexp '" + tmpl.getTemplate_scnd()+ "') "
+	 	        		  + " OR id in (select id_certificate from ownproduct where name regexp '" + tmpl.getTemplate_thrd()+ "')) ";
+		          
+		          nsql += (nsql.isEmpty() ? "" : "\n union ") + " select distinct id, '" + tmpl.getTnved() + "'" 
+		        		  + " as productcode, customername, customerunp, customeraddress, datecert, number, datestart, dateexpire, products" 
+	 	        		  + " from owncertificate where "
+	 	        		  + " id in (select id_certificate from ownproductdenorm where nncode >= " + tmpl.getMin() +  " and nncode <= " + tmpl.getMax() + ")";  
+                  if (tmpl.getExtnved().length() > 0) {
+                	  sql += " AND " 
+                		  + " (id not in (select id_certificate from ownproduct where code regexp '" + tmpl.getExtemplate_frst()+ "') "
+                		  + " OR id not in (select id_certificate from ownproduct where code regexp '" + tmpl.getExtemplate_scnd()+ "') "
+                		  + " OR id not in (select id_certificate from ownproduct where code regexp '" + tmpl.getExtemplate_thrd()+ "') "
+            			  + " OR id not in (select id_certificate from ownproduct where name regexp '" + tmpl.getTemplate_frst()+ "') "
+        	 	          + " OR id not in (select id_certificate from ownproduct where name regexp '" + tmpl.getTemplate_scnd()+ "') "
+        	 	          + " OR id not in (select id_certificate from ownproduct where name regexp '" + tmpl.getTemplate_thrd()+ "')) ";
+                	  
+                	  String expsql = "";		  
+                	  for (int i = 0; i < tmpl.getExprange().size(); i++) {	   	      
+                		  expsql += (expsql.length() > 0 ? " OR " : "") 
+                			     + " id not in (select id_certificate from ownproductdenorm where nncode >=" 
+                				 + tmpl.getExprange().getFrom(i) 
+                				 + " and nncode <= " 
+                				 + tmpl.getExprange().getTo(i) + ")";
+                	  }
+                	  nsql += " AND (" + expsql + " ) ";
+                  }
 		}
-		sql += " order by productcode, customername, datecert";
+		sql += " \n order by productcode, customername, datecert";
+		nsql += " \n order by productcode, customername, datecert";
+		if (certdate != null && certdate.length() > 0) {
+			nsql = "select * from (" + nsql + ") tbl where tbl.datecert > " + "STR_TO_DATE('" + certdate + "','%d.%m.%Y')" ;
+		}  
 		//LOG.info("SQL Waste Request: " + sql);
+		LOG.info("NSQL Waste Request: " + nsql);
 		
-  	    return this.template.query(sql, 
-  	    		new BeanPropertyRowMapper<ViewWasteOwnCertificate>(ViewWasteOwnCertificate.class));
+		//return null;
+  	    return this.template.query(nsql, 
+  	    	new BeanPropertyRowMapper<ViewWasteOwnCertificate>(ViewWasteOwnCertificate.class));
 	}
 	
 	

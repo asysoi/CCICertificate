@@ -10,6 +10,7 @@ import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.OwnCertificateHeaders;
 import cci.model.owncert.OwnCertificates;
 import cci.repository.SQLBuilder;
+import cci.service.owncert.TNVEDRegexpTemplate;
 import cci.web.controller.owncert.OwnFilter;
 import cci.web.controller.owncert.ViewWasteOwnCertificate;
 
@@ -45,6 +46,6 @@ public interface OwnCertificateDAO {
 
 	List<Report> getReport(String[] fields, SQLBuilder builder);
 
-	List<ViewWasteOwnCertificate> getWasteOwnCertificates(String reportdate, List<String> numbers);
+	List<ViewWasteOwnCertificate> getWasteOwnCertificates(String reportdate, List<TNVEDRegexpTemplate> templates);
 
 }

@@ -26,6 +26,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import cci.model.owncert.OwnCertificate;
+import cci.service.owncert.ExpRange;
+import cci.service.owncert.TNVEDRegexpTemplate;
 import cci.web.controller.owncert.ViewWasteOwnCertificate;
 
 public class XSLService {
@@ -269,7 +271,7 @@ public class XSLService {
 	* Create Excel workbook Waste Report
 	* ------------------------------------------------------------- */
 	public Workbook makeWorkbookWasteReport(List<ViewWasteOwnCertificate> certs, String filenametemplate,
-			String reportdate) {
+			String certdate) {
 		Workbook wb = null;
 		InputStream inp = null;
 		
@@ -280,7 +282,7 @@ public class XSLService {
 			
 			Row row = sheet.getRow(sheet.getFirstRowNum());
 			row.getCell(row.getFirstCellNum()).setCellValue(
-			         row.getCell(row.getFirstCellNum()).getStringCellValue() + " (" + reportdate + ")");
+			         row.getCell(row.getFirstCellNum()).getStringCellValue() + " (" + certdate + ")");
 			
 			int lnum = sheet.getLastRowNum() + 1;
 			int nrow = 1;
@@ -373,42 +375,73 @@ public class XSLService {
 
 	
 	/* --------------------------------------------------------------
-	* Get list product code numbers for Waste Report
+	* Read list regexp templates for Waste Report from excel file
 	* ------------------------------------------------------------- */
-	public List<String> getWasteNumbers(String filename) {
-		List<String> numbers = null;
+	public List<TNVEDRegexpTemplate> getWasteNumbers(String filename) {
+		List<TNVEDRegexpTemplate> templates = null;
 		InputStream inp = null;
 
 		try {
 			inp = new FileInputStream(filename);
 			Workbook wb = WorkbookFactory.create(inp);
 			Sheet sheet = wb.getSheetAt(0);
+			
+			if (templates == null)
+				templates = new ArrayList<TNVEDRegexpTemplate>();
 
 			for (int nrow = sheet.getFirstRowNum() + 1; nrow <= sheet.getLastRowNum(); nrow++) {
-				if (numbers == null)
-					numbers = new ArrayList<String>();
-				Cell cell = sheet.getRow(nrow).getCell(0);
-
-				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_NUMERIC:
-					numbers.add((int) cell.getNumericCellValue() + ""); 		
-					break;
-				case Cell.CELL_TYPE_STRING:
-					String code = cell.getStringCellValue().trim();
-					code = code.replaceAll("\\D", " ");
-					LOG.info("String code: " + code);
-					numbers.add(code);
-					break;
+				TNVEDRegexpTemplate tmpl = new TNVEDRegexpTemplate();
+				tmpl.setTnved(cellNormalize(sheet.getRow(nrow).getCell(0)));
+				tmpl.setTemplate_frst(cellNormalize(sheet.getRow(nrow).getCell(1)));
+				tmpl.setTemplate_scnd(cellNormalize(sheet.getRow(nrow).getCell(2)));
+				tmpl.setTemplate_thrd(cellNormalize(sheet.getRow(nrow).getCell(3)));
+				tmpl.setExtnved(cellNormalize(sheet.getRow(nrow).getCell(4)));
+				tmpl.setExtemplate_frst(cellNormalize(sheet.getRow(nrow).getCell(5)));
+				tmpl.setExtemplate_scnd(cellNormalize(sheet.getRow(nrow).getCell(6)));
+				tmpl.setExtemplate_thrd(cellNormalize(sheet.getRow(nrow).getCell(7)));
+				tmpl.setMin(cellNormalize(sheet.getRow(nrow).getCell(8)));
+				tmpl.setMax(cellNormalize(sheet.getRow(nrow).getCell(9)));
+				
+				ExpRange erange = new ExpRange();
+				for (int i = 10; i < 16; i+=2) {
+					String from = cellNormalize(sheet.getRow(nrow).getCell(i));
+					String to = cellNormalize(sheet.getRow(nrow).getCell(i+1));
+					
+					if (from.length() > 0 && to.length() > 0) {
+					   	erange.add(from, to);
+					}
 				}
+				if (erange.size() > 0) tmpl.setExprange(erange);
+				templates.add(tmpl);
 			}
 			inp.close();
 		} catch (Exception ex) {
-			LOG.error("Ошибка формирования списка кодов ТНВЭД: " + ex.getLocalizedMessage());
+			LOG.error("Ошибка формирования списка REGEXP шаблонов для кодов ТНВЭД: " + ex.getMessage());
+			ex.printStackTrace();
 		} finally {
 			if (inp != null)
 				try {inp.close();} catch (Exception ex) {}
 		}
 
-		return numbers;
+		return templates;
 	}
+	
+    private String cellNormalize(Cell cell) {
+        String rcell = "";	
+        
+        if (cell != null) {
+        	switch (cell.getCellType()) {
+    			case Cell.CELL_TYPE_NUMERIC:
+    				rcell = (int) cell.getNumericCellValue() + "";
+    				// LOG.info("Numeric value: " + rcell);
+    				break;
+    			case Cell.CELL_TYPE_STRING:
+    				rcell = cell.getStringCellValue().trim();
+    				// 	code = code.replaceAll("\\D", " ");
+    				break;
+        	}
+        }
+    	return rcell;
+	}
+
 }

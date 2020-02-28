@@ -196,11 +196,11 @@ public class OwnCertificateService {
 	/* --------------------------------------------------------------------------------------
 	 * Create Waste Report report  
 	 * ------------------------------------------------------------------------------------- */
-	public List<ViewWasteOwnCertificate> getWasteOwnReport(String reportdate, List<String> numbers) {
+	public List<ViewWasteOwnCertificate> getWasteOwnReport(String certdate, List<TNVEDRegexpTemplate> templates) {
 		   List<ViewWasteOwnCertificate> certs = null;
 
 		try {
-			certs = owncertificateDAO.getWasteOwnCertificates(reportdate, numbers);
+			certs = owncertificateDAO.getWasteOwnCertificates(certdate, templates);
 		} catch (Exception ex) {
 			LOG.info(ex.getMessage());
 		}
