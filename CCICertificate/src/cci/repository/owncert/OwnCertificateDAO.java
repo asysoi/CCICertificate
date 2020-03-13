@@ -40,7 +40,7 @@ public interface OwnCertificateDAO {
 
 	List<OwnCertificateExport> getCertificates(String[] fields, String orderby, String order, SQLBuilder builder);
 	
-	List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id);
+	List<OwnCertificate> getOrshaCertificates(String reportdate, String[] localities, String otd_id);
 
 	boolean updateOwnCertificateFileName(String number, String blanknumber, String datecert, String filename);
 

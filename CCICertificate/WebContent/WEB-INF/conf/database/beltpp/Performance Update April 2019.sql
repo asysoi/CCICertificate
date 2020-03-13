@@ -2,6 +2,8 @@ select tt."CERT_ID", bb.CERT_ID parent_id, tt.parentnumber from c_cert tt left j
 
 select CERT_ID, parent_id, parentnumber from c_cert;
 
+ALTER TABLE c_cert MODIFY otmetka varchar2(2000);
+
 alter table c_cert ADD parent_id integer;
 
 alter table c_cert ADD OTD_NAME varchar(255);

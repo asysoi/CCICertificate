@@ -49,9 +49,7 @@ public class OwnCertificate {
 	private List<Product> products;
 	private String otd_id;
 	private String xml;
-	
-	
-		
+			
 	@XmlTransient
 	public String getXml() {
 		return xml;
@@ -517,4 +515,5 @@ public class OwnCertificate {
 		return true;
 	}
 
+	
 }

@@ -508,23 +508,32 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	/* ---------------------------------------------------------------
 	* Get list orsha' factories for report
 	* --------------------------------------------------------------- */
-	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
-        
-		String sql = "select * from owncertificate where " 
-		          + " ((UPPER(factories) like :orsha and UPPER(customeraddress) like :orsha and type= :typeproduct) "  
-		          + " OR  (UPPER(customeraddress) like :orsha and type=:typeservice) ) " 
-		          + " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
-		          + " and otd_id = :otd_id " 
-		          + " ORDER by customername, datecert ";
+	public List<OwnCertificate> getOrshaCertificates(String reportdate, String[] localities, String otd_id) {
+        String sql="";
 		
         Map<String, Object> params = new HashMap<String,Object>();
+        params.put("typeproduct", "с/п");
+	    params.put("typeservice", "р/у");
+	    params.put("reportdate", reportdate);
+	    params.put("otd_id", Integer.valueOf(otd_id));
         
-     	params.put("orsha", "%" + query  +"%");
-     	params.put("typeproduct", "с/п");
-     	params.put("typeservice", "р/у");
-     	params.put("reportdate", reportdate);
-    	params.put("otd_id", Integer.valueOf(otd_id));
-    	
+        for  (String locality : localities) {
+		
+        	sql += (sql.isEmpty() ? "" : "\n union ") + "select * from owncertificate where " 
+        			+ " ((UPPER(factories) like :" + locality 
+        			+ " and UPPER(customeraddress) like :" + locality 
+        			+ " and type= :typeproduct) "  
+        			+ " OR  (UPPER(customeraddress) like :" + locality
+        			+"  and type=:typeservice) ) " 
+        			+ " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+        			+ " and otd_id = :otd_id ";
+		        
+        		    params.put(locality, "%" + locality  +"%");
+        }
+        sql += " ORDER by customername, datecert ";
+        
+        LOG.info("SQL Orsha Request: " + sql);
+        
 		return this.template.query(sql,	params, 
 				new OwnCertificateMapper<OwnCertificate>());
 	}
@@ -578,10 +587,8 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		if (certdate != null && certdate.length() > 0) {
 			nsql = "select * from (" + nsql + ") tbl where tbl.datecert > " + "STR_TO_DATE('" + certdate + "','%d.%m.%Y')" ;
 		}  
-		//LOG.info("SQL Waste Request: " + sql);
 		LOG.info("NSQL Waste Request: " + nsql);
 		
-		//return null;
   	    return this.template.query(nsql, 
   	    	new BeanPropertyRowMapper<ViewWasteOwnCertificate>(ViewWasteOwnCertificate.class));
 	}

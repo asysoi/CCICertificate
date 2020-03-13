@@ -6,8 +6,12 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +29,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
+import cci.model.owncert.ListOwnCertificate;
 import cci.model.owncert.OwnCertificate;
 import cci.service.owncert.ExpRange;
 import cci.service.owncert.TNVEDRegexpTemplate;
@@ -165,6 +170,82 @@ public class XSLService {
 		Workbook wb = null;
 		InputStream inp = null;
 		
+		List<ListOwnCertificate> ownlist = convertListOwnCertificatesToListOfList(certs);
+		
+		try {
+			inp = new FileInputStream(filenameTemplate);
+			wb = WorkbookFactory.create(inp);
+			Sheet sheet = wb.getSheet("Report");
+			
+			Row row = sheet.getRow(sheet.getFirstRowNum());
+			row.getCell(row.getFirstCellNum()).setCellValue(
+			         row.getCell(row.getFirstCellNum()).getStringCellValue() + " (" + reportdate + ")");
+			
+			int lnum = sheet.getLastRowNum() + 1;
+			int nrow = 1;
+			int iprev = -1;
+			int i = 0;
+
+			for (ListOwnCertificate list : ownlist) {
+				
+				for (int j = 0; j < list.size(); j++) {
+					row = sheet.createRow(lnum + i);
+					Cell cell;
+					
+				    if ( j == 0 ) {
+						cell = row.createCell(0);
+						setStyleCenter(cell, wb, true);
+						cell.setCellValue(nrow++ + ".");
+                
+						String address = list.get(j).getCustomeraddress().trim();
+						cell = row.createCell(1);
+						setStyleLeft(cell, wb, true);
+						cell.setCellValue(list.get(j).getCustomername().trim() + 
+								(address == null || address.isEmpty() ? "" :  ", " + address));
+				    }
+				    cell = row.createCell(2);
+				    setStyleCenter(cell, wb, true);
+				    cell.setCellValue(list.get(j).getDatecert().trim());
+				    cell = row.createCell(3);
+				    setStyleCenter(cell, wb, true);
+				    cell.setCellValue(list.get(j).getNumber().trim());
+				    cell = row.createCell(4);
+				    setStyleCenter(cell, wb, true);
+				    cell.setCellValue(list.get(j).getDatestart().trim());
+				    cell = row.createCell(5);
+				    setStyleCenter(cell, wb, true);
+				    cell.setCellValue(list.get(j).getDateexpire().trim());
+				    cell = row.createCell(6);
+				    setStyleCenter(cell, wb, true);
+				    cell.setCellValue(list.get(j).getType().trim());
+				    cell = row.createCell(7);
+				    setStyleCenter(cell, wb, true);
+				    cell.setCellValue(list.get(j).getProductdescription().trim());
+				    cell = row.createCell(8);
+				    setStyleCenter(cell, wb, true);
+				    cell.setCellValue(list.get(j).getFactorylist().trim());
+				    i++;
+				}
+				
+ 			    CellRangeAddress range;
+				range = new CellRangeAddress(lnum + iprev, lnum + i-1, 0, 0);
+				sheet.addMergedRegion(range);
+
+				range = new CellRangeAddress(lnum + iprev, lnum + i-1, 1, 1);
+				sheet.addMergedRegion(range);
+				iprev = i;
+				sheet.autoSizeColumn(1);
+			}
+			
+		} catch (Exception ex) {
+			LOG.error("Ошибка формирования оршанского отчета: " + ex.getLocalizedMessage());
+		} finally {
+		  if (inp != null) 
+			  try { inp.close();} catch(Exception ex) {};
+		} 
+
+
+		/* not sortable version
 		try {
 			inp = new FileInputStream(filenameTemplate);
 			wb = WorkbookFactory.create(inp);
@@ -241,9 +322,53 @@ public class XSLService {
 		} finally {
 		  if (inp != null) 
 			  try { inp.close();} catch(Exception ex) {};
-		}
+		} 
+		not sortable version */
 		
 		return wb;
+	}
+	
+	
+	/* ------------------------------------------------------------
+	 *  Convert list of certificates to list of list for sorting 
+	 * ---------------------------------------------------------- */
+	private List<ListOwnCertificate> convertListOwnCertificatesToListOfList(List<OwnCertificate> certs) {
+		List<ListOwnCertificate> ownlist = 
+				new ArrayList<ListOwnCertificate>();
+		ListOwnCertificate list = null;
+		
+		for (int i = 0; i < certs.size(); i++) {
+			if (i == 0 || !certs.get(i).getCustomername().equals(certs.get(i - 1).getCustomername()) 
+					   || i == certs.size() - 1) {
+				if (list != null )  
+					ownlist.add(list);
+				if  (i < certs.size() - 1) 
+					list = new ListOwnCertificate();				
+			} 
+			list.add(certs.get(i));
+		}
+		
+		Collections.sort(ownlist, new SortByDate());
+		return ownlist;
+	}
+
+	class SortByDate implements Comparator<ListOwnCertificate> 
+	{ 
+	    public int compare(ListOwnCertificate a, ListOwnCertificate b) 
+	    { 
+	        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+	        Date date1 = null ;
+	        Date date2 = null;
+	        
+			try {
+				date1 = sdf.parse(a.get(0).getDatecert());
+				date2 = sdf.parse(b.get(0).getDatecert());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        return date1.compareTo(date2); 
+	    }
 	}
 	
 	/* ------------------------------------------------------------

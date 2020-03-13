@@ -494,7 +494,9 @@ public class OwnCertificateController {
 				otd_id = certService.getACL().get("ROLE_VITEBSK"); 
 			}
 			
-			List<OwnCertificate> certs = ownCertService.getOrshaCertificates(reportdate, "ОРША", otd_id);
+			String[] localities = {"ОРША", "БАРАНЬ", "БОЛБАСОВО", "ОРЕХОВСК"};
+			
+			List<OwnCertificate> certs = ownCertService.getOrshaCertificates(reportdate, localities, otd_id);
 
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition", "attachment; filename=certificates.xlsx");

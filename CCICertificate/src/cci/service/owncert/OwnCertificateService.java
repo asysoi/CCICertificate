@@ -182,11 +182,11 @@ public class OwnCertificateService {
 	/* --------------------------------------------------------------------------------------
 	 * Create Orsha report  
 	 * ------------------------------------------------------------------------------------- */
-	public List<OwnCertificate> getOrshaCertificates(String reportdate, String query, String otd_id) {
+	public List<OwnCertificate> getOrshaCertificates(String reportdate, String[] localities, String otd_id) {
 		List<OwnCertificate> certs = null;
 
 		try {
-			certs = owncertificateDAO.getOrshaCertificates(reportdate, query, otd_id);
+			certs = owncertificateDAO.getOrshaCertificates(reportdate, localities, otd_id);
 		} catch (Exception ex) {
 			LOG.info(ex.getMessage());
 		}
