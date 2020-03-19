@@ -506,10 +506,47 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	}
 
 	/* ---------------------------------------------------------------
+	* Get list orsha' companies without factories on orsha's region
+	* --------------------------------------------------------------- */
+	public List<OwnCertificate> getOrshaOutCertificates(String reportdate, String[] localities, String otd_id) {
+        String sql="";
+        String whereFactories = "";
+        String whereCustomerAddress = "";
+		
+        Map<String, Object> params = new HashMap<String,Object>();
+        params.put("typeproduct", "с/п");
+	    params.put("reportdate", reportdate);
+	    params.put("otd_id", Integer.valueOf(otd_id));
+        
+        for  (String locality : localities) {
+        	params.put(locality, "%" + locality  +"%");
+        	whereFactories += (whereFactories.isEmpty() ? "" : " OR ") +  "UPPER(factories) like :" + locality;
+        	whereCustomerAddress += (whereCustomerAddress.isEmpty() ? "" : " OR ") 
+        						    +  "UPPER(customeraddress) like :" + locality;
+        }
+        
+        sql = "select * from owncertificate where " 
+    			+ " ((" + whereCustomerAddress + ") AND NOT (" + whereFactories + ") AND type= :typeproduct)"  
+    			+ " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+    			+ " AND dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+    			+ " AND otd_id = :otd_id ";
+	            
+        sql += " ORDER by customername, datecert ";
+        
+        LOG.info("SQL Orsha Out Request: " + sql);
+        
+		return this.template.query(sql,	params, 
+				new OwnCertificateMapper<OwnCertificate>());
+	}
+
+	
+	/* ---------------------------------------------------------------
 	* Get list orsha' factories for report
 	* --------------------------------------------------------------- */
 	public List<OwnCertificate> getOrshaCertificates(String reportdate, String[] localities, String otd_id) {
         String sql="";
+        String whereFactories = "";
+        String whereCustomerAddress = "";
 		
         Map<String, Object> params = new HashMap<String,Object>();
         params.put("typeproduct", "с/п");
@@ -518,18 +555,19 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	    params.put("otd_id", Integer.valueOf(otd_id));
         
         for  (String locality : localities) {
-		
-        	sql += (sql.isEmpty() ? "" : "\n union ") + "select * from owncertificate where " 
-        			+ " ((UPPER(factories) like :" + locality 
-        			+ " and UPPER(customeraddress) like :" + locality 
-        			+ " and type= :typeproduct) "  
-        			+ " OR  (UPPER(customeraddress) like :" + locality
-        			+"  and type=:typeservice) ) " 
-        			+ " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y')  and dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
-        			+ " and otd_id = :otd_id ";
-		        
-        		    params.put(locality, "%" + locality  +"%");
+        	params.put(locality, "%" + locality  +"%");
+        	whereFactories += (whereFactories.isEmpty() ? "" : " OR ") +  "UPPER(factories) like :" + locality;
+        	whereCustomerAddress += (whereCustomerAddress.isEmpty() ? "" : " OR ") 
+        						    +  "UPPER(customeraddress) like :" + locality;
         }
+        
+        sql = "select * from owncertificate where " 
+    			+ " (((" + whereCustomerAddress + ") AND (" + whereFactories + ") AND type= :typeproduct)"  
+    			+ " OR ((" + whereCustomerAddress + ") AND type=:typeservice))" 
+    			+ " AND datestart <= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+    			+ " AND dateexpire >= STR_TO_DATE(:reportdate,'%d.%m.%Y') "
+    			+ " AND otd_id = :otd_id ";
+	            
         sql += " ORDER by customername, datecert ";
         
         LOG.info("SQL Orsha Request: " + sql);
@@ -538,6 +576,8 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 				new OwnCertificateMapper<OwnCertificate>());
 	}
 
+	
+	
 	/* ---------------------------------------------------------------
 	 * Get list waste certificates for report
 	 * --------------------------------------------------------------- */

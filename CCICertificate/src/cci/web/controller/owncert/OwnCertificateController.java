@@ -497,15 +497,17 @@ public class OwnCertificateController {
 			String[] localities = {"ОРША", "БАРАНЬ", "БОЛБАСОВО", "ОРЕХОВСК"};
 			
 			List<OwnCertificate> certs = ownCertService.getOrshaCertificates(reportdate, localities, otd_id);
+			List<OwnCertificate> outcerts = ownCertService.getOrshaOutCertificates(reportdate, localities, otd_id);
 
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition", "attachment; filename=certificates.xlsx");
 			
-			String filetemplate = request.getSession().getServletContext().getRealPath(relativeWebPath) 
-									+ System.getProperty("file.separator") 
-									+ "ReportOrsha.xlsx";
+			String filetemplate = request.getSession().getServletContext().getRealPath(relativeWebPath)
+					+ System.getProperty("file.separator") 
+					+ "ReportOrsha.xlsx";
 			
-			(new XSLService()).makeWorkbookReportOrsha(certs, filetemplate, reportdate).write(response.getOutputStream());
+			
+			(new XSLService()).makeWorkbookReportOrsha(certs, outcerts, filetemplate, reportdate).write(response.getOutputStream());
 			response.flushBuffer();
 			LOG.debug("Download report finished...");
 

@@ -193,6 +193,17 @@ public class OwnCertificateService {
 		return certs;
 	}
 	
+	public List<OwnCertificate> getOrshaOutCertificates(String reportdate, String[] localities, String otd_id) {
+		List<OwnCertificate> outcerts = null;
+
+		try {
+			outcerts = owncertificateDAO.getOrshaOutCertificates(reportdate, localities, otd_id);
+		} catch (Exception ex) {
+			LOG.info(ex.getMessage());
+		}
+		return outcerts;
+	}
+	
 	/* --------------------------------------------------------------------------------------
 	 * Create Waste Report report  
 	 * ------------------------------------------------------------------------------------- */
@@ -248,5 +259,4 @@ public class OwnCertificateService {
 		return owncertificateDAO.updateOwnCertificateFileName(number, blanknumber, datecert, filename);
 	}
 
-	
 }

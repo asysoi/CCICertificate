@@ -166,76 +166,91 @@ public class XSLService {
 	/* --------------------------------------------------------------
 	* Create Excel workbook Orsha Report
 	* ------------------------------------------------------------- */
-	public Workbook makeWorkbookReportOrsha(List<OwnCertificate> certs, String filenameTemplate, String reportdate) {
+	public Workbook makeWorkbookReportOrsha(List<OwnCertificate> certs, List<OwnCertificate> outcerts, String filenameTemplate, String reportdate) {
 		Workbook wb = null;
 		InputStream inp = null;
 		
-		List<ListOwnCertificate> ownlist = convertListOwnCertificatesToListOfList(certs);
-		
+//      Sorting by certificate date
+//		
+//		List<ListOwnCertificate> ownlist = convertListOwnCertificatesToListOfList(certs);
+//		try {
+//			inp = new FileInputStream(filenameTemplate);
+//			wb = WorkbookFactory.create(inp);
+//			Sheet sheet = wb.getSheet("Report");
+//			
+//			Row row = sheet.getRow(sheet.getFirstRowNum());
+//			row.getCell(row.getFirstCellNum()).setCellValue(
+//			         row.getCell(row.getFirstCellNum()).getStringCellValue() + " (" + reportdate + ")");
+//			
+//			int lnum = sheet.getLastRowNum() + 1;
+//			int nrow = 1;
+//			int iprev = -1;
+//			int i = 0;
+//
+//			for (ListOwnCertificate list : ownlist) {
+//				
+//				for (int j = 0; j < list.size(); j++) {
+//					row = sheet.createRow(lnum + i);
+//					Cell cell;
+//					
+//				    if ( j == 0 ) {
+//						cell = row.createCell(0);
+//						setStyleCenter(cell, wb, true);
+//						cell.setCellValue(nrow++ + ".");
+//                
+//						String address = list.get(j).getCustomeraddress().trim();
+//						cell = row.createCell(1);
+//						setStyleLeft(cell, wb, true);
+//						cell.setCellValue(list.get(j).getCustomername().trim() + 
+//								(address == null || address.isEmpty() ? "" :  ", " + address));
+//				    }
+//				    cell = row.createCell(2);
+//				    setStyleCenter(cell, wb, true);
+//				    cell.setCellValue(list.get(j).getDatecert().trim());
+//				    cell = row.createCell(3);
+//				    setStyleCenter(cell, wb, true);
+//				    cell.setCellValue(list.get(j).getNumber().trim());
+//				    cell = row.createCell(4);
+//				    setStyleCenter(cell, wb, true);
+//				    cell.setCellValue(list.get(j).getDatestart().trim());
+//				    cell = row.createCell(5);
+//				    setStyleCenter(cell, wb, true);
+//				    cell.setCellValue(list.get(j).getDateexpire().trim());
+//				    cell = row.createCell(6);
+//				    setStyleCenter(cell, wb, true);
+//				    cell.setCellValue(list.get(j).getType().trim());
+//				    cell = row.createCell(7);
+//				    setStyleCenter(cell, wb, true);
+//				    cell.setCellValue(list.get(j).getProductdescription().trim());
+//				    cell = row.createCell(8);
+//				    setStyleCenter(cell, wb, true);
+//				    cell.setCellValue(list.get(j).getFactorylist().trim());
+//				    i++;
+//				}
+//				
+// 			    CellRangeAddress range;
+//				range = new CellRangeAddress(lnum + iprev, lnum + i-1, 0, 0);
+//				sheet.addMergedRegion(range);
+//
+//				range = new CellRangeAddress(lnum + iprev, lnum + i-1, 1, 1);
+//				sheet.addMergedRegion(range);
+//				iprev = i;
+//				sheet.autoSizeColumn(1);
+//			}
+//			
+//		} catch (Exception ex) {
+//			LOG.error("Ошибка формирования оршанского отчета: " + ex.getLocalizedMessage());
+//		} finally {
+//		  if (inp != null) 
+//			  try { inp.close();} catch(Exception ex) {};
+//		} 
+
 		try {
 			inp = new FileInputStream(filenameTemplate);
 			wb = WorkbookFactory.create(inp);
-			Sheet sheet = wb.getSheet("Report");
 			
-			Row row = sheet.getRow(sheet.getFirstRowNum());
-			row.getCell(row.getFirstCellNum()).setCellValue(
-			         row.getCell(row.getFirstCellNum()).getStringCellValue() + " (" + reportdate + ")");
-			
-			int lnum = sheet.getLastRowNum() + 1;
-			int nrow = 1;
-			int iprev = -1;
-			int i = 0;
-
-			for (ListOwnCertificate list : ownlist) {
-				
-				for (int j = 0; j < list.size(); j++) {
-					row = sheet.createRow(lnum + i);
-					Cell cell;
-					
-				    if ( j == 0 ) {
-						cell = row.createCell(0);
-						setStyleCenter(cell, wb, true);
-						cell.setCellValue(nrow++ + ".");
-                
-						String address = list.get(j).getCustomeraddress().trim();
-						cell = row.createCell(1);
-						setStyleLeft(cell, wb, true);
-						cell.setCellValue(list.get(j).getCustomername().trim() + 
-								(address == null || address.isEmpty() ? "" :  ", " + address));
-				    }
-				    cell = row.createCell(2);
-				    setStyleCenter(cell, wb, true);
-				    cell.setCellValue(list.get(j).getDatecert().trim());
-				    cell = row.createCell(3);
-				    setStyleCenter(cell, wb, true);
-				    cell.setCellValue(list.get(j).getNumber().trim());
-				    cell = row.createCell(4);
-				    setStyleCenter(cell, wb, true);
-				    cell.setCellValue(list.get(j).getDatestart().trim());
-				    cell = row.createCell(5);
-				    setStyleCenter(cell, wb, true);
-				    cell.setCellValue(list.get(j).getDateexpire().trim());
-				    cell = row.createCell(6);
-				    setStyleCenter(cell, wb, true);
-				    cell.setCellValue(list.get(j).getType().trim());
-				    cell = row.createCell(7);
-				    setStyleCenter(cell, wb, true);
-				    cell.setCellValue(list.get(j).getProductdescription().trim());
-				    cell = row.createCell(8);
-				    setStyleCenter(cell, wb, true);
-				    cell.setCellValue(list.get(j).getFactorylist().trim());
-				    i++;
-				}
-				
- 			    CellRangeAddress range;
-				range = new CellRangeAddress(lnum + iprev, lnum + i-1, 0, 0);
-				sheet.addMergedRegion(range);
-
-				range = new CellRangeAddress(lnum + iprev, lnum + i-1, 1, 1);
-				sheet.addMergedRegion(range);
-				iprev = i;
-				sheet.autoSizeColumn(1);
-			}
+			fillInOrshaReport (certs, wb, "Report", reportdate);
+			fillInOrshaReport (outcerts, wb,  "out", reportdate);
 			
 		} catch (Exception ex) {
 			LOG.error("Ошибка формирования оршанского отчета: " + ex.getLocalizedMessage());
@@ -243,92 +258,81 @@ public class XSLService {
 		  if (inp != null) 
 			  try { inp.close();} catch(Exception ex) {};
 		} 
-
-
-		/* not sortable version
-		try {
-			inp = new FileInputStream(filenameTemplate);
-			wb = WorkbookFactory.create(inp);
-			Sheet sheet = wb.getSheet("Report");
-			
-			Row row = sheet.getRow(sheet.getFirstRowNum());
-			row.getCell(row.getFirstCellNum()).setCellValue(
-			         row.getCell(row.getFirstCellNum()).getStringCellValue() + " (" + reportdate + ")");
-			
-			int lnum = sheet.getLastRowNum() + 1;
-			int nrow = 1;
-			int iprev = -1;
-			int i;
-
-			for (i = 0; i < certs.size(); i++) {
-				row = sheet.createRow(lnum + i);
-				Cell cell;
-
-				if (i == 0 || !certs.get(i).getCustomername().equals(certs.get(i - 1).getCustomername())) {
-					cell = row.createCell(0);
-					setStyleCenter(cell, wb, true);
-					cell.setCellValue(nrow++ + ".");
-                    
-					String address = certs.get(i).getCustomeraddress().trim();
-					cell = row.createCell(1);
-					setStyleLeft(cell, wb, true);
-					cell.setCellValue(certs.get(i).getCustomername().trim() + 
-							(address == null || address.isEmpty() ? "" :  ", " + address));
-
-					if (iprev != i - 1) {
-						CellRangeAddress range;
-						range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 0, 0);
-						sheet.addMergedRegion(range);
-
-						range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 1, 1);
-						sheet.addMergedRegion(range);
-					}
-					iprev = i;
-				}
-
-				cell = row.createCell(2);
-				setStyleCenter(cell, wb, true);
-				cell.setCellValue(certs.get(i).getDatecert().trim());
-				cell = row.createCell(3);
-				setStyleCenter(cell, wb, true);
-				cell.setCellValue(certs.get(i).getNumber().trim());
-				cell = row.createCell(4);
-				setStyleCenter(cell, wb, true);
-				cell.setCellValue(certs.get(i).getDatestart().trim());
-				cell = row.createCell(5);
-				setStyleCenter(cell, wb, true);
-				cell.setCellValue(certs.get(i).getDateexpire().trim());
-				cell = row.createCell(6);
-				setStyleCenter(cell, wb, true);
-				cell.setCellValue(certs.get(i).getType().trim());
-				cell = row.createCell(7);
-				setStyleCenter(cell, wb, true);
-				cell.setCellValue(certs.get(i).getProductdescription().trim());
-				cell = row.createCell(8);
-				setStyleCenter(cell, wb, true);
-				cell.setCellValue(certs.get(i).getFactorylist().trim());
-			}
-			if (iprev != i - 1) {
-				CellRangeAddress range;
-				range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 0, 0);
-				sheet.addMergedRegion(range);
-
-				range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 1, 1);
-				sheet.addMergedRegion(range);
-			}
-			sheet.autoSizeColumn(2);
-		} catch (Exception ex) {
-			LOG.error("Ошибка формирования оршанского отчета: " + ex.getLocalizedMessage());
-		} finally {
-		  if (inp != null) 
-			  try { inp.close();} catch(Exception ex) {};
-		} 
-		not sortable version */
-		
 		return wb;
 	}
 	
 	
+	private void fillInOrshaReport(List<OwnCertificate> certs, Workbook wb, String sheetName, String reportdate ) {
+
+		Sheet sheet = wb.getSheet(sheetName);
+		Row row = sheet.getRow(sheet.getFirstRowNum());
+		row.getCell(row.getFirstCellNum()).setCellValue(
+		         row.getCell(row.getFirstCellNum()).getStringCellValue() + " (" + reportdate + ")");
+		
+		int lnum = sheet.getLastRowNum() + 1;
+		int nrow = 1;
+		int iprev = -1;
+		int i;
+
+		for (i = 0; i < certs.size(); i++) {
+			row = sheet.createRow(lnum + i);
+			Cell cell;
+
+			if (i == 0 || !certs.get(i).getCustomername().equals(certs.get(i - 1).getCustomername())) {
+				cell = row.createCell(0);
+				setStyleCenter(cell, wb, true);
+				cell.setCellValue(nrow++ + ".");
+                
+				String address = certs.get(i).getCustomeraddress().trim();
+				cell = row.createCell(1);
+				setStyleLeft(cell, wb, true);
+				cell.setCellValue(certs.get(i).getCustomername().trim() + 
+						(address == null || address.isEmpty() ? "" :  ", " + address));
+
+				if (iprev != i - 1) {
+					CellRangeAddress range;
+					range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 0, 0);
+					sheet.addMergedRegion(range);
+
+					range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 1, 1);
+					sheet.addMergedRegion(range);
+				}
+				iprev = i;
+			}
+
+			cell = row.createCell(2);
+			setStyleCenter(cell, wb, true);
+			cell.setCellValue(certs.get(i).getDatecert().trim());
+			cell = row.createCell(3);
+			setStyleCenter(cell, wb, true);
+			cell.setCellValue(certs.get(i).getNumber().trim());
+			cell = row.createCell(4);
+			setStyleCenter(cell, wb, true);
+			cell.setCellValue(certs.get(i).getDatestart().trim());
+			cell = row.createCell(5);
+			setStyleCenter(cell, wb, true);
+			cell.setCellValue(certs.get(i).getDateexpire().trim());
+			cell = row.createCell(6);
+			setStyleCenter(cell, wb, true);
+			cell.setCellValue(certs.get(i).getType().trim());
+			cell = row.createCell(7);
+			setStyleCenter(cell, wb, true);
+			cell.setCellValue(certs.get(i).getProductdescription().trim());
+			cell = row.createCell(8);
+			setStyleCenter(cell, wb, true);
+			cell.setCellValue(certs.get(i).getFactorylist().trim());
+		}
+		if (iprev != i - 1) {
+			CellRangeAddress range;
+			range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 0, 0);
+			sheet.addMergedRegion(range);
+
+			range = new CellRangeAddress(lnum + iprev, lnum + i - 1, 1, 1);
+			sheet.addMergedRegion(range);
+		}
+		sheet.autoSizeColumn(2);
+	}
+
 	/* ------------------------------------------------------------
 	 *  Convert list of certificates to list of list for sorting 
 	 * ---------------------------------------------------------- */

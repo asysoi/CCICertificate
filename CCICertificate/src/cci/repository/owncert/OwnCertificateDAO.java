@@ -48,4 +48,6 @@ public interface OwnCertificateDAO {
 
 	List<ViewWasteOwnCertificate> getWasteOwnCertificates(String reportdate, List<TNVEDRegexpTemplate> templates);
 
+	List<OwnCertificate> getOrshaOutCertificates(String reportdate, String[] localities, String otd_id);
+
 }
