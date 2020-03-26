@@ -1,8 +1,12 @@
  package cci.repository.owncert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -252,44 +256,114 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			LOG.info("Добавлены продукты: " + updateCounts.toString());
 		}
 
+		insertProductIntoProductDenormTable(cert.getProducts());
+		
 		String sql_xml = "insert into ownfiles (id_certificate, xml) values (?, ?)";
 		template.getJdbcOperations().update(sql_xml, new Object[] { id, cert.getXml() });
 	}
 
 	/* -------------------------------------------
-	*  Get id of beltpp branch
-	* ------------------------------------------- */
+	 *  Get id of beltpp branch
+	 * -------------------------------------------
+	 */
 	private int getBeltppID(OwnCertificate cert) {
-		String sql = "SELECT id FROM beltpp WHERE name = '"
-				+ cert.getBeltpp().getName() + "' Limit 1";
+		String sql = "SELECT id FROM beltpp WHERE name = '" + cert.getBeltpp().getName() + "' Limit 1";
 		int id = 0;
 		try {
-			id = this.template.getJdbcOperations().queryForObject(sql,
-					Integer.class);
+			id = this.template.getJdbcOperations().queryForObject(sql, Integer.class);
 		} catch (Exception ex) {
-			System.out
-					.println(ex.getClass().getName() + ": " + ex.getMessage());
+			System.out.println(ex.getClass().getName() + ": " + ex.getMessage());
 		}
-		
+
 		if (id == 0) {
 			sql = "insert into beltpp(name, address, unp) values(:name, :address, :unp)";
-			SqlParameterSource parameters = new BeanPropertySqlParameterSource(
-					cert.getBeltpp());
+			SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert.getBeltpp());
 			GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 			id = 0;
 
-			int row = template.update(sql, parameters, keyHolder,
-					new String[] { "id" });
+			int row = template.update(sql, parameters, keyHolder, new String[] { "id" });
 			id = keyHolder.getKey().intValue();
 		}
 		return id;
 	}
+	
+	// ----------------------------------------------------
+	// Service methods to load OwnProductDenorm table
+	// ----------------------------------------------------
+	private void insertProductIntoProductDenormTable(List<Product> products) {
 
-	/* ---------------------------------------------------------------
+			String sql = "insert into ownproductdenorm(id_certificate, code, nncode) "
+					     + " values ( :id, :code, :nncode)";
+			
+			List<SqlParameterSource> lbatch = new ArrayList<SqlParameterSource>(); 
+			
+			for (Product product : products) {
+                   
+				String[] codes = split(product.getCode());
+
+				if (codes.length > 1) {
+					for (String code : codes) {
+						Long nncode = Long.parseLong(code.replaceAll("\\D+", ""));
+						// product.setNncode(nncode);
+						lbatch.add(new BeanPropertySqlParameterSource(product));	
+					}
+				} else if (product.getCode().trim().length() > 0) {
+					Long nncode = null;
+					try {
+						nncode = Long.parseLong(product.getCode().trim().replaceAll("\\D+", ""));
+					} catch (Exception ex) {
+						System.out.println("Error parse code to nncode: [" + product.getCode() + "]");
+					}
+					if (nncode == null) {
+						codes = split(product.getName());
+						if (codes.length > 0) {
+							for (String code : codes) {
+								nncode = Long.parseLong(code.replaceAll("\\D+", ""));
+								// product.setNncode(nncode);
+								lbatch.add(new BeanPropertySqlParameterSource(product));	
+							}
+						}
+					} else {
+						// product.setNncode(nncode);
+						lbatch.add(new BeanPropertySqlParameterSource(product));	
+					}
+				} else {
+					codes = split(product.getName());
+					if (codes.length > 0) {
+						for (String code : codes) {
+							Long nncode = Long.parseLong(code.replaceAll("\\D+", ""));
+							// product.setNncode(nncode);
+							lbatch.add(new BeanPropertySqlParameterSource(product));	
+						}
+					}
+				}
+			}
+			SqlParameterSource[] batch = (SqlParameterSource[])lbatch.toArray();
+			int[] updateCounts = template.batchUpdate(sql, batch);
+
+	}
+
+	private String[] split(String str) {
+		List<String> strs = new ArrayList<String>();
+		Pattern pattern = Pattern
+				.compile("[0-9]{4}[^0-9,^\\,]{0,2}[0-9]{2}[^0-9,^\\,]{0,2}[0-9]{3}[^0-9,^\\,]{0,2}[0-9]");
+		Matcher matcher = pattern.matcher(str);
+
+		while (matcher.find()) {
+			int start = matcher.start();
+			int end = matcher.end();
+			strs.add(str.substring(start, end));
+		}
+		return strs.toArray(new String[strs.size()]);
+	}
+
+	/*
+	 * ---------------------------------------------------------------
 	 * 
 	 * Update certificate
 	 * 
-	 * --------------------------------------------------------------- */
+	 * ---------------------------------------------------------------
+	 */
 	public OwnCertificate updateOwnCertificate(OwnCertificate cert) {
 		OwnCertificate oldcert = null;
 		try {
@@ -297,16 +371,16 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			LOG.info("Start update transaction = " + active);
 
 			String sql = "select * from owncertificate WHERE number = ? and blanknumber = ? and datecert = STR_TO_DATE(?,'%d.%m.%Y') and otd_id= ?";
-			oldcert = template.getJdbcOperations().queryForObject(sql,
-					new Object[] { cert.getNumber().trim(), cert.getBlanknumber().trim(),
-							cert.getDatecert(), cert.getOtd_id() },
+			oldcert = template.getJdbcOperations().queryForObject(sql, new Object[] { cert.getNumber().trim(),
+					cert.getBlanknumber().trim(), cert.getDatecert(), cert.getOtd_id() },
 					new OwnCertificateMapper<OwnCertificate>());
 
 		} catch (Exception ex) {
 			throw (new NotFoundCertificateException(
-					"Сертификат для обновления в базе не найден. Сертификат должен быть добавлен  другой командой: " + ex.getLocalizedMessage()));
+					"Сертификат для обновления в базе не найден. Сертификат должен быть добавлен  другой командой: "
+							+ ex.getLocalizedMessage()));
 		}
-		
+
 		if (oldcert == null) {
 			throw (new NotFoundCertificateException(
 					"Не удалось найти в базе cертификат " + cert.getNumber() + " на бланке " + cert.getBlanknumber()));
@@ -347,7 +421,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 							+ ex.getLocalizedMessage()));
 		}
 		return cert;
-		
+
 	}
 
 	/* ---------------------------------------------------------------
@@ -633,5 +707,5 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
   	    	new BeanPropertyRowMapper<ViewWasteOwnCertificate>(ViewWasteOwnCertificate.class));
 	}
 	
-	
+
 }

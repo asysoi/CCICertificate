@@ -13,6 +13,7 @@ public class Product {
 	private String name;
 	private String code;
 	private String ncode;
+	
 
 	public void init(int id, String number, String name, String code) {
 		this.id = id;
