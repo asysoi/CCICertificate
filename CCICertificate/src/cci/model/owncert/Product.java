@@ -13,8 +13,8 @@ public class Product {
 	private String name;
 	private String code;
 	private String ncode;
+	private Long nncode;
 	
-
 	public void init(int id, String number, String name, String code) {
 		this.id = id;
 		this.number = number;
@@ -22,6 +22,16 @@ public class Product {
 		this.code = code;
 	}
 
+	@XmlTransient
+	public Long getNncode() {
+		return nncode;
+	}
+
+	public void setNncode(Long nncode) {
+		this.nncode = nncode;
+	}
+
+	
 	@XmlTransient
 	public int getId() {
 		return id;

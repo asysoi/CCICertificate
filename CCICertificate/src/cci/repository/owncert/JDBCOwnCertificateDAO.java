@@ -292,55 +292,57 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ----------------------------------------------------
 	private void insertProductIntoProductDenormTable(List<Product> products) {
 
-			String sql = "insert into ownproductdenorm(id_certificate, code, nncode) "
-					     + " values ( :id, :code, :nncode)";
-			
-			List<SqlParameterSource> lbatch = new ArrayList<SqlParameterSource>(); 
-			
-			for (Product product : products) {
-                   
-				String[] codes = split(product.getCode());
+		String sql = "insert into ownproductdenorm(id_certificate, code, nncode) " + " values ( :id, :code, :nncode)";
 
-				if (codes.length > 1) {
-					for (String code : codes) {
-						Long nncode = Long.parseLong(code.replaceAll("\\D+", ""));
-						// product.setNncode(nncode);
-						lbatch.add(new BeanPropertySqlParameterSource(product));	
-					}
-				} else if (product.getCode().trim().length() > 0) {
-					Long nncode = null;
-					try {
-						nncode = Long.parseLong(product.getCode().trim().replaceAll("\\D+", ""));
-					} catch (Exception ex) {
-						System.out.println("Error parse code to nncode: [" + product.getCode() + "]");
-					}
-					if (nncode == null) {
-						codes = split(product.getName());
-						if (codes.length > 0) {
-							for (String code : codes) {
-								nncode = Long.parseLong(code.replaceAll("\\D+", ""));
-								// product.setNncode(nncode);
-								lbatch.add(new BeanPropertySqlParameterSource(product));	
-							}
-						}
-					} else {
-						// product.setNncode(nncode);
-						lbatch.add(new BeanPropertySqlParameterSource(product));	
-					}
-				} else {
+		List<SqlParameterSource> lbatch = new ArrayList<SqlParameterSource>();
+
+		for (Product product : products) {
+
+			String[] codes = split(product.getCode());
+
+			if (codes.length > 1) {
+				for (String code : codes) {
+					Long nncode = Long.parseLong(code.replaceAll("\\D+", ""));
+					lbatch.add(new BeanPropertySqlParameterSource(cloneProduct(product, nncode)));
+				}
+			} else if (product.getCode().trim().length() > 0) {
+				Long nncode = null;
+				try {
+					nncode = Long.parseLong(product.getCode().trim().replaceAll("\\D+", ""));
+				} catch (Exception ex) {
+					System.out.println("Error parse code to nncode: [" + product.getCode() + "]");
+				}
+				if (nncode == null) {
 					codes = split(product.getName());
 					if (codes.length > 0) {
 						for (String code : codes) {
-							Long nncode = Long.parseLong(code.replaceAll("\\D+", ""));
-							// product.setNncode(nncode);
-							lbatch.add(new BeanPropertySqlParameterSource(product));	
+							nncode = Long.parseLong(code.replaceAll("\\D+", ""));
+							lbatch.add(new BeanPropertySqlParameterSource(cloneProduct(product, nncode)));
 						}
+					}
+				} else {
+					lbatch.add(new BeanPropertySqlParameterSource(cloneProduct(product, nncode)));
+				}
+			} else {
+				codes = split(product.getName());
+				if (codes.length > 0) {
+					for (String code : codes) {
+						Long nncode = Long.parseLong(code.replaceAll("\\D+", ""));
+						lbatch.add(new BeanPropertySqlParameterSource(cloneProduct(product, nncode)));
 					}
 				}
 			}
-			SqlParameterSource[] batch = (SqlParameterSource[])lbatch.toArray();
-			int[] updateCounts = template.batchUpdate(sql, batch);
+		}
+		SqlParameterSource[] batch = new SqlParameterSource[lbatch.size()];
+		lbatch.toArray(batch);
+		int[] updateCounts = template.batchUpdate(sql, batch);
+	}
 
+	private Product cloneProduct(Product product, Long nncode) {
+		Product ret = new Product();
+		ret.init(product.getId(), product.getNumber(), product.getName(), product.getCode());
+		ret.setNncode(nncode);
+		return ret;
 	}
 
 	private String[] split(String str) {
@@ -413,6 +415,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 				template.getJdbcOperations().update("delete from ownproduct where id_certificate = ?", cert.getId());
 				template.getJdbcOperations().update("delete from ownbranch where id_certificate = ?", cert.getId());
 				template.getJdbcOperations().update("delete from ownfactory where id_certificate = ?", cert.getId());
+				template.getJdbcOperations().update("delete from ownproductdenorm where id_certificate = ?", cert.getId());
 				saveCertificateData(cert);
 			}
 		} catch (Exception ex) {
@@ -516,6 +519,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 					new Object[] { number.trim(), blanknumber.trim(), datecert.trim(), otd_id },
 					new OwnCertificateMapper<OwnCertificate>());
             
+			template.getJdbcOperations().update("delete from ownproductdenorm where id_certificate = ?", cert.getId());
 			template.getJdbcOperations().update("delete from ownproduct where id_certificate = ?", cert.getId());
 			template.getJdbcOperations().update("delete from ownbranch where id_certificate = ?", cert.getId());
 			template.getJdbcOperations().update("delete from ownfactory where id_certificate = ?", cert.getId());
