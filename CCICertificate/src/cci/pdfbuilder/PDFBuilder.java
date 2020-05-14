@@ -109,6 +109,9 @@ public abstract class PDFBuilder {
 		drawStamp(writer, stamps);
 	}
 
+   /*----------------------------------------------------------------------------------------
+	  Service methods
+	----------------------------------------------------------------------------------------- */
 	public void makeBorderedTexBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
 			DocumentException {
@@ -142,26 +145,32 @@ public abstract class PDFBuilder {
 		img.restoreState();
 	}
 
-	public void makeTexBoxtInAbsolutePosition(PdfWriter writer, String text,
-			BoxConfig config) throws IOException, DocumentException {
-		//System.out.println("makeTexBoxtInAbsolutePosition");
-		//System.out.println(config);
+	public void makeTexBoxtInAbsolutePosition(PdfWriter writer, String text, BoxConfig config)
+			throws IOException, DocumentException {
 		PdfContentByte canvas = writer.getDirectContent();
+		text = text.replaceAll("\\s+", " ");
 		canvas.saveState();
 		canvas.beginText();
 		canvas.setTextRenderingMode(PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE);
 		canvas.setLineWidth(config.getWidthTextLine());
-		Rectangle rect = new Rectangle(Utilities.millimetersToPoints(config
-				.getXl()), Utilities.millimetersToPoints(config.getYl()),
-				Utilities.millimetersToPoints(config.getXr()),
+		Rectangle rect = new Rectangle(Utilities.millimetersToPoints(config.getXl()),
+				Utilities.millimetersToPoints(config.getYl()), Utilities.millimetersToPoints(config.getXr()),
 				Utilities.millimetersToPoints(config.getYr()));
-
-		Phrase ptext = new Phrase(text, new Font(config.getBf(),
-				config.getFontSize()));
-
+		Font fnt = new Font(config.getBf(), config.getFontSize());
 		ColumnText column = new ColumnText(canvas);
-		column.setSimpleColumn(ptext, rect.getLeft(), rect.getBottom(),
-				rect.getRight(), rect.getTop(), config.getLeading(),
+        
+		// Calculate max font size to fitt all text into given box
+		float fntSize = column.fitText(fnt, text, rect, config.getFontSize(), column.getRunDirection());
+		float leading = config.getLeading();
+
+		if (fntSize < config.getFontSize()) {
+			System.out.println("Set font size: " + fntSize);
+			fnt.setSize(fntSize);
+			leading = fntSize;   // size between baseline, default value is 1,5 font size  
+		}
+		
+		Phrase ptext = new Phrase(text, fnt);
+		column.setSimpleColumn(ptext, rect.getLeft(), rect.getBottom(), rect.getRight(), rect.getTop(), leading,
 				config.getgAlign());
 		column.go();
 		canvas.endText();
