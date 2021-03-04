@@ -48,6 +48,15 @@ public class OwnCertificateRestFulController {
 	private XMLService xmlService;
 
 	/* -----------------------------------------
+	 * Fill in ownproductdenorm table from ownproduct
+	 * ----------------------------------------- */
+	@RequestMapping(value="rownfillindenorm.do",  method = RequestMethod.GET, headers = "Accept=application/json,application/xml")
+	@ResponseStatus (HttpStatus.OK)
+	public String fillInOwnProductDenorm() {
+		return service.fillInOwnProductDenorm();
+	}
+	
+	/* -----------------------------------------
 	 * Get list of all certificates by filter
 	 * ----------------------------------------- */
 	@RequestMapping(value="rowncerts.do",  method = RequestMethod.GET, headers = "Accept=application/json,application/xml")

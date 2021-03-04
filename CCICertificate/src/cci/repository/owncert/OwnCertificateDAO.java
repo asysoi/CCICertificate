@@ -50,4 +50,5 @@ public interface OwnCertificateDAO {
 
 	List<OwnCertificate> getOrshaOutCertificates(String reportdate, String[] localities, String otd_id);
 
+	String fillInOwnProductDenorm();
 }

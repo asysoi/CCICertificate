@@ -259,4 +259,8 @@ public class OwnCertificateService {
 		return owncertificateDAO.updateOwnCertificateFileName(number, blanknumber, datecert, filename);
 	}
 
+	public String fillInOwnProductDenorm() {
+		return owncertificateDAO.fillInOwnProductDenorm();
+	}
+
 }

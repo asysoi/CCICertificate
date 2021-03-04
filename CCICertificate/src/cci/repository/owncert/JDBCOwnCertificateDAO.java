@@ -256,7 +256,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			LOG.info("Добавлены продукты: " + updateCounts.toString());
 		}
 
-		insertProductIntoProductDenormTable(cert.getProducts());
+		insertProductIntoProductDenormTable(cert);
 		
 		String sql_xml = "insert into ownfiles (id_certificate, xml) values (?, ?)";
 		template.getJdbcOperations().update(sql_xml, new Object[] { id, cert.getXml() });
@@ -290,14 +290,15 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ----------------------------------------------------
 	// Service methods to load OwnProductDenorm table
 	// ----------------------------------------------------
-	private void insertProductIntoProductDenormTable(List<Product> products) {
+	private void insertProductIntoProductDenormTable(OwnCertificate cert) {
 
+		List<Product> products = cert.getProducts();
 		String sql = "insert into ownproductdenorm(id_certificate, code, nncode) " + " values ( :id, :code, :nncode)";
 
 		List<SqlParameterSource> lbatch = new ArrayList<SqlParameterSource>();
 
 		for (Product product : products) {
-
+            product.setId(cert.getId()); // используем свойство ID продукта как контейнер для ID сертификата
 			String[] codes = split(product.getCode());
 
 			if (codes.length > 1) {
@@ -310,7 +311,8 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 				try {
 					nncode = Long.parseLong(product.getCode().trim().replaceAll("\\D+", ""));
 				} catch (Exception ex) {
-					System.out.println("Error parse code to nncode: [" + product.getCode() + "]");
+					// System.out.println("Error parse code to nncode: [" + product.getCode() + "]");
+					LOG.info("Error parse code to nncode: [" + product.getCode() + "]");
 				}
 				if (nncode == null) {
 					codes = split(product.getName());
@@ -467,7 +469,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		cert.setFactories(template.getJdbcOperations().query(sql, new Object[] { cert.getId() },
 				new BeanPropertyRowMapper<Factory>(Factory.class)));
 	}
-
+	
 
 	// ---------------------------------------------------------------
 	// Update certificate's file name. If filename is empty there aren't original certificate file 
@@ -711,5 +713,31 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
   	    	new BeanPropertyRowMapper<ViewWasteOwnCertificate>(ViewWasteOwnCertificate.class));
 	}
 	
+	/* ---------------------------------------------------------------
+	 * Fill in ownproductdenorm data from ownproduct (code, nncode) 
+	 * --------------------------------------------------------------- */
+	public String fillInOwnProductDenorm() {
+		String result = "";
+		//clear ownproductdenorm table
+		template.getJdbcOperations().update("delete from ownproductdenorm");
+		LOG.info("Clean OwnProductDenorm table");
+		
+		// get list of own certificates
+		String sql = "select * from owncertificate ORDER BY datecert";
+        List<OwnCertificate> certs = this.template.getJdbcOperations().query(sql, new OwnCertificateMapper<OwnCertificate>());
+        LOG.info("Load OwnCertifvcates List: " + certs.size());
+        
+		// go through the list of certificates and insert data into denorm table
+        int i=1;
+		String sqlproducts = "select * from ownproduct WHERE id_certificate = ? ORDER BY id";
+		
+        for (OwnCertificate cert: certs) {
+    		cert.setProducts(template.getJdbcOperations().query(sqlproducts, new Object[] { cert.getId() },
+    				new BeanPropertyRowMapper<Product>(Product.class)));
+        	insertProductIntoProductDenormTable(cert);
+        }
+        
+	    return "Обработано " + certs.size() + " сертификатов и полностью обновлена таблица ownproductdenorm.";
+	}
 
 }
