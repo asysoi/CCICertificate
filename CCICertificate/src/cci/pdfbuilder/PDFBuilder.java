@@ -1,9 +1,11 @@
 ﻿package cci.pdfbuilder;
  
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
+
 import cci.config.cert.BoxConfig;
 import cci.config.cert.CTCell;
 import cci.config.cert.ImageBox;
@@ -14,6 +16,8 @@ import cci.model.cert.Certificate;
 import cci.model.cert.Product;
 import cci.model.cert.ProductIterator;
 import cci.service.CountryConverter;
+import cci.service.utils.CCIUtil;
+
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -23,9 +27,11 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.Utilities;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPRow;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.VerticalText;
 
@@ -34,6 +40,9 @@ public abstract class PDFBuilder {
 	private static final String CHAR_PARAGRAPH = "\n";
 	private static final String EMPTY_STRING = "";
 	
+// =============================================================================================
+// Page builder controller 
+// =============================================================================================
 
 	public void createPDFPage(PdfWriter writer, Object certificate,
 			PDFPageConfig pconfig) throws DocumentException, IOException {
@@ -44,7 +53,7 @@ public abstract class PDFBuilder {
 		List<BoxConfig> boxes = pconfig.getBoxes();
 		List<BoxConfig> outputs = pconfig.getOutputs();
 		List<ImageBox> images = pconfig.getImages();
-
+		
 		if (boxes != null) {
 			for (int i = 0; i < boxes.size(); i++) {
 				BoxConfig box = boxes.get(i);
@@ -68,7 +77,6 @@ public abstract class PDFBuilder {
 							box.getText(), box);
 				} else {
 					makeTexBoxtInAbsolutePosition(writer, box.getText(), box);
-					//makeBorderedTexBoxtInAbsolutePosition(writer, box.getText(), box);
 				}
 			}
 		}
@@ -107,8 +115,12 @@ public abstract class PDFBuilder {
 		}
 
 		drawStamp(writer, stamps);
+        
 	}
-
+	
+// =============================================================================================
+// Components rendering functions 
+// =============================================================================================
 	public void makeBorderedTexBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
 			DocumentException {
@@ -144,9 +156,10 @@ public abstract class PDFBuilder {
 
 	public void makeTexBoxtInAbsolutePosition(PdfWriter writer, String text,
 			BoxConfig config) throws IOException, DocumentException {
-		//System.out.println("makeTexBoxtInAbsolutePosition");
-		//System.out.println(config);
 		PdfContentByte canvas = writer.getDirectContent();
+		if (text != null) { 
+		   text = text.replaceAll("\\s+", " ");
+		}
 		canvas.saveState();
 		canvas.beginText();
 		canvas.setTextRenderingMode(PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE);
@@ -155,13 +168,20 @@ public abstract class PDFBuilder {
 				.getXl()), Utilities.millimetersToPoints(config.getYl()),
 				Utilities.millimetersToPoints(config.getXr()),
 				Utilities.millimetersToPoints(config.getYr()));
-
-		Phrase ptext = new Phrase(text, new Font(config.getBf(),
-				config.getFontSize()));
-
+		Font fnt = new Font(config.getBf(),	config.getFontSize());
 		ColumnText column = new ColumnText(canvas);
+		
+		float fntSize = column.fitText(fnt, text, rect, config.getFontSize(), column.getRunDirection());
+		float leading = config.getLeading();
+		
+		if (fntSize < config.getFontSize()) {
+			System.out.println("Set font size: " + fntSize);
+			fnt.setSize(fntSize - 0.1f);
+		    leading = fntSize - 0.1f;	
+		}
+		Phrase ptext = new Phrase(text, fnt);
 		column.setSimpleColumn(ptext, rect.getLeft(), rect.getBottom(),
-				rect.getRight(), rect.getTop(), config.getLeading(),
+				rect.getRight(), rect.getTop(), leading,
 				config.getgAlign());
 		column.go();
 		canvas.endText();
@@ -227,7 +247,7 @@ public abstract class PDFBuilder {
 	public void makeRotatedTextBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
 			DocumentException {
-		//System.out.println("makeRotatedTextBoxtInAbsolutePosition");
+		// LOG.info("makeRotatedTextBoxtInAbsolutePosition");
 		PdfContentByte canvas = writer.getDirectContent();
 		canvas.saveState();
 		canvas.beginText();
@@ -292,8 +312,10 @@ public abstract class PDFBuilder {
 	protected PdfPTable makeTableInAbsolutePosition(PdfWriter writer,
 			Object cert, TableConfig tablecon) throws DocumentException,
 			IOException {
-
+		
+		// LOG.info("Make table"); 
 		PdfPTable table = new PdfPTable(tablecon.getColnumber());
+		
 		makeTableHeader(writer, table, tablecon, cert);
 		makeTableBody(table, tablecon, cert);
 		makeTableFooter(writer, table, tablecon, cert);
@@ -303,15 +325,17 @@ public abstract class PDFBuilder {
 				Utilities.millimetersToPoints(tablecon.getXl()),
 				Utilities.millimetersToPoints(tablecon.getYr()),
 				writer.getDirectContent());
+		
+		//LOG.info("Table created ");
 
-		 LOG.info("Table height : " + table.getTotalHeight()
-		 + "  Calculate height : " + getTableHeight(table));
+	    //LOG.info("Table height : " + table.getTotalHeight()
+		// + "  Calculate height : " + getTableHeight(table));
 		 
-		 LOG.info("Table height : "
-		 + Utilities.pointsToMillimeters(table.getTotalHeight())
-		 + "  Calculate height : "
-		 + Utilities.pointsToMillimeters(getTableHeight(table)));
-		 
+		//LOG.info("Table height : "
+		// + Utilities.pointsToMillimeters(table.getTotalHeight())
+		// + "  Calculate height : "
+		// + Utilities.pointsToMillimeters(getTableHeight(table)));
+				 
 		return table;
 	}
 
@@ -361,10 +385,104 @@ public abstract class PDFBuilder {
 		}
 
 	}
+		
+	public void drawWatermark(PdfWriter writer, String text, BoxConfig config) throws IOException, DocumentException {
+		PdfContentByte canvas = writer.getDirectContentUnder();
+		
+		Phrase ptext = new Phrase(text, new Font(config.getBf(),
+				config.getFontSize()));
+		
+		ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER, ptext,
+				Utilities.millimetersToPoints(config.getXl()),
+				Utilities.millimetersToPoints(config.getYl()),
+				config.getRotation());
+	}
+
+// =============================================================================================
+// Table body filling functions 
+// =============================================================================================
+	private void makeTableBody(PdfPTable table, TableConfig tablecon,
+			Object cert) throws IOException, DocumentException {
+        // LOG.info("Make Table Body");
+        
+		List<CTCell> row = tablecon.getBodyRow();
+		table.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP);
+		float ht = 0f;
+        boolean nextpage = false;
+		ProductIterator cursor = ((Certificate) cert).getIterator();
+         
+		try {
+			while (!nextpage && cursor.hasNext() ) {
+				Product product = cursor.next();
+				fillInRow(row, product);
+				writeRow(table, row);
+				ht += table.getRows().get(table.getLastCompletedRowIndex())
+							.getMaxHeights();
+                    
+				if (ht > Utilities.millimetersToPoints(tablecon
+							.getWorkHeight())) {
+					    Product bufProduct = new Product();
+					    float tableLimit = Utilities.millimetersToPoints(tablecon.getWorkHeight());
+					    
+					    while (ht > tableLimit) {
+					    	PdfPCell[] cells = table.getRows().get(table.getLastCompletedRowIndex()).getCells();
+					    	int ind = 0, i = 0;
+					    	float cellMaxHeight = 0.0f;
+					    	for (PdfPCell cell : cells) {
+					    		if (cell.getHeight() > cellMaxHeight) {
+					    			cellMaxHeight = cell.getHeight();
+					        	    ind = i;				        	
+					    		}
+					    		i++;
+					    	}
+					    	
+					    	ht -= table.getRows().get(table.getLastCompletedRowIndex())
+				        			.getMaxHeights();
+					    	table.deleteLastRow();
+				    	
+					        if (truncateProductField(product, bufProduct, ind)) {
+					        	fillInRow(row, product);						
+					        	writeRow(table, row);
+					        	ht += table.getRows().get(table.getLastCompletedRowIndex())
+									.getMaxHeights();
+					        } else {
+					        	if (ht + cellMaxHeight > tableLimit) {
+					        		mergeProducts(product, bufProduct);
+					        	}
+					        }
+					    }
+					    cursor.insertProductInNextPosition(bufProduct);
+					    nextpage = true;
+					    break;
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		float delta = Utilities.millimetersToPoints(tablecon.getWorkHeight())
+				- ht;
+		PdfPRow tabrow = table.getRows().get(table.getLastCompletedRowIndex());
+		tabrow.setMaxHeights(tabrow.getMaxHeights() + delta);
+	}
+	
+	private void mergeProducts(Product product, Product bufProduct) {
+	    bufProduct.setNumerator(ifNULL(product.getNumerator()) + ifNULL(bufProduct.getNumerator()));
+	    bufProduct.setTovar(ifNULL(product.getTovar()) + ifNULL(bufProduct.getTovar()));
+	    bufProduct.setFobvalue(ifNULL(product.getFobvalue()) + ifNULL(bufProduct.getFobvalue()));
+	    bufProduct.setKriter(ifNULL(product.getKriter()) + ifNULL(bufProduct.getKriter()));
+	    bufProduct.setSchet(ifNULL(product.getSchet()) + ifNULL(bufProduct.getSchet()));
+	    bufProduct.setVes(ifNULL(product.getVes()) + ifNULL(bufProduct.getVes()));
+	    bufProduct.setVidup(ifNULL(product.getVidup()) + ifNULL(bufProduct.getVidup()));
+    }
+
+	private String ifNULL(String str) {
+		return str == null ? "" : str;
+	}
 
 	protected void writeRow(PdfPTable table, List<CTCell> row)
 			throws DocumentException, IOException {
-				
+		
 		for (int i = 0; i < row.size(); i++) {
 			table.addCell(makeCell(row.get(i)));
 		}
@@ -392,49 +510,63 @@ public abstract class PDFBuilder {
 		cell.setColspan(ctCell.getColspan());
 		return cell;
 	}
-
-	private void makeTableBody(PdfPTable table, TableConfig tablecon,
-			Object cert) throws IOException, DocumentException {
-
-		List<CTCell> row = tablecon.getBodyRow();
-		table.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP);
-		float ht = 0f;
-
-		ProductIterator cursor = ((Certificate) cert).getIterator();
-
-		try {
-			while (cursor.hasNext()) {
-				Product product = cursor.next();
-				fillInRow(row, product);
-				writeRow(table, row);
-
-				ht += table.getRows().get(table.getLastCompletedRowIndex())
-							.getMaxHeights();
-                    
-				if (ht > Utilities.millimetersToPoints(tablecon
-							.getWorkHeight())) {
-						ht -= table.getRows()
-								.get(table.getLastCompletedRowIndex())
-								.getMaxHeights();
-						table.deleteLastRow();
-						cursor.prev();
-						
-						break;
-				}
-				
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		float delta = Utilities.millimetersToPoints(tablecon.getWorkHeight())
-				- ht;
-		PdfPRow tabrow = table.getRows().get(table.getLastCompletedRowIndex());
-		tabrow.setMaxHeights(tabrow.getMaxHeights() + delta);
-	}
+	
 
 	protected void fillInRow(List<CTCell> row, Product product) {
 		// overwrite it in subclass
+	}
+	
+	protected boolean truncateProductField(Product product, Product bproduct, int ind) {
+		String bstr = null;
+		boolean ret = false;
+		
+		switch(ind) {
+		   case 0:
+			  bstr = product.getNumerator();  break;
+		   case 1:
+			  bstr = product.getVidup();  break; 
+		   case 2:
+			  bstr = product.getTovar();  break;
+		   case 3:
+			  bstr = product.getKriter();  break;
+		   case 4:
+			  bstr = product.getVes();  break;
+		   case 5:
+			  bstr = product.getSchet();  break;
+		}
+		
+		int pos = bstr.lastIndexOf(" ");
+		
+		if (pos > 0) {
+			ret = true;
+			switch(ind) {
+			   case 0:
+				  bproduct.setNumerator(bstr.substring(pos) + bproduct.getNumerator());
+				  product.setNumerator(bstr.substring(0, pos));
+				  break;
+			   case 1:
+				  bproduct.setVidup(bstr.substring(pos) + bproduct.getVidup());
+				  product.setVidup(bstr.substring(0, pos));
+				  break; 
+			   case 2:
+				  bproduct.setTovar(bstr.substring(pos) + bproduct.getTovar());
+				  product.setTovar(bstr.substring(0, pos));
+				  bstr = product.getTovar();  break;
+			   case 3:
+				  bproduct.setKriter(bstr.substring(pos) + bproduct.getKriter());
+				  product.setKriter(bstr.substring(0, pos));
+				  bstr = product.getKriter();  break;
+			   case 4:
+ 				  bproduct.setVes(bstr.substring(pos) + bproduct.getVes());
+				  product.setVes(bstr.substring(0, pos));
+				  bstr = product.getVes();  break;
+			   case 5:
+				  bproduct.setSchet(bstr.substring(pos) + bproduct.getSchet());
+				  product.setSchet(bstr.substring(0, pos));
+				  bstr = product.getSchet();  break;
+			}
+		}
+		return ret;
 	}
 
 	private float getTableHeight(PdfPTable table) {
@@ -445,6 +577,9 @@ public abstract class PDFBuilder {
 		return height;
 	}
 	
+// =============================================================================================
+// Get content functions
+// =============================================================================================
 	protected String getCertificateTextByMap(Object object, String map) {
 
 		Certificate certificate = (Certificate) object;
@@ -492,14 +627,16 @@ public abstract class PDFBuilder {
 		} else if ("certnumber".equals(map)) {
 			str = certificate.getNomercert();
 		} else if ("blanknumber".equals(map)) {
-			str = certificate.getNblanka();
+			str = getBlankNumberByPageNumber(certificate.getNblanka(), certificate.getCurrentlist());
 		} else if ("subcountry".equals(map)) {
 			str = CountryConverter.getCountryNameByCode(certificate.getStranapr());
 		} else if ("sourcecountry".equals(map)) {
 			str = CountryConverter.getCountryNameByCode(certificate.getStranav());
-		}else if ("note".equals(map)) {
+		} else if ("note".equals(map)) {
 			str = certificate.getOtmetka() == null ? "" : certificate.getOtmetka();
-		} else if ("department".equals(map)) {
+		} else if ("status".equals(map)) {
+			str = certificate.getStatus() == null ? "ДЕЙСТВИТЕЛЬНЫЙ" : certificate.getStatus();	
+		} else if ("department".equals(map)) {	
 			str = "Унитарное предприятие по оказанию услуг \""
 					+ certificate.getOtd_name() + "\", "
 					+ certificate.getOtd_addr_index() + ", "
@@ -535,6 +672,32 @@ public abstract class PDFBuilder {
 		return str;
 	}
 
+	private String getBlankNumberByPageNumber(String blanks, int currentlist) {
+		String blank = "";
+
+		if (blanks.indexOf(",") > -1 || blanks.indexOf("-") > -1) {
+			List<String> numbers = new ArrayList<String>();
+			
+			if (blanks != null && !blanks.trim().isEmpty()) {
+				blanks = blanks.trim().replaceAll("\\s*-\\s*", "-");
+				String[] lst = blanks.split(",");
+				
+				for (String str : lst) {
+					numbers.addAll(CCIUtil.getSequenceNumbers(str));
+				}
+			}
+
+			try {
+				blank = numbers.get(currentlist);
+			} catch (Exception ex) {
+				LOG.info(ex.getMessage());
+			}
+		} else {
+			blank = blanks;
+		}
+		return blank;	
+	}
+
 	private String getExporterName(Certificate cert) {
 		String exporter = cert.getKontrp();
 		
@@ -559,5 +722,4 @@ public abstract class PDFBuilder {
 	protected String renderString(String field, String strtermination) {
 		return (field != null && field.trim() != "") ? field.trim() + strtermination : "";
 	}
-
 }
