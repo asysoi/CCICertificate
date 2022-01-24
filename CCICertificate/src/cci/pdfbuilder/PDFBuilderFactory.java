@@ -3,10 +3,11 @@
 import cci.pdfbuilder.cert.APDFBuilder;
 import cci.pdfbuilder.cert.CT1PDFBuilder;
 import cci.pdfbuilder.cert.CT2PDFBuilder;
+import cci.pdfbuilder.cert.CT3PDFBuilder;
+import cci.pdfbuilder.cert.CTUZBuilder;
 import cci.pdfbuilder.cert.EAVPDFBuilder;
 import cci.pdfbuilder.cert.GeneralPDFBuilder;
 import cci.pdfbuilder.cert.TextilePDFBuilder;
-import cci.pdfbuilder.fscert.FSPDFBuilder;
 
 public class PDFBuilderFactory {
 	  public static final String PAGE_CT1 = "СТ-1";
@@ -25,7 +26,10 @@ public class PDFBuilderFactory {
 	  public static final String PAGE_EAV_b = "EAV.b";
 	  public static final String PAGE_FS = "FS";
 	  public static final String PAGE_FS_b = "FS_b";
-	  
+	  public static final String PAGE_CTUZ = "СТ-1 Узбекистан";
+	  public static final String PAGE_CT3 = "СТ-3";
+	  public static final String PAGE_CT3_b = "СТ-3b";
+ 
 	  	  
       public static PDFBuilder getPADFBuilder(String pagename) {
     	  PDFBuilder builder = null; 
@@ -58,11 +62,13 @@ public class PDFBuilderFactory {
     		  builder = new EAVPDFBuilder();    		  
     	  }  else if (pagename.equals(PAGE_EAV_b)) {
     		  builder = new EAVPDFBuilder();    		  
-    	  }  else if (pagename.equals(PAGE_FS)) {
-    		  builder = new FSPDFBuilder();    		  
-    	  }  else if (pagename.equals(PAGE_FS_b)) {
-    		  builder = new FSPDFBuilder();    		  
-    	  }  
+    	  } else if (pagename.equals(PAGE_CT3)) {
+    		  builder = new CT3PDFBuilder();    		  
+    	  }  else if (pagename.equals(PAGE_CT3_b)) {
+    		  builder = new CT3PDFBuilder();    		  
+    	  }  else if (pagename.equals(PAGE_CTUZ)) {
+    		  builder = new CTUZBuilder();
+    	  }
     	  return builder;
       }
 }

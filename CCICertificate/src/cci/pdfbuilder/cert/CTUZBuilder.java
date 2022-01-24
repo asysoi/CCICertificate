@@ -1,4 +1,4 @@
-﻿package cci.pdfbuilder.cert;
+package cci.pdfbuilder.cert;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import cci.config.cert.CTCell;
 import cci.model.cert.Product;
 import cci.pdfbuilder.PDFBuilder;
 
-public class GeneralPDFBuilder extends PDFBuilder {
+public class CTUZBuilder extends PDFBuilder {
 	
 	protected void fillInRow(List<CTCell> row, Product product) {
 		row.get(0).setText(product.getNumerator() == null ? "" : product.getNumerator());
@@ -20,7 +20,6 @@ public class GeneralPDFBuilder extends PDFBuilder {
 	protected boolean truncateProductField(Product product, Product bproduct, int ind) {
 		String bstr = null;
 		boolean ret = false;
-		
 		switch(ind) {
 		   case 0:
 			  bstr = product.getNumerator();  break;

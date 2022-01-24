@@ -16,5 +16,6 @@ public class CT2PDFBuilder extends PDFBuilder {
 		row.get(4).setText(product.getVes() == null ? "" : product.getVes());
 		row.get(5).setText(product.getSchet() == null ? "" : product.getSchet());
 	}
+		
 }
 
