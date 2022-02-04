@@ -97,7 +97,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
 		$("#pview").dialog("option", "width", 800);
-		$("#pview").dialog("option", "height", 660);
+		$("#pview").dialog("option", "height", 680);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -106,8 +106,13 @@
 				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
                   	                                               ] });
               
-		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
-		$("#pview").dialog("open");
+		
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
+		$("#pview").dialog("open");		
+		
+		//$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+		//$("#pview").dialog("open");
 	}
 
 	function viewCertificate(certid) {
@@ -126,11 +131,10 @@
 			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close"); $('#pdf').contents().find("body").html('');}} ]
 		});
 
-		$("#pdfview").dialog("option", "position", {
-			my : "center top",
-			at : "center",
-			of :  listwindow
-		});
+		//$("#pdfview").dialog("option", "position", {	my : "center top",at : "center",of :  listwindow});
+
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
                                    
         $('#pdf').attr('height', $("#pdfview").dialog("option", "height") - 150);
         $('#pdf').attr('width', $("#pdfview").dialog("option", "width") - 40);
@@ -175,13 +179,13 @@
 			} ]
 		});
 
-		$("#pview").dialog("option", "position", {
-			my : "center",
-			at : "center",
-			of : window
-		});
+		//$("#pview").dialog("option", "position", {my : "center",at : "center",of : window});
+		//$("#pview").dialog("open");
 		
-		$("#pview").dialog("open");
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
+		$("#pview").dialog("open");		
+
 	}
 	function sleep(ms) {
 	      setTimeout(sleep, ms);
@@ -207,11 +211,11 @@
 			} ]
 		});
 
-		$("#pview").dialog("option", "position", {
-			my : "center",
-			at : "center",
-			of : window
-		});
+		//$("#pview").dialog("option", "position", {	my : "center",	at : "center",	of : window	});
+		//$("#pview").dialog("open");
+		
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
 		$("#pview").dialog("open");
 	}
 
@@ -256,12 +260,14 @@
 			buttons : [ { text : "Закрыть",	click : function() {close();} } ]
 		});
 
-		$("#pview").dialog("option", "position", {
-			my : "center",
-			at : "center",
-			of : window
-		});
-		$("#pview").dialog("open");
+		//$("#pview").dialog("option", "position", {	my : "center",at : "center",of : window	});
+		//$("#pview").dialog("open");
+		
+		$("#pview").dialog({position: {  my: 'top',  at: 'top+130', of: window, collision: "none"}});
+		$("#pview").on( "dialogopen",  function (event, ui) {$(event.target).parent().css("position", "fixed");});		
+		$("#pview").dialog("open");		
+
+		
 	}
 
 
@@ -311,7 +317,9 @@
 			<tr>
 				<td><a href="javascript:openCertificate('${cert.cert_id}')">${cert.nomercert}</a>&nbsp;
   	            <c:if test="${cert.otd_id == otd}">
-					<a href="javascript:deleteCertificate('${cert.nomercert}', '${cert.nblanka}', '${cert.datacert}')">del</a>
+					<a href="javascript:deleteCertificate('${cert.nomercert}', '${cert.nblanka}', '${cert.datacert}')">
+					<img src="resources/images/trash_16.png" alt="удл." />
+                    </a>
 				</c:if>	
 				</td>
 				<td>${cert.otd_name}</td>

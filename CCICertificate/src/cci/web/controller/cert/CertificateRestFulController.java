@@ -115,14 +115,18 @@ public class CertificateRestFulController {
 			certificate.setOtd_id(Integer.parseInt(otd_id));
 			try {
 				restservice.addCertificate(certificate);
+   		        LOG.info("Certificate [" + certificate.getNomercert() + "][" + certificate.getNblanka() + "][" + certificate.getDatacert() + "] ADDED by [" + aut.getName() + "]");
 			} catch (Exception ex) {
+				LOG.info("Error ADD: " + ex.getMessage());
 				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
 			}
 	   	} else {
+	   		LOG.info("Добавлять сертификат может только авторизированный представитель отделения .");
 	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения ."));
 	   	}
 		return certificate;
 	}
+	
 	
 	/* -----------------------------
 	 * Get certificate by number & blanknumber & date
@@ -163,9 +167,12 @@ public class CertificateRestFulController {
 				 throw(new CertificateUpdateException("Изменить сертификат может только авторизированный представитель отделения."));
 			 }
    		     rcert = restservice.updateCertificate(cert, otd_id);
+   		     LOG.info("Certificate [" + cert.getNomercert() + "][" + cert.getNblanka() + "][" + cert.getDatacert() + "] UPDATED by [" + aut.getName() + "]");
 		 } catch (NotFoundCertificateException ex) {
+			 LOG.info("Errror UPDATE: Certificate [" + cert.getNomercert() + "][" + cert.getNblanka() + "][" + cert.getDatacert() + "] not found");
 			 throw(new CertificateUpdateException("Cертификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
 		 } catch (Exception ex) {
+			 LOG.info("Errror UPDATE: " + ex.getMessage());
 			 throw(new CertificateUpdateException("Ошибка обновления сертификата номер " + cert.getNomercert() + ", выданного на бланке " +  cert.getNblanka() + "  :  " + ex.toString()));
 		 }
 		 
@@ -181,9 +188,9 @@ public class CertificateRestFulController {
 	@RequestMapping(value = "rcert.do", method = RequestMethod.DELETE, headers = "Accept=application/txt")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteCertificate(
-			@RequestParam(value = "number", required = false) String number,
-			@RequestParam(value = "nblank", required = false) String blanknumber,
-			@RequestParam(value = "date", required = false) String date,
+			@RequestParam(value = "number", required = true) String number,
+			@RequestParam(value = "nblank", required = true) String blanknumber,
+			@RequestParam(value = "date", required = true) String date,
 			Authentication aut) {
 		try {
 			String otd_id = getOtd_idByRole(aut);
@@ -191,7 +198,9 @@ public class CertificateRestFulController {
 				 throw(new CertificateDeleteException("Удалить сертификат может только авторизированный представитель отделения."));
 			}
 			restservice.deleteCertificate(number, blanknumber, date, otd_id);
+			LOG.info("Certificate [" + number + "][" + blanknumber + "][" + date + "] DELETED by [" + aut.getName() + "]");
 		} catch(Exception ex) {
+			LOG.info("Errror DELETE: " + ex.getMessage());
 			throw(new CertificateDeleteException("Серитификат номер " + number + ", выданный " + date + " на бланке " +  blanknumber + "  не может быть удален: " + ex.toString()));	
 		}
 		

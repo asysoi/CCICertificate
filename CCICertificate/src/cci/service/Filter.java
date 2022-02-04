@@ -78,7 +78,7 @@ public abstract class Filter {
 				m = obj.getClass().getSuperclass().getMethod(name, params); 
 			 }
 		} catch (Exception ex) {
-			LOG.info("Error get method: " + ex.getMessage());
+			// LOG.info("Error get method: " + ex.getMessage());
 		}
 		return m;
 	}

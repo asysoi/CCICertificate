@@ -62,9 +62,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	
 		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
 		
-		LOG.info(sql);
-		LOG.info("Query time: "
-				+ (System.currentTimeMillis() - start));
+		//LOG.info(sql);
+		//LOG.info("Query time: "
+		//		+ (System.currentTimeMillis() - start));
 
 		return count.intValue();
 	}
@@ -106,7 +106,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 							cert.getDatacert(), cert.getDatacert() },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 			
-			LOG.info("Certificate check: " + (System.currentTimeMillis() - start));
+			//LOG.info("Certificate check: " + (System.currentTimeMillis() - start));
 			if (rcert != null) {
 				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				rcert.setProducts(template.getJdbcOperations().query(sql,
@@ -200,7 +200,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		}
         SQLQueryUnit filter = builder.getSQLUnitWhereClause();
         Map<String, Object> params = filter.getParams();
-        LOG.info("SQLQueryUnit : " + filter);
+        //LOG.info("SQLQueryUnit : " + filter);
         
         
         if (pagesize < pagecount) {
@@ -226,7 +226,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
     				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order;  
         }
 		
-		LOG.info("Next page : " + sql);
+		//LOG.info("Next page : " + sql);
 		
 		if (pagecount != 0) {
 		    return this.template.query(sql,	params, 
@@ -304,7 +304,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public Map<String,String> getACL() {
 		String sql = "SELECT acl_role, id from C_OTD";
 
-		LOG.debug("Got ACL map");
+		//LOG.debug("Got ACL map");
 		
 		return template.query(sql, new ResultSetExtractor<Map<String, String>>(){
 			
@@ -338,7 +338,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		countries.put("RU",countriesru);
 		countries.put("EN",countriesen);
 		
-		LOG.debug("Got country list");		
+		//LOG.debug("Got country list");		
 		return countries;
 	}
 
@@ -348,7 +348,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public List<String> getFormsList() {
 		String sql = "SELECT forms from c_cert group by forms having forms is not null ORDER BY forms ";
 
-		LOG.debug("Got forms list");
+		//LOG.debug("Got forms list");
 		return (List<String>) template.getJdbcOperations().queryForList(sql,
 				String.class);
 	}
@@ -372,7 +372,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		String sql = " SELECT " + flist + " FROM CERT_VIEW_TOFILE " 
 				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
 
-		LOG.info("Get certificates: " + sql);
+		//LOG.info("Get certificates: " + sql);
 		
 		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
@@ -389,7 +389,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		String sql = "SELECT " + field + " as field, COUNT(*) as value FROM (SELECT * FROM CERT_VIEW " +  
 					 (onfilter ? filter.getClause() : "") + ") group by " + field + " ORDER BY value DESC" ;		
 
-		LOG.debug("Make report: " + sql);
+		//LOG.debug("Make report: " + sql);
 		
 		Map<String, Object> params = filter.getParams();
 
@@ -425,7 +425,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		}
 
 		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
-	    LOG.info("SQLQueryUnit : " + filter);
+	    //LOG.info("SQLQueryUnit : " + filter);
 	        
 		String sql = "select " + flist 
 				+ " from cert_report where file_in_id in "
@@ -441,13 +441,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ ") b on a.file_in_id = b.file_in_id where b.file_in_id is null)" 
 				+ " ORDER by " +  orderby + " " + order + ", file_in_id " + order;
 
-		LOG.info("Next loaded page : " + sql);
+		//LOG.info("Next loaded page : " + sql);
 		
 		Map<String, Object> params = filter.getParams();
 		params.put("highposition", Integer.valueOf(page * pagesize));
 		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
 		
-		LOG.info("Next page : " + sql);
+		//LOG.info("Next page : " + sql);
 		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 		
@@ -461,7 +461,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		
 		String sql = "select count(*) from CERT_REPORT " + filter.getClause();
 		
-		LOG.info(sql);
+		//LOG.info(sql);
 		Integer count = this.template.queryForObject(sql, filter.getParams(), Integer.class);
 		
 		return count;
@@ -484,7 +484,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		String sql = " SELECT " + flist + " FROM CERT_VIEW_LOAD_REPORT " 
 				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
 
-		LOG.info("Get certificates for Report: " + sql);
+		//LOG.info("Get certificates for Report: " + sql);
 
 		return this.template.query(sql,	filter.getParams(), 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
@@ -759,7 +759,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		StringBuffer str = new StringBuffer();
 		
 		String sql = "select nomercert, nblanka, datacert from c_cert " + filter.getWhereLikeClause() + " ORDER by issuedate";
-		LOG.info(sql);
+		// LOG.info(sql);
 		Connection conn = null;
 
 		try {

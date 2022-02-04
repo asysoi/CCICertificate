@@ -106,7 +106,7 @@ public class CertificateController {
 			HttpServletResponse response, ModelMap model) {
 		try {
 			
-            LOG.debug("Download started...");   
+            //LOG.debug("Download started...");   
 			ViewManager vmanager = (ViewManager) model.get("vmanager");
 
 			Filter filter = vmanager.getFilter();
@@ -129,7 +129,7 @@ public class CertificateController {
 			List certs = certService.readCertificates(vmanager.getDownloadconfig().getFields(),
 					vmanager.getOrderby(), vmanager.getOrder(), builder);
 			
-			LOG.debug("Download. Certificates loaded from database..."); 
+			//LOG.debug("Download. Certificates loaded from database..."); 
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			//response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition",
@@ -139,7 +139,7 @@ public class CertificateController {
 					vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
 					response.getOutputStream());
 			response.flushBuffer();
-			LOG.debug("Download finished...");
+			//LOG.debug("Download finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -161,7 +161,7 @@ public class CertificateController {
 			ModelMap model) {
 
 		long start = System.currentTimeMillis();
-		LOG.info("=========================== GET CERT LIST =================================== >");
+		//LOG.info("=========================== GET CERT LIST =================================== >");
 
 		// ViewManager vmanager = (ViewManager)
 		// request.getSession().getAttribute("vmanager");
@@ -204,8 +204,8 @@ public class CertificateController {
 		// ACL needs
 		if (filter == null) {
 			filter = new CertFilter();
-			LOG.debug
-					("New filterCertificate created bacause of ACL");
+			//LOG.debug
+			//		("New filterCertificate created bacause of ACL");
 		}
 		
 		Iterator iterator = aut.getAuthorities().iterator();
@@ -275,10 +275,10 @@ public class CertificateController {
 
 		if (fc == null) {
 			fc = new CertFilter();
-			LOG.debug("New filterCertificate created in GET method");
+			//LOG.debug("New filterCertificate created in GET method");
 			model.addAttribute("certfilter", fc);
 		} else {
-			LOG.debug("Found FilterCertificate in GET : ");
+			//LOG.debug("Found FilterCertificate in GET : ");
 		}
 
 		ViewCertFilter vf = new ViewCertFilter(
@@ -301,10 +301,10 @@ public class CertificateController {
 
 		if (fc == null) {
 			fc = new CertFilter();
-			LOG.debug
-					("New filterCertificate created in the POST method");
+			//LOG.debug
+			//		("New filterCertificate created in the POST method");
 		} else {
-			LOG.debug("Found FilterCertificate in POST");
+			//LOG.debug("Found FilterCertificate in POST");
 		}
 
 		fc.loadViewcertificate(viewfilter.getViewcertificate());
@@ -323,7 +323,7 @@ public class CertificateController {
 			ModelMap model) {
 		String relativeWebPath = "/resources";
 		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
-		LOG.debug("Absolute path: " + absoluteDiskPath);
+		//LOG.debug("Absolute path: " + absoluteDiskPath);
 		
 		Certificate cert = certService.readCertificate(certid);
 		makepdffile(absoluteDiskPath, cert);
@@ -382,7 +382,7 @@ public class CertificateController {
 				
 				long start = System.currentTimeMillis();
 				makepdffile(absoluteDiskPath, rcert);
-				LOG.info("Certificate check pdf making: " + (System.currentTimeMillis() - start));
+				//LOG.info("Certificate check pdf making: " + (System.currentTimeMillis() - start));
 				
 				String msg = "<p>Найден сертификат номер " + cert.getNomercert()
 						+ " на бланке с номером " + cert.getNblanka() + ", выданный "
@@ -431,7 +431,7 @@ public class CertificateController {
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		List reports = null;
-		LOG.debug("Report generation started...");
+		//LOG.debug("Report generation started...");
 		ViewManager vmanager = (ViewManager) model.get("vmanager");
 
 		try {
@@ -452,7 +452,7 @@ public class CertificateController {
 
 			reports = certService.makeReports(reportconfig.getFields(),	builder, vmanager.getOnfilter());
 
-			LOG.debug("Reporting finished...");
+			//LOG.debug("Reporting finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();

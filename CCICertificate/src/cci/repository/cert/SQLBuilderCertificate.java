@@ -37,8 +37,8 @@ public class SQLBuilderCertificate extends SQLBuilder {
 		    where = (where.trim().isEmpty() ? "" : " where " + where);
 			
 		}
-		LOG.info("Where: " + where);
-		LOG.info("Params: " + qunit.getParams());
+		//LOG.info("Where: " + where);
+		//LOG.info("Params: " + qunit.getParams());
 		qunit.setClause(where);
 		return qunit;
 	}

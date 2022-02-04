@@ -42,11 +42,65 @@ a."OTD_ADDR_BUILDING",a."EOTD_NAME",a."EOTD_ADDR_CITY",a."EOTD_ADDR_LINE",
 decode(a."EXPP", null, a."KONTRP", a."EXPP") as exporter, decode(a."IMPORTER", null, a."POLUCHAT", a."IMPORTER") as importerfull 
 from c_cert a;
 
+// Далее вариант нескольких инструкций DDL, когда не добавляется адрес в таблицу c_cert
+CREATE OR REPLACE VIEW CERT_VIEW
+AS select a."CERT_ID",a."FORMS",a."UNN",a."KONTRP",a."KONTRS",a."ADRESS",a."POLUCHAT",a."ADRESSPOL",
+a."DATACERT",a."ISSUEDATE",a."NOMERCERT",a."EXPERT",a."NBLANKA",a."RUKOVOD",a."TRANSPORT",a."MARSHRUT",
+a."OTMETKA",a."STRANAV",a."STRANAPR",a."STATUS",a."KOLDOPLIST",a."FLEXP",a."UNNEXP",a."EXPP",a."EXPS",
+a."EXPADRESS",a."FLIMP",a."IMPORTER",a."ADRESSIMP",a."FLSEZ",a."SEZ",a."FLSEZREZ",a."STRANAP",
+a."OTD_ID",a."PARENTNUMBER",a."PARENTSTATUS", a."CODESTRANAV", a."CODESTRANAPR", a."CODESTRANAP", 
+a."CATEGORY", a."PARENT_ID", decode(a."EXPP", null, a."KONTRP", a."EXPP") as exporter, 
+decode(a."IMPORTER", null, a."POLUCHAT", a."IMPORTER") as importerfull, 
+B.OTD_NAME, B.OTD_ADDR_INDEX , B.OTD_ADDR_CITY, B.OTD_ADDR_LINE, B.OTD_ADDR_BUILDING, 
+B.EOTD_NAME, B.EOTD_ADDR_CITY, B.EOTD_ADDR_LINE 
+from C_CERT a left join C_OTD b on A.OTD_ID = B.ID;
 
-CREATE OR REPLACE VIEW CERT_REPORT
-AS select file_in_id, aa.cert_id as cert_id, bb.nomercert, bb.nblanka,
-bb.datacert, bb.issuedate, bb.expert, aa.DATE_LOAD, bb.otd_id, bb.otd_name 
-from C_FILES_IN aa inner join C_CERT bb on bb.cert_id = aa.cert_id;
+
+// отчет с учетом загрузки информации об отделении
+CREATE OR REPLACE  VIEW CERT_REPORT ("FILE_IN_ID", "CERT_ID", "NOMERCERT", "NBLANKA", "DATACERT", "ISSUEDATE", "EXPERT", "DATE_LOAD", "OTD_ID", "OTD_NAME") AS 
+select cc."FILE_IN_ID",cc."CERT_ID",cc."NOMERCERT",cc."NBLANKA",cc."DATACERT",cc."ISSUEDATE",cc."EXPERT",cc."DATE_LOAD",cc."OTD_ID", otd_name 
+from (
+select file_in_id, aa.cert_id, nomercert, nblanka, datacert, issuedate, expert, DATE_LOAD, otd_id 
+from C_FILES_IN aa left join C_CERT bb on aa.cert_id = bb.cert_id) cc 
+left join C_OTD dd on cc.otd_id = dd.id;
+
+
+// блокировать создание дублирующей записи о сертификате
+CREATE UNIQUE INDEX CERT_NUMBER_BLANK_DATE ON C_CERT ("NOMERCERT", "NBLANKA", "DATACERT");
+
+ // настроить cron для периодического запуска обновления индекса 
+exec CTX_DDL.SYNC_INDEX('INDX_CPRODUCT_CONTEXT');
+exec CTX_DDL.SYNC_INDEX('INDX_CPRODUCT_DENORM_CTX');
+
+===================================== перенос базы с 46 машины на 4 3.02.22  ===============================
+alter table c_cert ADD parent_id integer;
+
+select tt."CERT_ID", bb.CERT_ID parent_id, tt.parentnumber from c_cert tt left join c_cert bb on tt.parentnumber = bb.nomercert where tt.parentnumber is not null;
+
+update c_cert aa set 
+parent_id = (select cert_id from c_cert bb where bb.nomercert = aa.parentnumber) 
+where aa.parentnumber is not NULL and LENGTH(TRIM(parentnumber)) > 0;
+
+CREATE OR REPLACE VIEW CERT_VIEW
+AS select a."CERT_ID",a."FORMS",a."UNN",a."KONTRP",a."KONTRS",a."ADRESS",a."POLUCHAT",a."ADRESSPOL",
+a."DATACERT",a."ISSUEDATE",a."NOMERCERT",a."EXPERT",a."NBLANKA",a."RUKOVOD",a."TRANSPORT",a."MARSHRUT",
+a."OTMETKA",a."STRANAV",a."STRANAPR",a."STATUS",a."KOLDOPLIST",a."FLEXP",a."UNNEXP",a."EXPP",a."EXPS",
+a."EXPADRESS",a."FLIMP",a."IMPORTER",a."ADRESSIMP",a."FLSEZ",a."SEZ",a."FLSEZREZ",a."STRANAP",
+a."OTD_ID",a."PARENTNUMBER",a."PARENTSTATUS", a."CODESTRANAV", a."CODESTRANAPR", a."CODESTRANAP", 
+a."CATEGORY", a."PARENT_ID", decode(a."EXPP", null, a."KONTRP", a."EXPP") as exporter, 
+decode(a."IMPORTER", null, a."POLUCHAT", a."IMPORTER") as importerfull, 
+B.OTD_NAME, B.OTD_ADDR_INDEX , B.OTD_ADDR_CITY, B.OTD_ADDR_LINE, B.OTD_ADDR_BUILDING, 
+B.EOTD_NAME, B.EOTD_ADDR_CITY, B.EOTD_ADDR_LINE 
+from C_CERT a left join C_OTD b on A.OTD_ID = B.ID;
+
+CREATE OR REPLACE  VIEW CERT_REPORT ("FILE_IN_ID", "CERT_ID", "NOMERCERT", "NBLANKA", "DATACERT", "ISSUEDATE", "EXPERT", "DATE_LOAD", "OTD_ID", "OTD_NAME") AS 
+select cc."FILE_IN_ID",cc."CERT_ID",cc."NOMERCERT",cc."NBLANKA",cc."DATACERT",cc."ISSUEDATE",cc."EXPERT",cc."DATE_LOAD",cc."OTD_ID", otd_name 
+from (
+select file_in_id, aa.cert_id, nomercert, nblanka, datacert, issuedate, expert, DATE_LOAD, otd_id 
+from C_FILES_IN aa left join C_CERT bb on aa.cert_id = bb.cert_id) cc 
+left join C_OTD dd on cc.otd_id = dd.id;
+
+CREATE UNIQUE INDEX CERT_NUMBER_BLANK_DATE ON C_CERT ("NOMERCERT", "NBLANKA", "DATACERT");
 
 ===========================================================================
 ' Создаем CTXCAT индекс на таблице c_product для ускорения поиска
@@ -63,7 +117,6 @@ CREATE INDEX INDX_CPRODUCT_CTXCAT ON C_PRODUCT (TOVAR) INDEXTYPE IS CTXSYS.CTXCA
 ' CREATE INDEX INDX_CPRODUCT_DENORM_CTXCAT ON C_PRODUCTDENORM (TOVAR) INDEXTYPE IS CTXSYS.CTXCAT PARALLEL;'
 
 alter table c_product_denorm INMEMORY INMEMORY(CERT_ID) NO INMEMORY(tovar);  
-
 alter table c_cert INMEMORY;  
 
 

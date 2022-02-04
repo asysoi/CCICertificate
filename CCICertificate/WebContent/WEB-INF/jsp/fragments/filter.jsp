@@ -97,6 +97,13 @@
 	<fieldset>
 		<legend class="grp_title">Экспортеры и Импортеры</legend>
 		<table class="filter">
+		    <tr>
+		       <td >УНП экспортера</td>
+				<td colspan="3"><form:input path="viewcertificate.unn" id="unn" /><a
+					href="javascript:clearelement($('#unn'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>	
 			<tr>
 				<td>Экспортер</td>
 				<td><form:input path="viewcertificate.expp" id="expp" /><a

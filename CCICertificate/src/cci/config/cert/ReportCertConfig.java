@@ -8,7 +8,7 @@ import java.util.Map;
 public class ReportCertConfig {
 	private String[] headernames = new String[] { "Отделение БелТПП", "Дата сертификата", "Форма сертификата", "Эксперт",
 			"Статус", "Количество доп.листов",
-			"УНП Грузополучателя",	"Грузоотправитель.Полное наименование", "Грузоотправитель.Краткое наименование",
+			"Грузоотправитель.Полное наименование", "Грузоотправитель.Краткое наименование",
 			"Адрес грузоотправителя", "Грузополучатель", "Адрес грузополучателя",
 			"Заявитель", "Средства транспорта", "Маршрут",
 			"Для служебных отметок", "Страна выдачи", "Страна предоставления",
@@ -20,9 +20,9 @@ public class ReportCertConfig {
 
 	private String[] fieldnames = new String[] {"OTD_NAME", "ISSUEDATE", "FORMS", "EXPERT",
 			"STATUS","KOLDOPLIST",
-			"UNN", "KONTRP", "KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", 
+			"KONTRP", "KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", 
 			"RUKOVOD", "TRANSPORT",	"MARSHRUT", "OTMETKA", "CODESTRANAV", 
-			"CODESTRANAPR", "CODESTRANAP", "UNNEXP", "EXPP", "EXPS",
+			"CODESTRANAPR", "CODESTRANAP", "UNN", "EXPP", "EXPS",
 			"EXPADRESS","IMPORTER", "ADRESSIMP"};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
