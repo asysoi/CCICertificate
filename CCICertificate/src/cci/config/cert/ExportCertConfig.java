@@ -11,27 +11,28 @@ import cci.config.ExportConfig;
 
 public class ExportCertConfig implements ExportConfig {
 	
-	private String[] headernames = new String[] { "Форма сертификата", "УНП",
+	private String[] headernames = new String[] { 
+			"Номер сертификата", "Дата сертификата", "Номер бланка",
+			"Форма сертификата", 
+			"УНП Экспортера", "Экспортер. Полное наименование",	"Экспортер. Сокращенное наименование","Адрес экспортера",
+			"УНП Импортера","Импортер",	"Адрес импортера",
 			"Грузоотправитель.Полное наименование", "Грузоотправитель.Краткое наименование",
 			"Адрес грузоотправителя", "Грузополучатель", "Адрес грузополучателя",
-			"Дата сертификата", "Номер сертификата", "Эксперт", "Номер бланка",
 			"Заявитель", "Средства транспорта", "Маршрут",
 			"Для служебных отметок", "Страна выдачи", "Страна предоставления", "Код страны предоставления",
-			"Статус", "Количество доп.листов", "УНП Экспортера",
-			"Экспортер. Полное наименование",
-			"Экспортер. Сокращенное наименование",
-			"Адрес экспортера", "Импортер",
-			"Адрес импортера", "Флаг СЭЗ", "СЭЗ", "Флаг резидента СЭЗ", "Страна происхождения",
-			"Отделение БелТПП", "Номер замененного сертификата",
+			"Статус", "Количество доп.листов", "Флаг СЭЗ", "СЭЗ", "Флаг резидента СЭЗ", "Страна происхождения",
+			"Отделение БелТПП", "Эксперт", "Номер замененного сертификата",
 			"Статус замененного сертификата", "Свод товарных позиций"};
 
-	private String[] fieldnames = new String[] { "FORMS", "UNN", "KONTRP",
-			"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
-			"NOMERCERT", "EXPERT", "NBLANKA", "RUKOVOD", "TRANSPORT",
+	private String[] fieldnames = new String[] { 
+			"NOMERCERT", "DATACERT", "NBLANKA",
+			"FORMS", 
+			"UNN",	"EXPP", "EXPS", "EXPADRESS",
+			"UNNEXP","IMPORTER", "ADRESSIMP",
+			"KONTRP", "KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL",  "RUKOVOD", "TRANSPORT",
 			"MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR",  "CODESTRANAPR", "STATUS",
-			"KOLDOPLIST", "UNNEXP", "EXPP", "EXPS", "EXPADRESS",
-			"IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ", "FLSEZREZ",
-			"STRANAP", "OTD_NAME", "PARENTNUMBER", "PARENTSTATUS", "TOVAR"};
+			"KOLDOPLIST", "FLSEZ", "SEZ", "FLSEZREZ",
+			"STRANAP", "OTD_NAME", "EXPERT", "PARENTNUMBER", "PARENTSTATUS", "TOVAR"};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
 	private String[] headers = new String[]{};

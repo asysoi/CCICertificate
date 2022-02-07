@@ -98,6 +98,15 @@ public class XSLService {
 			   	cell = row.createCell(cellnum++);
 				cell.setCellValue(	
 					new SimpleDateFormat("dd/MM/yyyy").format((Date) obj));
+			} else if (obj == null) {
+				cell = row.createCell(cellnum++);
+				cell.setCellValue("");
+			} else {
+				try {
+				    LOG.info(obj.getClass() + ": " + obj.toString());
+				} catch (Exception ex) {
+					
+				}
 			}
 		}
 	}

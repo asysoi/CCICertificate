@@ -6,13 +6,22 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 
+<style>
+  input[name="fields"] {
+      margin-top: 4px;
+      margin-bottom: 3px;
+      margin-right:8px;
+      margin-left: 0px;
+  }
+</style>
+
 <script>
     $(document).ready(function(){
 	      $( "#content li" ).each(function(index, element) {
 	        if (index < 17) {
-	           $("#col1").append("<li>" + $(element).html() + "</li>");
+	           $("#col1").append($(element).html() + "</br>");
 	        } else {
-	           $("#col2").append("<li>" + $(element).html() + "</li>");
+	           $("#col2").append($(element).html() + "</br>");
 	        }
 	   });
 	   $("#content").empty();
@@ -25,9 +34,7 @@
 <h4>Список отображаемых полей сертификата</h4>
 <form:form id="config" method="POST" commandName="downloadconfig">
 <div id="content" style="display: none">
-	<ul>
-		<form:checkboxes element="li" path="fields"	items="${downloadconfig.headermap}" />
-	</ul>
+	<form:checkboxes element="li" path="fields"	items="${downloadconfig.headermap}" />
 </div>
 	
 <table style="width:100%">
