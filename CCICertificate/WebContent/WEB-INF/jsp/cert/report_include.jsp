@@ -247,12 +247,12 @@
 		</tr>
 	</table>
 
-	<table class="certificate" style="width: 100%">
+	<table class="certificate" style="width: 100%; margin-top: 6px;">
 		<tr>
 			<c:forEach items="${rmanager.headers}" var="item">
 				<td
-					style="width:${item.width}%;background-color: gray; color: black"><a
-					href="javascript: goToList('${item.link}');" style="color: white; font-size: 120%;">${item.name}${item.selection}
+					style="width:${item.width}%;background-color: #36478B; color: white"><a
+					href="javascript: goToList('${item.link}');" style="color: white; font-size: 110%;">${item.name}${item.selection}
 
 </a></td>
 			</c:forEach>
@@ -270,7 +270,7 @@
 		</c:forEach>
 	</table>
 
-	<table style="width: 100%">
+	<table style="width: 100%; margin-top: 10px;">
 		<tr>
 			<td style="width: 80%; text-align: left"><a
 				href="javascript: goToList('${first_page}');"><img

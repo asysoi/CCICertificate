@@ -67,6 +67,7 @@ left join C_OTD dd on cc.otd_id = dd.id;
 
 // блокировать создание дублирующей записи о сертификате
 CREATE UNIQUE INDEX CERT_NUMBER_BLANK_DATE ON C_CERT ("NOMERCERT", "NBLANKA", "DATACERT");
+ALTER TABLE c_cert MODIFY (nomercert NOT NULL);
 
  // настроить cron для периодического запуска обновления индекса 
 exec CTX_DDL.SYNC_INDEX('INDX_CPRODUCT_CONTEXT');

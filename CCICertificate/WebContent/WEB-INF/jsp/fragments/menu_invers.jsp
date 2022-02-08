@@ -41,7 +41,7 @@
 				<li><a href="main.do">Главная</a></li>
 				-->
 	
-				<security:authorize ifAnyGranted="ROLE_CLIENT,ROLE_EXPERT">				
+				<security:authorize ifAnyGranted="ROLE_CLIENT">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Клиенты<b class="caret"></b></a>
 					<ul class="dropdown-menu">

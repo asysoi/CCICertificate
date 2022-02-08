@@ -206,7 +206,7 @@
 		$("#pview").dialog({
 			buttons : [ { text : "Загрузить",	click : function() {download();}}, 
  				{ text : "Очистить Все ", click : function() {clearconfig(); }}, 
- 				{ text : "Выбрать Все ", click : function() {selectall(); }}, 
+ 				// { text : "Выбрать Все ", click : function() {selectall(); }}, 
 				{ text : "Закрыть",	click : function() {$(this).dialog("close");}
 			} ]
 		});
@@ -276,7 +276,7 @@
 
 
 <div id="listwindow" class="main">
-	<h3>Список сертификатов</h3>
+	<h3>Список сертификатов (${vmanager.pagecount})</h3>
 	<table style="width: 100%">
 		<tr>
 
@@ -302,12 +302,12 @@
 		</tr>
 	</table>
 
-	<table class="certificate" style="width: 100%">
+	<table class="certificate" style="width: 100%; margin-top: 4px;">
 		<tr>
 			<c:forEach items="${vmanager.headers}" var="item">
 				<td
-					style="width:${item.width}%;background-color: gray; color: black"><a
-					href="javascript: goToList('${item.link}');" style="color: white; font-size: 120%;">${item.name}${item.selection}
+					style="width:${item.width}%;background-color: #36478B; color: white"><a
+					href="javascript: goToList('${item.link}');" style="color: white; font-size: 110%;">${item.name}${item.selection}
 
 </a></td>
 			</c:forEach>
@@ -350,7 +350,7 @@
 		</c:forEach>
 	</table>
 
-	<table style="width: 100%">
+	<table style="width: 100%; margin-top: 10px;">
 		<tr>
 			<td style="width: 80%; text-align: left"><a
 				href="javascript: goToList('${first_page}');"><img
@@ -371,7 +371,7 @@ ${vmanager.orderby}
 
 1px;"</c:if>>
 						${item} </a>
-				</c:forEach> &nbsp; [Сертификатов:&nbsp;${vmanager.pagecount}]</td>
+				</c:forEach></td>
 			<td style="width: 20%; text-align: right"><a
 				href="javascript: goToList('${next_page}');"><img
 					src="resources/images/next_page_24.png" alt="След."></a> <a
@@ -388,7 +388,7 @@ ${vmanager.orderby}
                   <!--  iframe class="pdf" id="pdf"></iframe -->
 	</div>
 
-    <p >Время загрузки: ${timeduration}</p> 
+    <!-- p>Время загрузки: ${timeduration}</p --> 
 </div>
 
 

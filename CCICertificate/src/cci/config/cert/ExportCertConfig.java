@@ -29,10 +29,12 @@ public class ExportCertConfig implements ExportConfig {
 			"FORMS", 
 			"UNN",	"EXPP", "EXPS", "EXPADRESS",
 			"UNNEXP","IMPORTER", "ADRESSIMP",
-			"KONTRP", "KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL",  "RUKOVOD", "TRANSPORT",
-			"MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR",  "CODESTRANAPR", "STATUS",
-			"KOLDOPLIST", "FLSEZ", "SEZ", "FLSEZREZ",
-			"STRANAP", "OTD_NAME", "EXPERT", "PARENTNUMBER", "PARENTSTATUS", "TOVAR"};
+			"KONTRP", "KONTRS", "ADRESS", 
+			"POLUCHAT", "ADRESSPOL",  
+			"RUKOVOD", "TRANSPORT",	"MARSHRUT", 
+			"OTMETKA", "STRANAV", "STRANAPR",  "CODESTRANAPR", 
+			"STATUS", "KOLDOPLIST", "FLSEZ", "SEZ", "FLSEZREZ",	"STRANAP", 
+			"OTD_NAME", "EXPERT", "PARENTNUMBER", "PARENTSTATUS", "TOVAR"};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
 	private String[] headers = new String[]{};
