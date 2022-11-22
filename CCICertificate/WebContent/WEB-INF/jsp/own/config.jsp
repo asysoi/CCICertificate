@@ -5,14 +5,22 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<style>
+  input[name="fields"] {
+      margin-top: 4px;
+      margin-bottom: 3px;
+      margin-right:8px;
+      margin-left: 0px;
+  }
+</style>
 
 <script>
     $(document).ready(function(){
 	      $( "#content li" ).each(function(index, element) {
 	        if (index < 10) {
-	           $("#col1").append("<li>" + $(element).html() + "</li>");
+	           $("#col1").append($(element).html() + "</br>");
 	        } else {
-	           $("#col2").append("<li>" + $(element).html() + "</li>");
+	           $("#col2").append($(element).html() + "</br>");
 	        }
 	   });
 	   $("#content").empty();
@@ -25,10 +33,7 @@
 <h4>Список экспортируемых реквизитов сертификата собственного производства</h4>
 <form:form id="config" method="POST" commandName="downloadconfig">
 <div id="content" style="display: none">
-	<ul>
-		<form:checkboxes element="li" path="fields"	items="${downloadconfig.headermap}" style="list-style: none;"/>
-		
-	</ul>
+	<form:checkboxes element="li" path="fields"	items="${downloadconfig.headermap}" />
 </div>
 	
 <table style="width:100%">

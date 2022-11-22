@@ -298,19 +298,23 @@
 
 			<td style="width: 80%; text-align: right">
 			       <security:authorize ifAnyGranted="ROLE_EXPERT">		
-			       <a href="javascript:wastereport();" title="Выгрузить отчет по отходам">
-			       <img src="resources/images/wastereport.png" alt="Отчет по отходам" /></a>
-				   &nbsp;
+			         <a href="javascript:wastereport();" title="Выгрузить отчет по отходам">
+			         <img src="resources/images/wastereport.png" alt="Отчет по отходам" /></a>
+				     &nbsp;
 				   </security:authorize>
 			       <security:authorize ifAnyGranted="ROLE_VITEBSK,ROLE_EXPERT">		
-			       <input id="reportdate" class="datepicker" size="12" placeholder="отчет на дату"/>
-			       <a href="javascript:reportOrsha();" title="Выгрузить отчет по Оршанскому региону">
-			       <img src="resources/images/orshareport.png" alt="Отчет по Орше" /></a>
-				   &nbsp;
+			         <input id="reportdate" class="datepicker" size="12" placeholder="отчет на дату"/>
+			         <a href="javascript:reportOrsha();" title="Выгрузить отчет по Оршанскому региону">
+			         <img src="resources/images/orshareport.png" alt="Отчет по Орше" /></a>
+				     &nbsp;
 				   </security:authorize>
-			       <a href="javascript:reportWindow();" title="Получить сводный отчет по сертификатам">
-			       <img src="resources/images/report_24.png" alt="Сводный отчет"/></a>
-                   &nbsp;
+				   
+				   <security:authorize ifNotGranted="ROLE_MNS">
+			          <a href="javascript:reportWindow();" title="Получить сводный отчет по сертификатам">
+			          <img src="resources/images/report_24.png" alt="Сводный отчет"/></a>
+                      &nbsp;
+                   </security:authorize>
+                    
 				   <a href="javascript:downloadCertificates();"  title="Экспортировать список сертификатов в формате Excel">
 				   <img src="resources/images/exp_excel.png" alt="Экспорт в файл формата Excel"/></a>
 				   &nbsp;			        

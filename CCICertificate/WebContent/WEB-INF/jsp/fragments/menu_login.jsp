@@ -19,7 +19,7 @@
 		<div class="navbar-collapse collapse">
 		
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="certcheck.do">
+				<li><a target="_blank" href="https://certs.cci.by">
     			Проверка сертификата 
 				</a></li>
 			</ul>

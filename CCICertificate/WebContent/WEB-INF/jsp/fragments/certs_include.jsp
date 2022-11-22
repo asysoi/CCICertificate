@@ -2,6 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
 <spring:url value="resources/css/cci.css" var="CCICss" />
 <link href="${CCICss}" rel="stylesheet" />
@@ -276,7 +277,7 @@
 
 
 <div id="listwindow" class="main">
-	<h3>Список сертификатов (${vmanager.pagecount})</h3>
+	<h3>Список сертификатов происхождения товара (${vmanager.pagecount})</h3>
 	<table style="width: 100%">
 		<tr>
 
@@ -286,7 +287,9 @@
             </td>
 
 			<td style="width: 40%; text-align: right">
-			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Сводная таблица"/></a>
+			       <security:authorize ifNotGranted="ROLE_MNS">
+   				      <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Отчеты"/></a>
+				   </security:authorize>
 				   &nbsp;
 				   <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
 				   &nbsp;			        
@@ -326,7 +329,11 @@
 				<td>${cert.kontrp}</td>
 				<td>${cert.nblanka}</td>
 				<td>${cert.datacert}</td>
-                <td>${cert.koldoplist}</td> 
+                <td>
+                  <c:if test="${cert.koldoplist > 0}"> 
+                       ${cert.koldoplist}
+                  </c:if> 
+                </td> 
 				<!-- 
 	        <td>
 	        <c:if test="${cert.child_id != null}">

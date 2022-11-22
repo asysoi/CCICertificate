@@ -33,9 +33,11 @@
 		  <security:authorize access="isAuthenticated()">
 			<ul class="nav navbar-nav navbar-right">
 			
-				<form class="navbar-form navbar-right">
+			    <security:authorize ifNotGranted="ROLE_MNS">
+				 <form class="navbar-form navbar-right">
             		<input type="text" class="form-control" placeholder="Поиск..." style="height: 24px"/>
-          		</form>
+          		 </form>
+          		</security:authorize> 
 
 			    <!-- 
 				<li><a href="main.do">Главная</a></li>
@@ -76,18 +78,22 @@
 				</li>
 				</security:authorize>
 
-				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK,ROLE_BREST,ROLE_GRODNO,ROLE_MOGILEV">				
+				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK,ROLE_BREST,ROLE_GRODNO,ROLE_MOGILEV,ROLE_MNS">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="certs.do">Сертификаты происхождения</a></li>
+						<security:authorize ifNotGranted="ROLE_MNS">
 						<li><a href="reportcerts.do">Отчет о загрузке сертификатов происхождения</a></li>
+						</security:authorize>
 						<li class="divider"></li>
 						<li><a href="owncerts.do">Сертификаты собственного производства</a></li>
+						<security:authorize ifNotGranted="ROLE_MNS">						
 						<li><a href="fscerts.do">Сертификаты свободной продажи</a></li>
 						<li class="divider"></li>						
 						<li><a href="#">Акты экспертиз</a></li>
-						<li><a href="certcheck.do">Верификация</a></li>
+						</security:authorize>
+						<li><a target="blank" href="https://certs.cci.by">Проверка сертификата</a></li>
 					</ul>
 				</li>
 			    </security:authorize>				
@@ -111,7 +117,7 @@
 					</ul>
 				</li>
 			    </security:authorize>
-				
+
 				<li>
 				    <a href="logout.do">
 					<security:authorize access="isAuthenticated()">
@@ -119,8 +125,9 @@
 					</security:authorize>
 				    </a>
 				</li>
-				
+				<security:authorize ifNotGranted="ROLE_MNS">
 				<li><a href="help.do">Справка</a></li>
+				</security:authorize>
 			</ul>
 		  </security:authorize>
 		</div>

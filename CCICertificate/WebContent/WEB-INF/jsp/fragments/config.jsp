@@ -31,7 +31,7 @@
 	});
 </script>
 
-<h4>Список отображаемых полей сертификата</h4>
+<h4>Список отображаемых полей сертификата происхождения товара</h4>
 <form:form id="config" method="POST" commandName="downloadconfig">
 <div id="content" style="display: none">
 	<form:checkboxes element="li" path="fields"	items="${downloadconfig.headermap}" />
