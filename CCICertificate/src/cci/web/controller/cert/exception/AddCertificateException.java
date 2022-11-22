@@ -8,6 +8,6 @@ public class AddCertificateException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 
 	public AddCertificateException(String err) {
-		   super("Ошибка добавления сертификата в базу: " + err);
+		   super("Error certificate adding: " + err);
        }
 }

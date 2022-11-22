@@ -1,5 +1,7 @@
 ﻿package cci.pdfbuilder;
 
+import java.lang.reflect.Field;
+
 import cci.pdfbuilder.cert.APDFBuilder;
 import cci.pdfbuilder.cert.CT1PDFBuilder;
 import cci.pdfbuilder.cert.CT2PDFBuilder;
@@ -71,4 +73,20 @@ public class PDFBuilderFactory {
     	  }
     	  return builder;
       }
+      
+	public static boolean checkValidFormName(String fname) {
+		PDFBuilderFactory obj = new PDFBuilderFactory();
+		Field fields[] = obj.getClass().getDeclaredFields();
+
+		for (Field field : fields) {
+			try {
+				if (fname.equals((String) field.get(obj))) {
+					return true;
+				}
+			} catch (Exception ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+		return false;
+	}
 }

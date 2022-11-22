@@ -9,7 +9,7 @@ public class CertificateUpdateException extends RuntimeException {
 	private static final long serialVersionUID = 2L;
 
 	public  CertificateUpdateException(String err) {
-		   super(err);
+		super("Error certificate update: " + err);
        }
 
 }

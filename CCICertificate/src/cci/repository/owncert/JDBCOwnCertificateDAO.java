@@ -438,12 +438,14 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 
 		String sql = "select * from owncertificate WHERE number = ? and blanknumber = ? and datecert =  STR_TO_DATE(?,'%d.%m.%Y') and otd_id = ? ";
 		LOG.info("findOwnCertificateByNumber");
+		LOG.info("SQL parameneters: " + number.trim() + " / " + blanknumber.trim() + " / " + datecert.trim() + " / " + otd_id) ;
+		
 		OwnCertificate cert = template.getJdbcOperations()
 				.queryForObject(
 						sql,
 						new Object[] { number.trim(), blanknumber.trim(), datecert.trim(), otd_id},
 						new OwnCertificateMapper<OwnCertificate>());
-		
+		LOG.info("findOwnCertificateByNumber: after query") ;
 		loadReletedCertificateEntities(cert);
 		return cert;	
 	}
@@ -515,7 +517,8 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 			String sql = "select * from owncertificate WHERE number = ? and blanknumber = ? and datecert =  STR_TO_DATE(?,'%d.%m.%Y') and otd_id= ?";
             
 			boolean active = TransactionSynchronizationManager.isActualTransactionActive();
-			LOG.debug("\n\nActive transaction = " + active + "\n\n");
+			LOG.info("\n\nActive transaction = " + active + "\n\n");
+			LOG.info("SQL parameneters: " + number.trim() + " / " + blanknumber.trim() + " / " + datecert.trim() + " / " + otd_id) ;
 			
 			OwnCertificate cert = template.getJdbcOperations().queryForObject(sql,
 					new Object[] { number.trim(), blanknumber.trim(), datecert.trim(), otd_id },

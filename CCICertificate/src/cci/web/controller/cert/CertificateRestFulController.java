@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +36,7 @@ import cci.web.controller.cert.exception.AddCertificateException;
 import cci.web.controller.cert.exception.CertificateDeleteException;
 import cci.web.controller.cert.exception.CertificateUpdateException;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
+import cci.web.validator.cert.CertificateValidator;
 
 @Controller
 @RestController
@@ -109,6 +112,12 @@ public class CertificateRestFulController {
 	public Certificate addXMLCertificate(@RequestBody Certificate certificate,
 			Authentication aut) {
 		
+		List<String> errors = CertificateValidator.validate(certificate);
+        if ( errors.size() > 0 ) {
+	    	LOG.info("Errror ADD: " + errors.toString());
+        	throw(new AddCertificateException("Certificate isn't valid: " + errors.toString()));
+        }
+		
 		String otd_id = getOtd_idByRole(aut);
 		
 		if (otd_id != null) {
@@ -118,11 +127,11 @@ public class CertificateRestFulController {
    		        LOG.info("Certificate [" + certificate.getNomercert() + "][" + certificate.getNblanka() + "][" + certificate.getDatacert() + "] ADDED by [" + aut.getName() + "]");
 			} catch (Exception ex) {
 				LOG.info("Error ADD: " + ex.getMessage());
-				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
+				throw(new AddCertificateException(ex.toString()));
 			}
 	   	} else {
-	   		LOG.info("Добавлять сертификат может только авторизированный представитель отделения .");
-	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения ."));
+	   		LOG.info("Добавлять сертификат может только авторизированный представитель отделения.");
+	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения."));
 	   	}
 		return certificate;
 	}
@@ -161,11 +170,19 @@ public class CertificateRestFulController {
 	@ResponseStatus(HttpStatus.OK)
 	public Certificate updateCertificate(@RequestBody Certificate cert, Authentication aut) {
 		 Certificate rcert = null;
+		 
+		 List<String> errors = CertificateValidator.validate(cert);
+	     if ( errors.size() > 0 ) {
+	    	LOG.info("Errror UPDATE: " + errors.toString()); 
+	       	throw(new CertificateUpdateException("Certificate isn't valid: " + errors.toString()));
+	     }
+	     
 		 try {
 			 String otd_id = getOtd_idByRole(aut);
 			 if (otd_id == null) {
 				 throw(new CertificateUpdateException("Изменить сертификат может только авторизированный представитель отделения."));
 			 }
+
    		     rcert = restservice.updateCertificate(cert, otd_id);
    		     LOG.info("Certificate [" + cert.getNomercert() + "][" + cert.getNblanka() + "][" + cert.getDatacert() + "] UPDATED by [" + aut.getName() + "]");
 		 } catch (NotFoundCertificateException ex) {

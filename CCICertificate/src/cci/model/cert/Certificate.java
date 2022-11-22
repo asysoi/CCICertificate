@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+
 @XmlRootElement(name = "cert")
 @Component
 @XmlType(propOrder = {"otd_id", "otd_name", "forms", "unn",  "kontrp",  "kontrs", "adress", "poluchat", "adresspol", "datacert", "nomercert", "expert", "nblanka", "rukovod", 
