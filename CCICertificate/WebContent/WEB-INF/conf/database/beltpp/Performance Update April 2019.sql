@@ -72,7 +72,7 @@ ALTER TABLE c_cert MODIFY (nomercert NOT NULL);
  // настроить cron для периодического запуска обновления индекса 
 exec CTX_DDL.SYNC_INDEX('INDX_CPRODUCT_CONTEXT');
 exec CTX_DDL.SYNC_INDEX('INDX_CPRODUCT_DENORM_CTX');
-
+sqlplus brltpp/123456@dbtest @/home/oracle/index
 ===================================== перенос базы с 46 машины на 4 3.02.22  ===============================
 alter table c_cert ADD parent_id integer;
 
