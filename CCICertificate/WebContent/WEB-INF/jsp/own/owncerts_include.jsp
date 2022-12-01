@@ -246,16 +246,16 @@
         	iframe.id = hiddenIFrameID;
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
-	    	$("#iframe").on('load', function(event) {alert("IFrame loaded");});	    	
+	    	$("#hiddenDownloader").on('load', function() {alert("IFrame loaded");});	    	
     	}
     	
-    	//spin('hiddenDownloader');
+    	spin('hiddenDownloader');
     	if ($("#reportdate").val() === "")  {
     	    iframe.src = "ownorshareport.do";
     	} else {
     		iframe.src = "ownorshareport.do?reportdate=" + $("#reportdate").val();
     	}
-    	//$('#hiddenDownloader').data('spinner').stop();
+    	$('#hiddenDownloader').data('spinner').stop();
 	}
 	
 	// ---------------------------------------------------------------------------------
@@ -265,15 +265,20 @@
 		
    		var hiddenIFrameID = 'hiddenDownloader';
         var iframe = document.getElementById(hiddenIFrameID);
-        
+        alert("Отправлен запрос на формирование отчета по отходам на сервер. Оэидайте результатов обработки.");
     	if (iframe == null) {
         	iframe = document.createElement('iframe');
         	iframe.id = hiddenIFrameID;
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
-	    	 $("#iframe").on('load', function(event) {alert("IFrame loaded");});	    	
     	}
+    	$("#hiddenDownloader").on('load', function(event) {  alert("IFrame loaded");} );	    	
+    	$("#hiddenDownloader").onload = "function(){parent.iframeload()}";
+    	iframe.addEventListener("load", iframeload);
+    	iframe.addEventListener("load", iframeload);
+    	iframe.addEventListener("onunload", iframeload); 
     	
+    	$('#waste').attr("href", "javascript:alert('Формирование отчета об отходах. Ожидайте ответа сервера. После сохренения файла отчета необходимо перегрузить страницу со списком сертификатов для получения возможности повторить формирование отчета.');");
     	spin('hiddenDownloader');
     	if ($("#reportdate").val() === "")  {
     	    iframe.src = "ownwastereport.do";
@@ -281,8 +286,12 @@
     		iframe.src = "ownwastereport.do?certdate=" + $("#reportdate").val();
     	}
         $('#hiddenDownloader').data('spinner').stop();
-        
 	}
+	
+	function iframeload() {
+		$('#waste').attr("href", "javascript:wastereport();");
+	}
+	
 </script>
 
 
@@ -298,7 +307,7 @@
 
 			<td style="width: 80%; text-align: right">
 			       <security:authorize ifAnyGranted="ROLE_EXPERT">		
-			         <a href="javascript:wastereport();" title="Выгрузить отчет по отходам">
+			         <a id="waste" href="javascript:wastereport();" title="Выгрузить отчет по отходам">
 			         <img src="resources/images/wastereport.png" alt="Отчет по отходам" /></a>
 				     &nbsp;
 				   </security:authorize>
