@@ -1,0 +1,242 @@
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+	xmlns:urn="urn:EEC:Interaction:v1.0" xmlns:wsa="http://www.w3.org/2005/08/addressing">
+	<soap:Header>
+		<wsa:To>ESS.VN.VN</wsa:To>
+		<wsa:From>
+			<wsa:Address>ESS.VN.RU</wsa:Address>
+		</wsa:From>
+		<wsa:Action>tr://CERTIFICATE/0.1/ESS.VN.PRC.001/ESS.VN.TRN.001/ESS.VN.MSG.001
+		</wsa:Action>
+		<wsa:MessageID>urn:uuid:dba8fff6-bbb3-47c3-afb2-a9a9accce8dd
+		</wsa:MessageID>
+	</soap:Header>
+	<soap:Body>
+		<n1:RootDocument
+			xsi:schemaLocation="urn:wco:datamodel:WCO:Declaration:2Certificate.xsd"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n1="urn:wco:datamodel:WCO:Declaration:2">
+			<CancellationDateTime>2017-12-17T00:00:00Z</CancellationDateTime>
+			<EffectiveDateTime>2017-10-15T00:00:00Z</EffectiveDateTime>
+			<ExpirationDateTime>2018-09-17T00:00:00Z</ExpirationDateTime>
+			<FunctionCode>CHG</FunctionCode>
+			<FunctionalReferenceID>PcaFAG0kNUGqHYoSTryWbg%3d%3d
+			</FunctionalReferenceID>
+			<ID>12345</ID>
+			<IssueDateTime>2017-09-17T09:30:00Z</IssueDateTime>
+			<issueLocationID>RU MOW</issueLocationID>
+			<TypeCode>EAV</TypeCode>
+			<AdditionalDocument>
+				<IssueDateTime>2017-09-17T00:00:00Z</IssueDateTime>
+				<issueLocationID>RUMOW</issueLocationID>
+				<IssueLocationName>Russian Federation, Moscow</IssueLocationName>
+				<Authenticator>
+					<Name>The Chamber of Commerce and Industry of the Russian
+						Federation (CCI of
+						Russia)
+					</Name>
+					<ID>1027746000853</ID>
+					<RoleCode>AX</RoleCode>
+					<Address>
+						<TypeCode>2</TypeCode>
+						<CityName>Moscow</CityName>
+						<CountryCode>RU</CountryCode>
+						<Line>Ilyinka 6/1, 1 Moscow, Russian Federation</Line>
+						<PostcodeID>109012</PostcodeID>
+					</Address>
+				</Authenticator>
+				<LPCOAuthorizedParty>
+					<Name>RostovVinTrade</Name>
+					<ID>1234567890987</ID>
+					<RoleCode>DT</RoleCode>
+					119
+					<Address>
+						<TypeCode>2</TypeCode>
+						<CityName>Rostov-on-Don</CityName>
+						<CountryCode>RU</CountryCode>
+						<Line>Rostov-on-Don, Lenina st, 18, Russia</Line>
+						<PostcodeID>344012</PostcodeID>
+					</Address>
+				</LPCOAuthorizedParty>
+			</AdditionalDocument>
+			<AdditionalInformation>
+				<StatementCode>R.TR</StatementCode>
+				<StatementDescription>Issued Retroactively</StatementDescription>
+				<LimitDateTime>2017-09-16T00:00:00Z</LimitDateTime>
+			</AdditionalInformation>
+			<GoodsShipment>
+				<ExportationCountryCode>RU</ExportationCountryCode>
+				<AdditionalInformation>
+					<Content>Invoice will be issued later by Asia Grocery Distribution
+						Limited. Address：4/F How
+						Ming Factory Building, 99 How Ming Street,
+						Kwun Tong
+					</Content>
+					<StatementCode>TCI</StatementCode>
+					<StatementDescription>Third Country Invoice</StatementDescription>
+				</AdditionalInformation>
+				<Consignee>
+					<Name>LEE KHOA TRADING</Name>
+					<RoleCode>CN</RoleCode>
+					<Address>
+						<CityName>Hanoi</CityName>
+						<CountryCode>VN</CountryCode>
+						<Line>Add. 44/4 Dang Van Ngu Str., Dong Da Distr.,Hanoi, Viet Nam,
+							115000
+						</Line>
+					</Address>
+				</Consignee>
+				<Consignment>
+					<BorderTransportMeans>
+						<TypeCode listAgencyName="EAEU">40</TypeCode>
+					</BorderTransportMeans>
+					<LoadingLocation>
+						<Name>Russiian Federation, Moscow</Name>
+						<ID>RUSVO</ID>
+					</LoadingLocation>
+					<UnloadingLocation>
+						<ID>VNHAN</ID>
+					</UnloadingLocation>
+				</Consignment>
+				<DeliveryDestination>
+					<Address>
+						<CountryCode>VN</CountryCode>
+					</Address>
+				</DeliveryDestination>
+				<Exporter>
+					<Name>RostovVinTrade</Name>
+					<RoleCode>EX</RoleCode>
+					<Address>
+						120
+						<TypeCode>2 </TypeCode>
+						<CityName>Rostov-on-Don</CityName>
+						<CountryCode>RU</CountryCode>
+						<Line>Rostov-on-Don, Lenina st, 18, Russia, 344012</Line>
+					</Address>
+				</Exporter>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>1</SequenceNumeric>
+					<Commodity>
+						<Description>Sparkling wine</Description>
+						<CountQuantity unitCode="796">144</CountQuantity>
+						<Classification>
+							<ID>2204101100</ID>
+							<IdentificationTypeCode>HS code</IdentificationTypeCode>
+						</Classification>
+						<GoodsMeasure>
+							<GrossMassMeasure unitCode="166">80</GrossMassMeasure>
+							<NetNetWeightMeasure unitCode="166">60
+							</NetNetWeightMeasure>
+						</GoodsMeasure>
+						<ProductName>
+							<Name>Rostovskoye Igristoye</Name>
+							<NameQualifierCode>brand name</NameQualifierCode>
+						</ProductName>
+					</Commodity>
+					<Origin>
+						<RuleCode>WO</RuleCode>
+					</Origin>
+					<Packaging>
+						<QuantityQuantity>1</QuantityQuantity>
+						<TypeCode>32</TypeCode>
+					</Packaging>
+				</GovernmentAgencyGoodsItem>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>2</SequenceNumeric>
+					<Commodity>
+						<Description>Dry white wine</Description>
+						<CountQuantity unitCode="796">144</CountQuantity>
+						<Classification>
+							<ID>2204210700</ID>
+							<IdentificationTypeCode>HS code</IdentificationTypeCode>
+						</Classification>
+						<GoodsMeasure>
+							<GrossMassMeasure unitCode="166">70</GrossMassMeasure>
+							<NetNetWeightMeasure unitCode="166">55
+							</NetNetWeightMeasure>
+						</GoodsMeasure>
+						<ProductName>
+							<Name>TSIMLYANSKY RESERVE</Name>
+							<NameQualifierCode>brand name</NameQualifierCode>
+						</ProductName>
+					</Commodity>
+					<Origin>
+						<RuleCode>WO</RuleCode>
+						121
+					</Origin>
+					<Packaging>
+						<QuantityQuantity>1</QuantityQuantity>
+						<TypeCode>32</TypeCode>
+					</Packaging>
+				</GovernmentAgencyGoodsItem>
+				<GovernmentAgencyGoodsItem>
+					<SequenceNumeric>3</SequenceNumeric>
+					<Commodity>
+						<Description>vodka</Description>
+						<CountQuantity unitCode="796">144</CountQuantity>
+						<Classification>
+							<ID>2208601100</ID>
+							<IdentificationTypeCode>HS code</IdentificationTypeCode>
+						</Classification>
+						<GoodsMeasure>
+							<GrossMassMeasure unitCode="166">60</GrossMassMeasure>
+							<NetNetWeightMeasure unitCode="166">50
+							</NetNetWeightMeasure>
+						</GoodsMeasure>
+						<ProductName>
+							<Name>Ataman Platov</Name>
+							<NameQualifierCode>brand name</NameQualifierCode>
+						</ProductName>
+					</Commodity>
+					<Origin>
+						<RuleCode>WO</RuleCode>
+					</Origin>
+					<Packaging>
+						<QuantityQuantity>1</QuantityQuantity>
+						<TypeCode>32</TypeCode>
+					</Packaging>
+				</GovernmentAgencyGoodsItem>
+				<Importer>
+					<Name>LEE KHOA TRADING</Name>
+					<RoleCode>CN</RoleCode>
+					<Address>
+						<TypeCode>2</TypeCode>
+						<CityName>Hanoi</CityName>
+						<CountryCode>VN</CountryCode>
+						<Line>Add. 44/4 Dang Van Ngu Str., Dong Da Distr.,Hanoi, Viet Nam,
+							115000
+						</Line>
+					</Address>
+				</Importer>
+				<Invoice>
+					<ID>12345</ID>
+					<IssueDateTime>2017-08-17T00:00:00Z</IssueDateTime>
+					<TypeCode>02017</TypeCode>
+					<SequenceNumeric>1</SequenceNumeric>
+				</Invoice>
+				<Invoice>
+					<ID>12333</ID>
+					<IssueDateTime>2017-08-17T00:00:00Z</IssueDateTime>
+					<TypeCode>02017</TypeCode>
+					122
+					<SequenceNumeric>1</SequenceNumeric>
+				</Invoice>
+				<Invoice>
+					<ID>12444</ID>
+					<IssueDateTime>2017-08-18T00:00:00Z</IssueDateTime>
+					<TypeCode>02017</TypeCode>
+					<SequenceNumeric>2</SequenceNumeric>
+				</Invoice>
+				<Invoice>
+					<ID>12555</ID>
+					<IssueDateTime>2017-08-19T00:00:00Z</IssueDateTime>
+					<TypeCode>02017</TypeCode>
+					<SequenceNumeric>3</SequenceNumeric>
+				</Invoice>
+			</GoodsShipment>
+			<PreviousDocument>
+				<ID>12097</ID>
+				<IssueDateTime>2017-09-01T00:00:00Z</IssueDateTime>
+				<TypeCode>861</TypeCode>
+			</PreviousDocument>
+		</n1:RootDocument>
+	</soap:Body>
+</soap:Envelope>

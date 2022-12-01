@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (http://www.altova.com) by AMD (ru-Board) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:wco:datamodel:WCO:Declaration:2"
+	xmlns:ds="urn:wco:datamodel:WCO:DS:1" targetNamespace="urn:wco:datamodel:WCO:Declaration:2">
+	<xs:import namespace="urn:wco:datamodel:WCO:DS:1"
+		schemaLocation="DS_1p0.xsd" />
+	<xs:element name="RootDocument" type="RootDocumentType" />
+	<xs:complexType name="RootDocumentType">
+		<xs:sequence>
+			<xs:element name="CancellationDateTime" type="ds:RootDocumentCancellationDateTimeType"
+				minOccurs="0" />
+			<xs:element name="EffectiveDateTime" type="ds:RootDocumentEffectiveDateTimeType"
+				minOccurs="0" />
+			<xs:element name="ExpirationDateTime" type="ds:RootDocumentExpirationDateTimeType" />
+			<xs:element name="FunctionCode" type="ds:RootDocumentFunctionCodeType" />
+			<xs:element name="FunctionalReferenceID"
+				type="ds:RootDocumentFunctionalReferenceIDType" minOccurs="0" />
+			<xs:element name="ID" type="ds:RootDocumentIdentificationIDType" />
+			<xs:element name="IssueDateTime" type="ds:RootDocumentIssueDateTimeType" />
+			<xs:element name="issueLocationID"
+				type="ds:RootDocumentIssueLocationIdentificationIDType" />
+			<xs:element name="TypeCode" type="ds:RootDocumentTypeCodeType" />
+			<xs:element name="AdditionalDocument">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="IssueDateTime"
+							type="ds:AdditionalDocumentIssueDateTimeType" />
+						<xs:element name="issueLocationID"
+							type="ds:AdditionalDocumentIssueLocationIdentificationIDType" />
+						<xs:element name="IssueLocationName"
+							type="ds:AdditionalDocumentIssueLocationNameTextType" />
+						<xs:element name="Authenticator">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="ds:AuthenticatorNameTextType" />
+									<xs:element name="ID"
+										type="ds:AuthenticatorIdentificationIDType" />
+									<xs:element name="RoleCode" type="ds:AuthenticatorRoleCodeType" />
+									<xs:element name="Address">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TypeCode" type="ds:AddressTypeCodeType"
+													minOccurs="0" />
+												<xs:element name="CityName" type="ds:AddressCityNameTextType"
+													minOccurs="0" />
+												<xs:element name="CountryCode" type="ds:AddressCountryCodeType" />
+												<xs:element name="CountrySubDivisionCode"
+													type="ds:AddressCountrySubDivisionCodeType" minOccurs="0" />
+												<xs:element name="CountrySubDivisionName"
+													type="ds:AddressCountrySubDivisionNameTextType" minOccurs="0" />
+												<xs:element name="Line" type="ds:AddressLineTextType"
+													minOccurs="0" />
+												<xs:element name="PostcodeID" type="ds:AddressPostcodeIDType"
+													minOccurs="0" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="LPCOAuthorizedParty">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name"
+										type="ds:LPCOAuthorizedPartyNameTextType" />
+									<xs:element name="ID"
+										type="ds:LPCOAuthorizedPartyIdentificationIDType" minOccurs="0" />
+									<xs:element name="RoleCode"
+										type="ds:LPCOAuthorizedPartyRoleCodeType" />
+									<xs:element name="Address">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TypeCode" type="ds:AddressTypeCodeType"
+													minOccurs="0" />
+												<xs:element name="CityName" type="ds:AddressCityNameTextType"
+													minOccurs="0" />
+												<xs:element name="CountryCode" type="ds:AddressCountryCodeType" />
+												<xs:element name="CountrySubDivisionCode"
+													type="ds:AddressCountrySubDivisionCodeType" minOccurs="0" />
+												<xs:element name="CountrySubDivisionName"
+													type="ds:AddressCountrySubDivisionNameTextType" minOccurs="0" />
+												<xs:element name="Line" type="ds:AddressLineTextType"
+													minOccurs="0" />
+												<xs:element name="PostcodeID" type="ds:AddressPostcodeIDType"
+													minOccurs="0" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AdditionalInformation">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="StatementCode"
+							type="ds:AdditionalInformationStatementCodeType" minOccurs="0" />
+						<xs:element name="StatementDescription"
+							type="ds:AdditionalInformationStatementDescriptionTextType"
+							minOccurs="0" />
+						<xs:element name="LimitDateTime"
+							type="ds:AdditionalInformationLimitDateTimeType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GoodsShipment">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ExportationCountryCode"
+							type="ds:GoodsShipmentExportationCountryCodeType" />
+						<xs:element name="AdditionalInformation" minOccurs="0"
+							maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Content"
+										type="ds:AdditionalInformationContentTextType" />
+									<xs:element name="StatementCode"
+										type="ds:AdditionalInformationStatementCodeType" />
+									<xs:element name="StatementDescription"
+										type="ds:AdditionalInformationStatementDescriptionTextType" />
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Consignee" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="ds:ConsigneeNameTextType" />
+									<xs:element name="ID" type="ds:ConsigneeIdentificationIDType"
+										minOccurs="0" />
+									<xs:element name="RoleCode" type="ds:ConsigneeRoleCodeType" />
+									<xs:element name="Address">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TypeCode" type="ds:AddressTypeCodeType"
+													minOccurs="0" />
+												<xs:element name="CityName" type="ds:AddressCityNameTextType"
+													minOccurs="0" />
+												<xs:element name="CountryCode" type="ds:AddressCountryCodeType" />
+												<xs:element name="CountrySubDivisionCode"
+													type="ds:AddressCountrySubDivisionCodeType" minOccurs="0" />
+												<xs:element name="CountrySubDivisionName"
+													type="ds:AddressCountrySubDivisionNameTextType" minOccurs="0" />
+												<xs:element name="Line" type="ds:AddressLineTextType"
+													minOccurs="0" />
+												<xs:element name="PostcodeID" type="ds:AddressPostcodeIDType"
+													minOccurs="0" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Contact" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Name" type="ds:ContactNameTextType"
+													minOccurs="0" />
+												<xs:element name="Communication" minOccurs="0"
+													maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ID"
+																type="ds:CommunicationIdentificationIDType" />
+															<xs:element name="TypeID" type="ds:CommunicationTypeIDType"
+																minOccurs="0" />
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Communication" minOccurs="0"
+										maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ID"
+													type="ds:CommunicationIdentificationIDType" />
+												<xs:element name="TypeID" type="ds:CommunicationTypeIDType"
+													minOccurs="0" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Consignment" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="BorderTransportMeans" minOccurs="0"
+										maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Name"
+													type="ds:BorderTransportMeansNameTextType" minOccurs="0" />
+												<xs:element name="ID"
+													type="ds:BorderTransportMeansIdentificationIDType"
+													minOccurs="0" />
+												<xs:element name="TypeCode"
+													type="ds:BorderTransportMeansTypeCodeType" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="LoadingLocation" minOccurs="0"
+										maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Name" type="ds:LoadingLocationNameTextType" />
+												<xs:element name="ID"
+													type="ds:LoadingLocationIdentificationIDType" />
+												<xs:element name="DepartureDateTime"
+													type="ds:LoadingLocationDepartureDateTimeType" minOccurs="0" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="UnloadingLocation" minOccurs="0"
+										maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ID"
+													type="ds:UnloadingLocationIdentificationIDType" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="DeliveryDestination">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Address">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="CountryCode" type="ds:AddressCountryCodeType" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Exporter">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="ds:ExporterNameTextType" />
+									<xs:element name="ID" type="ds:ExporterIdentificationIDType"
+										minOccurs="0" />
+									<xs:element name="RoleCode" type="ds:ExporterRoleCodeType" />
+									<xs:element name="Address">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TypeCode" type="ds:AddressTypeCodeType"
+													minOccurs="0" />
+												<xs:element name="CityName" type="ds:AddressCityNameTextType"
+													minOccurs="0" />
+												<xs:element name="CountryCode" type="ds:AddressCountryCodeType" />
+												<xs:element name="CountrySubDivisionCode"
+													type="ds:AddressCountrySubDivisionCodeType" minOccurs="0" />
+												<xs:element name="CountrySubDivisionName"
+													type="ds:AddressCountrySubDivisionNameTextType" minOccurs="0" />
+												<xs:element name="Line" type="ds:AddressLineTextType"
+													minOccurs="0" />
+												<xs:element name="PostcodeID" type="ds:AddressPostcodeIDType"
+													minOccurs="0" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="GovernmentAgencyGoodsItem" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="SequenceNumeric" type="ds:CommoditySequenceNumericType" />
+									<xs:element name="Commodity">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Description"
+													type="ds:CommodityDescriptionTextType" />
+												<xs:element name="CountQuantity" type="ds:CommodityCountQuantityType"
+													minOccurs="0" />
+												<xs:element name="AdditionalInformation"
+													minOccurs="0">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="StatementCode"
+																type="ds:AdditionalInformationStatementCodeType" />
+															<xs:element name="StatementDescription"
+																type="ds:AdditionalInformationStatementDescriptionTextType" />
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="Classification">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ID"
+																type="ds:ClassificationIdentificationIDType" />
+															<xs:element name="IdentificationTypeCode"
+																type="ds:ClassificationIdentificationTypeCodeType" />
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="GoodsMeasure" minOccurs="0">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="GrossMassMeasure"
+																type="ds:GoodsMeasureGrossMassMeasureType" />
+															<xs:element name="NetNetWeightMeasure"
+																type="ds:GoodsMeasureNetNetWeightMeasureType" />
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="ProductName" minOccurs="0"
+													maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="Name" type="ds:ProductNameNameTextType" />
+															<xs:element name="NameQualifierCode"
+																type="ds:ProductNameNameQualifierCodeType" minOccurs="0" />
+														</xs:sequence>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Origin">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="RuleCode" type="ds:OriginRuleCodeType" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Packaging" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="MarksNumbersID" type="ds:PackagingMarksNumbersIDType"
+													minOccurs="0" />
+												<xs:element name="QuantityQuantity"
+													type="ds:PackagingQuantityQuantityType" />
+												<xs:element name="TypeCode" type="ds:PackagingTypeCodeType" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Importer">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="ds:ImporterNameTextType" />
+									<xs:element name="ID" type="ds:ExporterIdentificationIDType"
+										minOccurs="0" />
+									<xs:element name="RoleCode" type="ds:ImporterRoleCodeType" />
+									<xs:element name="Address">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TypeCode" type="ds:AddressTypeCodeType"
+													minOccurs="0" />
+												<xs:element name="CityName" type="ds:AddressCityNameTextType"
+													minOccurs="0" />
+												<xs:element name="CountryCode" type="ds:AddressCountryCodeType" />
+												<xs:element name="CountrySubDivisionCode"
+													type="ds:AddressCountrySubDivisionCodeType" minOccurs="0" />
+												<xs:element name="CountrySubDivisionName"
+													type="ds:AddressCountrySubDivisionNameTextType" minOccurs="0" />
+												<xs:element name="Line" type="ds:AddressLineTextType"
+													minOccurs="0" />
+												<xs:element name="PostcodeID" type="ds:AddressPostcodeIDType"
+													minOccurs="0" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Invoice" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ID" type="ds:InvoiceIdentificationIDType" />
+									<xs:element name="IssueDateTime" type="ds:InvoiceIssueDateTimeType" />
+									<xs:element name="TypeCode" type="ds:InvoiceTypeCodeType" />
+									<xs:element name="SequenceNumeric" type="ds:InvoiceSequenceNumericType" />
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PreviousDocument" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ID"
+							type="ds:PreviousDocumentIdentificationIDType" />
+						<xs:element name="IssueDateTime" type="ds:PreviousDocumentIssueDateTimeType" />
+						<xs:element name="TypeCode" type="ds:PreviousDocumentTypeCodeType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

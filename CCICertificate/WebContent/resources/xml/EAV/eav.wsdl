@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://tempuri.org/"
+	xmlns:ls_1="urn:wco:datamodel:WCO:Declaration:1" xmlns:ls_2="urn:wco:datamodel:WCO:Declaration:2"
+	xmlns:ls_3="urn:wco:datamodel:WCO:Declaration:3" xmlns:sgn="urn:EEC:signal:v1.0"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" name="EECVNCertificateService"
+	targetNamespace="http://tempuri.org/">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://tempuri.org/" xmlns:ls_1="urn:wco:datamodel:WCO:Declaration:1"
+			xmlns:ls_2="urn:wco:datamodel:WCO:Declaration:2" xmlns:ls_3="urn:wco:datamodel:WCO:Declaration:3"
+			xmlns:sgn="urn:EEC:signal:v1.0" elementFormDefault="qualified">
+			<xsd:import namespace="urn:wco:datamodel:WCO:Declaration:1"
+				schemaLocation="Request.xsd" />
+			<xsd:import namespace="urn:wco:datamodel:WCO:Declaration:2"
+				schemaLocation="Certificate.xsd" />
+			<xsd:import namespace="urn:wco:datamodel:WCO:Declaration:3"
+				schemaLocation="Response.xsd" />
+			<xsd:import namespace="urn:EEC:signal:v1.0"
+				schemaLocation="EECSoapSignal.xsd" />
+			<xsd:element name="sendCertificateDetails">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RootDocument" type="ls_2:RootDocumentType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendRequestCertificateDetails">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RootDocument" type="ls_1:RootDocumentType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendResultCertificateDetails">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RootDocument" type="ls_2:RootDocumentType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendSignal">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Signal" type="sgn:Signal" />
+					</xsd:sequence>
+
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendResult">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ls_3RootDocument" type="ls_3:RootDocumentType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="sendCertificateDetails">
+		<wsdl:part name="parameters" element="tns:sendCertificateDetails" />
+	</wsdl:message>
+	<wsdl:message name="sendRequestCertificateDetails">
+		<wsdl:part name="parameters" element="tns:sendRequestCertificateDetails" />
+	</wsdl:message>
+	<wsdl:message name="sendResultCertificateDetails">
+		<wsdl:part name="parameters" element="tns:sendResultCertificateDetails" />
+	</wsdl:message>
+	<wsdl:message name="sendSignal">
+		<wsdl:part name="parameters" element="tns:sendSignal" />
+	</wsdl:message>
+	<wsdl:message name="sendResult">
+		<wsdl:part name="parameters" element="tns:sendResult" />
+	</wsdl:message>
+	<wsdl:portType name="EECVNCertificateService_PortType">
+		<wsdl:operation name="sendCertificateDetails">
+			<wsdl:documentation>
+			    ”Providing information on the issued certificate of origin service”
+			</wsdl:documentation>
+			<wsdl:input name="sendCertificateDetails" message="tns:sendCertificateDetails"
+				wsam:Action="http://tempuri.org/EECVNCertificateService/sendCertificateDetails" />
+		</wsdl:operation>
+		<wsdl:operation name="sendRequestCertificateDetails">
+			<wsdl:documentation>”Receiving information about the certificate of origin service”
+			</wsdl:documentation>
+			<wsdl:input name="sendRequestCertificateDetails" message="tns:sendRequestCertificateDetails"
+				wsam:Action="http://tempuri.org/EECVNCertificateService/sendRequestCertificateDetails" />
+		</wsdl:operation>
+		<wsdl:operation name="sendResultCertificateDetails">
+			<wsdl:documentation>”Receiving results of processing containing	information on the certificate 	of origin service”
+			</wsdl:documentation>
+			<wsdl:input name="sendResultCertificateDetails" message="tns:sendResultCertificateDetails"
+				wsam:Action="http://tempuri.org/EECVNCertificateService/sendResultCertificateDetails" />
+		</wsdl:operation>
+		<wsdl:operation name="sendSignal">
+			<wsdl:documentation>”Receiving of signals on the current processing	status service”
+			</wsdl:documentation>
+			<wsdl:input name="sendSignal" message="tns:sendSignal"
+				wsam:Action="http://tempuri.org/EECVNCertificateService/sendSignal" />
+		</wsdl:operation>
+		<wsdl:operation name="sendResult">
+			<wsdl:documentation>”Receiving of the processing result service” 
+			</wsdl:documentation>
+			<wsdl:input name="sendResult" message="tns:sendResult"
+				wsam:Action="http://tempuri.org/EECVNCertificateService/sendResult" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="EECVNCertificateService_Binding" type="tns:EECVNCertificateService_PortType">
+		<soap12:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="sendCertificateDetails">
+			<soap12:operation soapActionRequired="false" style="document" />
+			<wsdl:input name="sendCertificateDetails">
+				<soap12:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="sendRequestCertificateDetails">
+			<soap12:operation soapActionRequired="false" style="document" />
+			<wsdl:input name="sendRequestCertificateDetails">
+				<soap12:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="sendResultCertificateDetails">
+			<soap12:operation soapActionRequired="false" style="document" />
+			<wsdl:input name="sendResultCertificateDetails">
+				<soap12:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="sendSignal">
+			<soap12:operation soapActionRequired="false" style="document" />
+			<wsdl:input name="sendSignal">
+				<soap12:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		<wsdl:operation name="sendResult">
+			<soap12:operation soapActionRequired="false" style="document" />
+			<wsdl:input name="sendResult">
+				<soap12:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="EECVNCertificateService">
+		<wsdl:port name="EECVNCertificateService" binding="tns:EECVNCertificateService_Binding">
+			<soap12:address location="http://tempuri.org/EECVNCertificateService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
