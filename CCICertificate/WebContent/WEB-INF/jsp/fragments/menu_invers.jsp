@@ -8,12 +8,14 @@
 .container-fluid {
   min-height: 58px;
 }
+
+.dropdown>a .navbar-brand>li>a {
+  color: white !important;
+}
 </style>
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
 
-
-				
    <div class="container-fluid">
       
         <div class="navbar-header">
@@ -23,8 +25,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="main.do" style="font-size: 200%">
-          <img src="resources/images/logo_40.png" width="40" height="40" style="vertical-align: middle;"/>
+          <a class="navbar-brand" href="main.do" style="font-size: 200%; color: white;">
+          <img src="resources/images/logo.svg" width="38" height="38" style="vertical-align: middle;"/>
           Портал БелТПП
           </a>
         </div>
@@ -33,19 +35,17 @@
 		  <security:authorize access="isAuthenticated()">
 			<ul class="nav navbar-nav navbar-right">
 			
-			    <security:authorize ifNotGranted="ROLE_MNS">
-				 <form class="navbar-form navbar-right">
+				<form class="navbar-form navbar-right">
             		<input type="text" class="form-control" placeholder="Поиск..." style="height: 24px"/>
-          		 </form>
-          		</security:authorize> 
+          		</form>
 
 			    <!-- 
-				<li><a href="main.do">Главная</a></li>
+				<li><a href="main.do" style="color: white;">Главная</a></li>
 				-->
 	
 				<security:authorize ifAnyGranted="ROLE_CLIENT">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Клиенты<b class="caret"></b></a>
+					data-toggle="dropdown" style="color: white;">Клиенты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="members.do">Члены БелТПП</a></li>
 						<li><a href="clients.do">Контрагенты</a></li>
@@ -54,9 +54,9 @@
 				</security:authorize>
 				
 				<security:authorize ifAnyGranted="ROLE_VES">	
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">ВЭС<b class="caret"></b></a>
-					<ul class="dropdown-menu">
+				<li class="dropdown" ><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown" style="color: white;">ВЭС<b class="caret"></b></a>
+					<ul class="dropdown-menu" >
 					    <li><a href="#">Все Мероприятия</a></li>
                         <li><a href="#">Деловые советы</a></li>					
 						<li><a href="#">Форумы</a></li>					
@@ -67,7 +67,7 @@
 				</security:authorize>
 				
                 <security:authorize ifAnyGranted="ROLE_HR">
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
+				<li class="dropdown" style="color: white;"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Кадры<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="employees.do">Сотрудники</a></li>					
@@ -78,29 +78,25 @@
 				</li>
 				</security:authorize>
 
-				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK,ROLE_BREST,ROLE_GRODNO,ROLE_MOGILEV,ROLE_MNS">				
+				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK,ROLE_BREST,ROLE_GRODNO,ROLE_MOGILEV">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
+					data-toggle="dropdown" style="color: white;">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="certs.do">Сертификаты происхождения</a></li>
-						<security:authorize ifNotGranted="ROLE_MNS">
 						<li><a href="reportcerts.do">Отчет о загрузке сертификатов происхождения</a></li>
-						</security:authorize>
 						<li class="divider"></li>
 						<li><a href="owncerts.do">Сертификаты собственного производства</a></li>
-						<security:authorize ifNotGranted="ROLE_MNS">						
 						<li><a href="fscerts.do">Сертификаты свободной продажи</a></li>
 						<li class="divider"></li>						
 						<li><a href="#">Акты экспертиз</a></li>
-						</security:authorize>
-						<li><a target="blank" href="https://certs.cci.by">Проверка сертификата</a></li>
+						<li><a href="certcheck.do">Верификация</a></li>
 					</ul>
 				</li>
 			    </security:authorize>				
 
                 <security:authorize ifAnyGranted="ROLE_HR">
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Справочники<b class="caret"></b></a>
+					data-toggle="dropdown" style="color: white;">Справочники<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="#">Телефонный</a></li>
 						<li><a href="#">Арендные помещения</a></li>
@@ -110,29 +106,28 @@
 
 				<security:authorize ifAnyGranted="ROLE_ACCOUNT">
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Логистика<b class="caret"></b></a>
+					data-toggle="dropdown" style="color: white;">Логистика<b class="caret"></b></a>
 					<ul class="dropdown-menu">
                         <li><a href="purchases.do">Сделки</a></li>
 						<li><a href="#">Договора</a></li>					
 					</ul>
 				</li>
 			    </security:authorize>
-
+				
 				<li>
-				    <a href="logout.do">
+				    <a href="logout.do" style="color: white;">
 					<security:authorize access="isAuthenticated()">
     				Выйти <security:authentication property="principal.username" /> 
 					</security:authorize>
 				    </a>
 				</li>
-				<security:authorize ifNotGranted="ROLE_MNS">
-				<li><a href="help.do">Справка</a></li>
-				</security:authorize>
+				
+				<li><a href="help.do" style="color: white;">Справка</a></li>
 			</ul>
 		  </security:authorize>
 		</div>
 						
       </div>
-      <div style="height: 2px; width: 100%; background-color: yellow; border: none   !important;"> </div>
+      <div style="height: 2px; width: 100%; background-color: white; border: none   !important;"> </div>
     </div>
 
