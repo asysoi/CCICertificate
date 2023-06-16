@@ -38,6 +38,10 @@ public class CertificateValidator {
 		 if (!PDFBuilderFactory.checkValidFormName(cert.getForms()) )  {
 			 errors.add("Form name isn't correct.");
  		 }	 
+		 
+		 if ("Y".equals(cert.getAgree()) && nullOrEmpty(cert.getDataexpire())  )  {
+			 errors.add("Expiration date isn't defined.");
+ 		 }	 
 
 		 return errors;			 
 	 }

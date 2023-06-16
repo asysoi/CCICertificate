@@ -121,6 +121,7 @@ public class OwnCertificateRestFulController {
 			                             Authentication aut)  {
 		try {
 			verify(certificate);
+			 
 			certificate.setXml(xmlService.parceObjectToXMLString(certificate));
 		
 			// get ACL information and store otd_id
@@ -311,7 +312,7 @@ public class OwnCertificateRestFulController {
         
 			try {
 				verify(certificate);
-				certificate.setXml(xmlService.parceObjectToXMLString(certificate));
+  			    certificate.setXml(xmlService.parceObjectToXMLString(certificate));
 
 				// get ACL information and store otd_id
 				String otd_id = service.getOtd_idByRole(aut);

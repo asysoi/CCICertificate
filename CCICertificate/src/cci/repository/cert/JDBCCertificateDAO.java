@@ -508,14 +508,14 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ "stranav, stranapr, status, koldoplist, flexp, unnexp, expp, "
 				+ "exps, expadress, flimp, importer, adressimp, flsez, sez, "
 				+ "flsezrez, stranap, otd_id, parentnumber, parentstatus, issuedate,  "
-				+ "codestranav, codestranapr, codestranap,  category) "
+				+ "codestranav, codestranapr, codestranap,  category, dataexpire, expiredate, agree) "
 				+ "values (:cert_id, "
 				+ "TRIM(:forms), :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert, "
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka, "
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
 				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez, "
 				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'),  "
-				+ ":codestranav, :codestranapr, :codestranap,  :category )";
+				+ ":codestranav, :codestranapr, :codestranap,  :category, :dataexpire, TO_DATE(:dataexpire,'DD.MM.YY'), :agree)";
 
 		long cert_id = 0;
 		
@@ -615,7 +615,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
 				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id, parentnumber = :parentnumber, parentstatus = :parentstatus, issuedate = TO_DATE(:datacert,'DD.MM.YY'), "
-				+ "codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap, category = :category "
+				+ "codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap, category = :category, "
+				+ "dataexpire = :dataexpire, expiredate = TO_DATE(:dataexpire,'DD.MM.YY'), agree = :agree "
 				+ "WHERE nomercert = :nomercert AND nblanka = :nblanka";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);

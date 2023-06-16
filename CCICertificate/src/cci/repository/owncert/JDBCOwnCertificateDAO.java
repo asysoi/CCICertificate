@@ -407,7 +407,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 					+ " beltppname=:beltppname, beltppaddress=:beltppaddress, "
 					+ " beltppphone=:beltppphone, beltppunp=:beltppunp,  "
 					+ " numberprev = :numberprev, numbernext=:numbernext, status=:status,"
-					+ " productdescription=:productdescription " + " WHERE id = :id ";
+					+ " productdescription=:productdescription, agree=:agree " + " WHERE id = :id ";
 
 			SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 			int row = template.update(sql_cert, parameters);

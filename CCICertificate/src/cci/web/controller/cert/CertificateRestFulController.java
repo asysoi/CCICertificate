@@ -176,8 +176,8 @@ public class CertificateRestFulController {
 	    	LOG.info("Errror UPDATE: " + errors.toString()); 
 	       	throw(new CertificateUpdateException("Certificate isn't valid: " + errors.toString()));
 	     }
-	     
-		 try {
+	
+	     try {
 			 String otd_id = getOtd_idByRole(aut);
 			 if (otd_id == null) {
 				 throw(new CertificateUpdateException("Изменить сертификат может только авторизированный представитель отделения."));

@@ -14,10 +14,11 @@ import org.springframework.stereotype.Component;
 
 @XmlRootElement(name = "cert")
 @Component
-@XmlType(propOrder = {"otd_id", "otd_name", "forms", "unn",  "kontrp",  "kontrs", "adress", "poluchat", "adresspol", "datacert", "nomercert", "expert", "nblanka", "rukovod", 
-		"transport", "marshrut", "otmetka",  "stranav","codestranav", "stranapr","codestranapr", "stranap", "codestranap", "status", 
-		"koldoplist", "flexp", "unnexp", "expp", "exps", "expadress", "flimp",  "importer","adressimp","flsez","sez", "flsezrez", "parentnumber", "parentstatus", 
-		"category", "date_load", "products"})
+@XmlType(propOrder = {"otd_id", "otd_name", "forms", "unn",  "kontrp",  "kontrs", "adress", "poluchat", "adresspol",  
+		"datacert", "dataexpire", "nomercert", "expert", "nblanka", "rukovod", "transport", "marshrut", "otmetka",  
+	    "stranav","codestranav", "stranapr","codestranapr", "stranap", "codestranap", "status", "koldoplist", "flexp", 
+		"unnexp", "expp", "exps", "expadress", "flimp",  "importer","adressimp","flsez","sez", "flsezrez",  
+		"parentnumber", "parentstatus", "category", "date_load", "products", "agree"})
 
 public class Certificate {
 	private static final Logger LOG=Logger.getLogger(Certificate.class);
@@ -30,8 +31,10 @@ public class Certificate {
 	private String adress;
 	private String poluchat;
 	private String adresspol;
-	private String issuedate;
 	private String datacert;
+	private String issuedate;
+	private String dataexpire;
+	private String expiredate;
 	private String nomercert;
 	private String expert;
 	private String nblanka;
@@ -71,6 +74,7 @@ public class Certificate {
 	private String eotd_name;
 	private String eotd_addr_city;
 	private String eotd_addr_line;
+	private String agree="N";
 	private List<Product> products;
 	private String childnumber = "";
 	private Integer child_id = 0;
@@ -80,6 +84,32 @@ public class Certificate {
 	private int currentlist;
 	private String date_load;
 	
+	
+	@XmlTransient	
+	public String getExpiredate() {
+		return expiredate;
+	}
+
+	public void setExpiredate(String expiredate) {
+		this.expiredate = expiredate;
+	}
+
+	public String getDataexpire() {
+		return dataexpire;
+	}
+
+	public void setDataexpire(String dataexpire) {
+		this.dataexpire = dataexpire;
+	}
+
+	public String getAgree() {
+		return agree;
+	}
+
+	public void setAgree(String agree) {
+		this.agree = "Y".equals(agree) ? "Y" : "N";
+	}
+
 	@XmlTransient
 	public String getIssuedate() {
 		return issuedate;
@@ -528,6 +558,8 @@ public class Certificate {
 		builder.append(" ");
 		builder.append(getDatacert());
 		builder.append(" ");
+		builder.append(getDataexpire());
+		builder.append(" ");
 		builder.append(getNomercert());
 		builder.append(" ");
 		builder.append(getExpert());
@@ -619,6 +651,8 @@ public class Certificate {
 				+ ((adresspol == null) ? 0 : adresspol.hashCode());
 		result = prime * result
 				+ ((datacert == null) ? 0 : datacert.hashCode());
+		result = prime * result
+				+ ((dataexpire == null) ? 0 : dataexpire.hashCode());
 		result = prime * result
 				+ ((expadress == null) ? 0 : expadress.hashCode());
 		result = prime * result + ((expert == null) ? 0 : expert.hashCode());
@@ -957,6 +991,26 @@ public class Certificate {
 			System.out.print(" |  " + 66);
 			return false;
 		}
+		
+		if (dataexpire == null) {
+			if (other.dataexpire != null && other.dataexpire.length() > 0) {
+				System.out.print(" |  " + 67);
+				return false;
+			}
+		} else if (!dataexpire.equals(other.dataexpire)) {
+			System.out.print(" |  " + 67);
+			return false;
+		}		
+		
+		if (agree == null) {
+			if (other.agree != null && other.agree.length() > 0) {
+				System.out.print(" |  " + 68);
+				return false;
+			}
+		} else if (!agree.equals(other.agree)) {
+			System.out.print(" |  " + 68);
+			return false;
+		}		
 		return true;
 	}
 

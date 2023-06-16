@@ -46,10 +46,11 @@ public class OwnCertificate {
 	private String productdescription;
 	private List<Factory> factories;
 	private List<Branch> branches;
+	private String agree="N";	
 	private List<Product> products;
 	private String otd_id;
 	private String xml;
-	private String agree; 
+	 
 			
 	
 	public String getAgree() {
@@ -57,7 +58,7 @@ public class OwnCertificate {
 	}
 
 	public void setAgree(String agree) {
-		this.agree = agree;
+		this.agree = "Y".equals(agree) ? "Y" : "N";
 	}
 
 	@XmlTransient
