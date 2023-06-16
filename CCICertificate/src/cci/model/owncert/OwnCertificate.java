@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @XmlType(propOrder = {"type", "number", "blanknumber", "beltpp", "customername", "customeraddress", "customerunp", 
 		"additionalblanks", "datestart", "dateexpire", "expert", "signer", "signerjob", "datecert", "dateload",  
 		"datestop", "datechange", "numbernext", "numberprev", "status", "productdescription", "filename",
-		"factories", "branches", "products" })
+		"factories", "branches", "products", "agree"})
 
 public class OwnCertificate {
 	private int id;
@@ -49,7 +49,17 @@ public class OwnCertificate {
 	private List<Product> products;
 	private String otd_id;
 	private String xml;
+	private String agree; 
 			
+	
+	public String getAgree() {
+		return agree;
+	}
+
+	public void setAgree(String agree) {
+		this.agree = agree;
+	}
+
 	@XmlTransient
 	public String getXml() {
 		return xml;
@@ -337,7 +347,7 @@ public class OwnCertificate {
 				+ dateload + ", datestop=" + datestop + ", datechange=" + datechange + ", numberprev=" + numberprev
 				+ ", numbernext=" + numbernext + ", status=" + status + ", filename=" + filename
 				+ ", productdescription=" + productdescription + ", factories=" + factories + ", branches=" + branches
-				+ ", products=" + products + "]";
+				+ ", products=" + products + ", agree=" + agree + "]";
 	}
 
 	@Override
@@ -371,6 +381,7 @@ public class OwnCertificate {
 		result = prime * result + ((signerjob == null) ? 0 : signerjob.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((agree == null) ? 0 : agree.hashCode());
 		return result;
 	}
 
@@ -511,6 +522,11 @@ public class OwnCertificate {
 			if (other.type != null)
 				return false;
 		} else if (!type.equals(other.type))
+			return false;
+		if (agree == null) {
+			if (other.agree != null)
+				return false;
+		} else if (!agree.equals(other.agree))
 			return false;
 		return true;
 	}

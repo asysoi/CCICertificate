@@ -50,7 +50,7 @@ public class OwnCertificateRestFulController {
 	/* -----------------------------------------
 	 * Fill in ownproductdenorm table from ownproduct
 	 * ----------------------------------------- */
-	@RequestMapping(value="rownfillindenorm.do",  method = RequestMethod.GET, headers = "Accept=application/json,application/xml")
+	@RequestMapping(value="rownfillindenorm.do",  method = RequestMethod.GET, headers = "Accept=application/xml,application/json")
 	@ResponseStatus (HttpStatus.OK)
 	public String fillInOwnProductDenorm() {
 		return service.fillInOwnProductDenorm();
@@ -59,7 +59,7 @@ public class OwnCertificateRestFulController {
 	/* -----------------------------------------
 	 * Get list of all certificates by filter
 	 * ----------------------------------------- */
-	@RequestMapping(value="rowncerts.do",  method = RequestMethod.GET, headers = "Accept=application/json,application/xml")
+	@RequestMapping(value="rowncerts.do",  method = RequestMethod.GET, headers = "Accept=application/xml,application/json")
 	@ResponseStatus (HttpStatus.OK)
 	public cci.model.owncert.OwnCertificates getCertificates(
 			@RequestParam(value = "number", required = false) String number,
@@ -85,7 +85,7 @@ public class OwnCertificateRestFulController {
 	/* -----------------------------------------
 	 * Get list of all headr's certificates by filter 
 	 * ----------------------------------------- */
-	@RequestMapping(value = "rowncertheaders.do", method = RequestMethod.GET, headers = "Accept=application/json,application/xml")
+	@RequestMapping(value = "rowncertheaders.do", method = RequestMethod.GET, headers = "Accept=application/xml,application/json")
 	@ResponseStatus (HttpStatus.OK)
 	public OwnCertificateHeaders getCertificateHeaders(
 			@RequestParam(value = "number", required = false) String number,
@@ -221,7 +221,7 @@ public class OwnCertificateRestFulController {
 	 * Get certificate by identification
 	 * ------------------------------------------------- */
 	@RequestMapping(value = "rowncert.do", method = RequestMethod.GET, 
-			headers = "Accept=application/json,application/xml")
+			headers = "Accept=application/xml,application/json")
 	@ResponseStatus(HttpStatus.OK)
 	public OwnCertificate getOwnCertificateByNumber(
 			@RequestParam(value = "number", required = true) String number,
@@ -304,7 +304,7 @@ public class OwnCertificateRestFulController {
 	 *  Update certificate
 	 *  Certificate must be exist
 	 * ----------------------------- */
-	@RequestMapping(value = "rowncert.do", method = RequestMethod.PUT, headers = "Accept=application/json,application/xml")
+	@RequestMapping(value = "rowncert.do", method = RequestMethod.PUT, headers = "Accept=application/xml,application/json")
 	@ResponseStatus(HttpStatus.OK)
 	public OwnCertificate updateC(@RequestBody OwnCertificate certificate,
 								  Authentication aut) throws Exception {
@@ -404,7 +404,7 @@ public class OwnCertificateRestFulController {
 	/* -----------------------------
 	 * Delete certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "rowncert.do", method = RequestMethod.DELETE, headers = "Accept=application/json,application/xml")
+	@RequestMapping(value = "rowncert.do", method = RequestMethod.DELETE, headers = "Accept=application/xml,application/json")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteCountry(
 			@RequestParam(value = "number", required = true) String number,

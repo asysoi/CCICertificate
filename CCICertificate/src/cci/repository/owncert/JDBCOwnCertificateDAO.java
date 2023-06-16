@@ -190,7 +190,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		String sql_cert = "insert into owncertificate(id_beltpp, number, blanknumber, type, customername, customeraddress, "
 				+ " customerunp, datecert, dateexpire, expert, signer, signerjob, datestart, additionalblanks, factories, branches, products, codes,  "
 				+ " beltppname, beltppaddress, beltppphone, beltppunp, "
-				+ " datestop, datechange, numberprev, numbernext, status, productdescription, otd_id) "
+				+ " datestop, datechange, numberprev, numbernext, status, productdescription, otd_id, agree) "
 				+ " values ("
 				+ " :id_beltpp, :number, :blanknumber, :type, :customername, :customeraddress, :customerunp, "
 				+ " STR_TO_DATE(:datecert,'%d.%m.%Y'), " + " STR_TO_DATE(:dateexpire,'%d.%m.%Y'), "
@@ -198,7 +198,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 				+ " :additionalblanks, :factorylist, :branchlist, :productlist, :codes, "
 				+ " :beltppname, :beltppaddress, :beltppphone, :beltppunp, " + " STR_TO_DATE(:datestop,'%d.%m.%Y'), "
 				+ " STR_TO_DATE(:datechange,'%d.%m.%Y'), "
-				+ " :numberprev, :numbernext, :status, :productdescription, :otd_id" 
+				+ " :numberprev, :numbernext, :status, :productdescription, :otd_id, :agree" 
 				+ ")";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);

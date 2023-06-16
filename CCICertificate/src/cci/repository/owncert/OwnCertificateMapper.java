@@ -56,6 +56,7 @@ public class OwnCertificateMapper<T> implements RowMapper<OwnCertificate> {
 			cert.setStatus(resultSet.getString("status"));
 			cert.setProductdescription(resultSet.getString("productdescription"));
 			cert.setOtd_id(resultSet.getInt("otd_id") + "");
+			cert.setAgree(resultSet.getString("agree"));
 			
 			beltpp = new Company();
 			beltpp.setName(resultSet.getString("beltppname")); 
