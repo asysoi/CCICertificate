@@ -40,7 +40,7 @@ public class CertificateValidator {
  		 }	 
 		 
 		 if ("Y".equals(cert.getAgree()) && nullOrEmpty(cert.getDataexpire())  )  {
-			 errors.add("Expiration date isn't defined.");
+			 errors.add("Expiration date isn't defined when ticked agreement.");
  		 }	 
 
 		 return errors;			 
